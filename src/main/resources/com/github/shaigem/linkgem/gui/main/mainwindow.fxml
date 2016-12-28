@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="454.0" prefWidth="666.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.shaigem.linkgem.gui.main.MainWindowPresenter">
+   <children>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <SplitPane dividerPositions="0.28330522765598654" prefHeight="688.0" prefWidth="595.0" VBox.vgrow="ALWAYS">
+         <items>
+            <StackPane fx:id="itemSidebarPane" prefHeight="150.0" prefWidth="200.0" />
+            <StackPane prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <SplitPane dividerPositions="0.6954177897574124" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+                     <items>
+                        <StackPane fx:id="explorerPane" prefHeight="150.0" prefWidth="200.0" />
+                        <StackPane prefHeight="116.0" prefWidth="420.0" />
+                     </items>
+                  </SplitPane>
+               </children>
+            </StackPane>
+         </items>
+      </SplitPane>
+   </children>
+</VBox>

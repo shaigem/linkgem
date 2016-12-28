@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.shaigem.linkgem.gui.main.explorer.FolderExplorerPresenter">
+   <children>
+      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="333.0" prefWidth="444.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox fx:id="toolbar" alignment="CENTER" prefHeight="38.0" prefWidth="444.0" spacing="8.0" VBox.vgrow="NEVER">
+               <children>
+                  <HBox fx:id="leftToolbarSection" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label text="Items" />
+                     </children>
+                  </HBox>
+                  <HBox fx:id="centerToolbarSection" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                  <HBox fx:id="rightToolbarSection" alignment="CENTER_RIGHT" prefHeight="38.0" prefWidth="237.0" spacing="5.0" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <StackPane fx:id="itemsView" prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>
