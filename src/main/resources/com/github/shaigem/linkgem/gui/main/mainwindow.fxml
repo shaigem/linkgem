@@ -31,16 +31,7 @@
       <SplitPane dividerPositions="0.28330522765598654" prefHeight="688.0" prefWidth="595.0" VBox.vgrow="ALWAYS">
          <items>
             <StackPane fx:id="itemSidebarPane" prefHeight="150.0" prefWidth="200.0" />
-            <StackPane prefHeight="150.0" prefWidth="200.0">
-               <children>
-                  <SplitPane dividerPositions="0.6954177897574124" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
-                     <items>
-                        <StackPane fx:id="explorerPane" prefHeight="150.0" prefWidth="200.0" />
-                        <StackPane prefHeight="116.0" prefWidth="420.0" />
-                     </items>
-                  </SplitPane>
-               </children>
-            </StackPane>
+            <StackPane fx:id="explorerPane" prefHeight="150.0" prefWidth="200.0" />
          </items>
       </SplitPane>
    </children>
