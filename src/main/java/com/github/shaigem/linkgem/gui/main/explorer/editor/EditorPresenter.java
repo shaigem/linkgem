@@ -6,7 +6,6 @@ import com.github.shaigem.linkgem.model.item.BookmarkItem;
 import com.github.shaigem.linkgem.model.item.Item;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 import org.controlsfx.control.PropertySheet;
 import org.sejda.eventstudio.annotation.EventListener;
 
@@ -25,8 +24,6 @@ public class EditorPresenter implements Initializable {
 
     @FXML
     PropertySheet propertySheet;
-    @FXML
-    Label noSelectionLabel;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -63,7 +60,5 @@ public class EditorPresenter implements Initializable {
 
     private void setPropertySheetVisibility(boolean show) {
         propertySheet.setVisible(show);
-        noSelectionLabel.setVisible(!show); // i don't think we even need this
-
     }
 }
