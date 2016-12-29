@@ -1,4 +1,4 @@
-package com.github.shaigem.linkgem.gui.main.explorer;
+package com.github.shaigem.linkgem.gui.events;
 
 /**
  * Created on 2016-12-28.

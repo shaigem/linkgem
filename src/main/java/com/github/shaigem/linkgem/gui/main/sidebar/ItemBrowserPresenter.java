@@ -1,10 +1,9 @@
 package com.github.shaigem.linkgem.gui.main.sidebar;
 
-import com.github.shaigem.linkgem.gui.main.explorer.OpenFolderRequest;
-import com.github.shaigem.linkgem.gui.main.explorer.SelectedFolderChangedEvent;
-import com.github.shaigem.linkgem.model.item.BookmarkItem;
+import com.github.shaigem.linkgem.gui.events.AddItemToFolderEvent;
+import com.github.shaigem.linkgem.gui.events.OpenFolderRequest;
+import com.github.shaigem.linkgem.gui.events.SelectedFolderChangedEvent;
 import com.github.shaigem.linkgem.model.item.FolderItem;
-import com.github.shaigem.linkgem.model.item.event.AddItemToFolderEvent;
 import com.github.shaigem.linkgem.repository.FolderRepository;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -41,7 +40,6 @@ public class ItemBrowserPresenter implements Initializable {
         folderTreeView.getSelectionModel().selectFirst();
         eventStudio().addAnnotatedListeners(this);
     }
-
 
     private void listenForTreeViewSelection() {
         // 1. Selection on treeview changes
@@ -96,10 +94,10 @@ public class ItemBrowserPresenter implements Initializable {
             final MenuItem newFolder = new MenuItem("Add Folder...");
             newFolder.setOnAction(event -> eventStudio().broadcast(new AddItemToFolderEvent
                     (getItem(), new FolderItem("New Folder"))));
-            final MenuItem newBookmark = new MenuItem("Add Bookmark...");
-            newBookmark.setOnAction(event -> eventStudio().broadcast(new AddItemToFolderEvent
-                    (getItem(), new BookmarkItem("New Bookmark"))));
-            menu.getItems().addAll(newFolder, newBookmark);
+            //  final MenuItem newBookmark = new MenuItem("Add Bookmark...");
+            //  newBookmark.setOnAction(event -> eventStudio().broadcast(new AddItemToFolderEvent
+            //          (getItem(), new BookmarkItem("New Bookmark"))));
+            menu.getItems().addAll(newFolder);//, newBookmark);
         }
 
         private String getString() {

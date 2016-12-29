@@ -1,6 +1,7 @@
 package com.github.shaigem.linkgem.gui.main.explorer.folder.impl;
 
-import com.github.shaigem.linkgem.gui.main.explorer.OpenFolderRequest;
+import com.github.shaigem.linkgem.gui.events.ItemSelectionChangedEvent;
+import com.github.shaigem.linkgem.gui.events.OpenFolderRequest;
 import com.github.shaigem.linkgem.gui.main.explorer.folder.AbstractFolderView;
 import com.github.shaigem.linkgem.gui.main.explorer.folder.FolderViewMode;
 import com.github.shaigem.linkgem.model.item.FolderItem;
@@ -35,14 +36,16 @@ public class TableFolderView extends AbstractFolderView {
             return row;
         });
         if (getViewingFolder() != null) {
-            tableView.setItems(getViewingFolder().getItems());
+            tableView.setItems(getViewingFolder().getChildren());
             tableView.setContextMenu(createContextMenu());
         }
+        tableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
+                eventStudio().broadcast(new ItemSelectionChangedEvent(newValue)));
     }
 
     @Override
     public void onFolderChanged() {
-        tableView.setItems(getViewingFolder().getItems());
+        tableView.setItems(getViewingFolder().getChildren());
     }
 
     @Override

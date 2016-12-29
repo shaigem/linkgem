@@ -9,9 +9,19 @@ import javafx.beans.property.StringProperty;
 public abstract class Item {
 
     private StringProperty name;
+    private StringProperty description;
 
-    public Item(final String name) {
+    public Item(final String name, final String description) {
         this.name = new SimpleStringProperty(name);
+        this.description = new SimpleStringProperty(description);
+    }
+
+    public void setName(String name) {
+        this.name.set(name);
+    }
+
+    public void setDescription(String description) {
+        this.description.set(description);
     }
 
 
@@ -19,8 +29,17 @@ public abstract class Item {
         return name.get();
     }
 
+    public String getDescription() {
+        return description.get();
+    }
+
+
     public StringProperty nameProperty() {
         return name;
+    }
+
+    public StringProperty descriptionProperty() {
+        return description;
     }
 
     @Override

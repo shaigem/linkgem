@@ -1,4 +1,4 @@
-package com.github.shaigem.linkgem.gui.main.explorer;
+package com.github.shaigem.linkgem.gui.events;
 
 import com.github.shaigem.linkgem.model.item.FolderItem;
 

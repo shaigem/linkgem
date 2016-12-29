@@ -10,23 +10,27 @@ import javafx.scene.control.TreeItem;
 public class FolderItem extends Item {
 
     private TreeItem<FolderItem> treeItem;
-    private ObservableList<Item> items;
+    private ObservableList<Item> children;
+
+    public FolderItem(String name, String description) {
+        super(name, description);
+        this.children = FXCollections.observableArrayList();
+    }
 
     public FolderItem(String name) {
-        super(name);
-        this.items = FXCollections.observableArrayList();
+        this(name, "");
     }
 
     public boolean addItem(Item item) {
-        return items.add(item);
+        return children.add(item);
     }
 
-    public ObservableList<Item> getItems() {
-        return items;
+    public ObservableList<Item> getChildren() {
+        return children;
     }
 
     public TreeItem<FolderItem> getAsTreeItem() {
-        if(treeItem == null) {
+        if (treeItem == null) {
             treeItem = new TreeItem<>(this);
             treeItem.setExpanded(true);
         }

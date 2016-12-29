@@ -1,5 +1,6 @@
 package com.github.shaigem.linkgem.gui.main.explorer;
 
+import com.github.shaigem.linkgem.gui.events.SelectedFolderChangedEvent;
 import com.github.shaigem.linkgem.gui.main.explorer.folder.AbstractFolderView;
 import com.github.shaigem.linkgem.gui.main.explorer.folder.FolderViewMode;
 import com.github.shaigem.linkgem.model.item.FolderItem;
