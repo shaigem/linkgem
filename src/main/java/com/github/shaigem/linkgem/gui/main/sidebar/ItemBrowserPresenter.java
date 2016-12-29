@@ -78,14 +78,12 @@ public class ItemBrowserPresenter implements Initializable {
         public void updateItem(FolderItem item, boolean empty) {
             super.updateItem(item, empty);
             if (empty) {
-                setText(null);
+                textProperty().unbind();
                 setGraphic(null);
             } else {
-                setText(getString());
+                textProperty().bind(item.nameProperty());
                 setGraphic(getTreeItem().getGraphic());
-                //    if (!getTreeItem().isLeaf() && getTreeItem().getParent() != null) {
                 setContextMenu(menu);
-                //       }
             }
         }
 
