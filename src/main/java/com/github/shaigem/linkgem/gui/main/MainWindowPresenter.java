@@ -22,7 +22,6 @@ public class MainWindowPresenter implements Initializable {
     @FXML
     StackPane explorerPane;
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeItemSidebar();

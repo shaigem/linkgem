@@ -78,7 +78,7 @@ public class ItemBrowserPresenter implements Initializable {
         public void updateItem(FolderItem item, boolean empty) {
             super.updateItem(item, empty);
             if (empty) {
-                textProperty().unbind();
+           //     textProperty().unbind();
                 setGraphic(null);
             } else {
                 textProperty().bind(item.nameProperty());
@@ -90,8 +90,7 @@ public class ItemBrowserPresenter implements Initializable {
         private void createContextMenu() {
             menu = new ContextMenu();
             final MenuItem newFolder = new MenuItem("Add Folder...");
-            newFolder.setOnAction(event -> eventStudio().broadcast(new AddItemToFolderEvent
-                    (getItem(), new FolderItem("New Folder"))));
+            newFolder.setOnAction(event -> eventStudio().broadcast(new AddItemToFolderEvent(getItem(), new FolderItem("New Folder..."))));
             //  final MenuItem newBookmark = new MenuItem("Add Bookmark...");
             //  newBookmark.setOnAction(event -> eventStudio().broadcast(new AddItemToFolderEvent
             //          (getItem(), new BookmarkItem("New Bookmark"))));

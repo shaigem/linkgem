@@ -22,6 +22,8 @@ public class EditorPresenter implements Initializable {
 
     private static final String DEFAULT_CATEGORY = "Default";
 
+    private Item editingItem;
+
     @FXML
     PropertySheet propertySheet;
 
@@ -34,22 +36,23 @@ public class EditorPresenter implements Initializable {
     private void onItemSelectionChanged(ItemSelectionChangedEvent event) {
         final Optional<Item> item = event.getSelectedItem();
         if (item.isPresent()) {
-            updatePropertySheetItems(item.get());
+            setEditingItem(item.get());
         } else {
             setPropertySheetVisibility(false);
         }
     }
 
-    private void updatePropertySheetItems(Item item) {
+    private void updatePropertySheetItems() {
         setPropertySheetVisibility(true);
+
         final PropertyEditorItem<String> nameItem = (new PropertyEditorItem<>
-                (DEFAULT_CATEGORY, item.nameProperty(), "Name", "Stuff"));
+                (DEFAULT_CATEGORY, editingItem.nameProperty(), "Name", "Stuff"));
 
         final PropertyEditorItem<String> descriptionItem = (new PropertyEditorItem<>
-                (DEFAULT_CATEGORY, item.descriptionProperty(), "Description", ""));
+                (DEFAULT_CATEGORY, editingItem.descriptionProperty(), "Description", ""));
 
-        if (item instanceof BookmarkItem) {
-            final BookmarkItem bookmarkItem = (BookmarkItem) item;
+        if (editingItem instanceof BookmarkItem) {
+            final BookmarkItem bookmarkItem = (BookmarkItem) editingItem;
             final PropertyEditorItem<String> locationItem = (new PropertyEditorItem<>
                     (DEFAULT_CATEGORY, bookmarkItem.locationProperty(), "Link", ""));
             propertySheet.getItems().setAll(nameItem, locationItem, descriptionItem);
@@ -60,5 +63,14 @@ public class EditorPresenter implements Initializable {
 
     private void setPropertySheetVisibility(boolean show) {
         propertySheet.setVisible(show);
+    }
+
+    private void setEditingItem(Item item) {
+        this.editingItem = item;
+        editingItemDidChange();
+    }
+
+    private void editingItemDidChange() {
+        updatePropertySheetItems();
     }
 }
