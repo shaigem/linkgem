@@ -15,8 +15,16 @@ public class BookmarkItem extends Item {
         this.location = new SimpleStringProperty(location);
     }
 
+    public BookmarkItem(String name) {
+        this(name, "", "");
+    }
+
     public StringProperty locationProperty() {
         return location;
+    }
+
+    public void setLocation(String location) {
+        this.location.set(location);
     }
 
     public String getLocation() {

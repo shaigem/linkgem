@@ -1,16 +1,20 @@
 package com.github.shaigem.linkgem.ui.main;
 
+import com.github.shaigem.linkgem.ui.listeners.ItemDialogListener;
+import com.github.shaigem.linkgem.ui.main.browser.FolderBrowserView;
 import com.github.shaigem.linkgem.ui.main.explorer.FolderExplorerView;
 import com.github.shaigem.linkgem.ui.main.explorer.editor.ItemEditorView;
-import com.github.shaigem.linkgem.ui.main.browser.FolderBrowserView;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Side;
 import javafx.scene.layout.StackPane;
 import org.controlsfx.control.MasterDetailPane;
+import org.sejda.eventstudio.ReferenceStrength;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import static org.sejda.eventstudio.StaticStudio.eventStudio;
 
 /**
  * Created on 2016-12-21.
@@ -26,6 +30,7 @@ public class MainWindowPresenter implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         initializeItemSidebar();
         initializeExplorer();
+        eventStudio().add(new ItemDialogListener(), 0, ReferenceStrength.STRONG);
     }
 
     @FXML

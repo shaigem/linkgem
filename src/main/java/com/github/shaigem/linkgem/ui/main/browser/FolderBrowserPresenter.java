@@ -1,12 +1,12 @@
 package com.github.shaigem.linkgem.ui.main.browser;
 
-import com.github.shaigem.linkgem.ui.events.AddItemRequest;
+import com.github.shaigem.linkgem.model.item.BookmarkItem;
+import com.github.shaigem.linkgem.model.item.FolderItem;
+import com.github.shaigem.linkgem.repository.FolderRepository;
 import com.github.shaigem.linkgem.ui.events.AddItemToFolderEvent;
+import com.github.shaigem.linkgem.ui.events.OpenItemDialogRequest;
 import com.github.shaigem.linkgem.ui.events.OpenFolderRequest;
 import com.github.shaigem.linkgem.ui.events.SelectedFolderChangedEvent;
-import com.github.shaigem.linkgem.model.item.FolderItem;
-import com.github.shaigem.linkgem.model.item.ItemType;
-import com.github.shaigem.linkgem.repository.FolderRepository;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -80,10 +80,12 @@ public class FolderBrowserPresenter implements Initializable {
         public void updateItem(FolderItem item, boolean empty) {
             super.updateItem(item, empty);
             if (empty) {
+                setText(null);
                 //     textProperty().unbind();
                 setGraphic(null);
             } else {
-                textProperty().bind(item.nameProperty());
+                setText(item.getName());
+                //textProperty().bind(item.nameProperty());
                 setGraphic(getTreeItem().getGraphic());
                 setContextMenu(menu);
             }
@@ -92,11 +94,16 @@ public class FolderBrowserPresenter implements Initializable {
         private void createContextMenu() {
             menu = new ContextMenu();
             final MenuItem newFolder = new MenuItem("Add Folder...");
-            newFolder.setOnAction(event -> eventStudio().broadcast(new AddItemRequest(getItem(), ItemType.BOOKMARK)));
+            newFolder.setOnAction(event -> eventStudio().broadcast(new OpenItemDialogRequest(getItem(), new FolderItem("New Folder"), true)));
+            final MenuItem newBookmark = new MenuItem("Add Bookmark...");
+            newBookmark.setOnAction(event -> eventStudio().broadcast(new OpenItemDialogRequest(getItem(),
+                    new BookmarkItem("New Bookmark"), true)));
+
+            //      newFolder.setOnAction(event -> eventStudio().broadcast(new AddItemRequest(getItem(), ItemType.BOOKMARK)));
             //  final MenuItem newBookmark = new MenuItem("Add Bookmark...");
             //  newBookmark.setOnAction(event -> eventStudio().broadcast(new AddItemToFolderEvent
             //          (getItem(), new BookmarkItem("New Bookmark"))));
-            menu.getItems().addAll(newFolder);//, newBookmark);
+            menu.getItems().addAll(newFolder, newBookmark);//, newBookmark);
         }
 
         private String getString() {

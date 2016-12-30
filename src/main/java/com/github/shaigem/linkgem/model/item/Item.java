@@ -17,13 +17,15 @@ public abstract class Item {
     }
 
     public void setName(String name) {
+        if(name.isEmpty()) {
+            name = "<No Name>";
+        }
         this.name.set(name);
     }
 
     public void setDescription(String description) {
         this.description.set(description);
     }
-
 
     public String getName() {
         return name.get();
