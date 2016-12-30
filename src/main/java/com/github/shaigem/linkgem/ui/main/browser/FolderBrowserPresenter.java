@@ -71,7 +71,6 @@ public class FolderBrowserPresenter implements Initializable {
 
     private final class CustomTreeCellImpl extends TreeCell<FolderItem> {
         private ContextMenu menu;
-
         CustomTreeCellImpl() {
             createContextMenu();
         }
@@ -80,12 +79,13 @@ public class FolderBrowserPresenter implements Initializable {
         public void updateItem(FolderItem item, boolean empty) {
             super.updateItem(item, empty);
             if (empty) {
+              //  setText(null);
+                textProperty().unbind();
                 setText(null);
-                //     textProperty().unbind();
                 setGraphic(null);
             } else {
-                setText(item.getName());
-                //textProperty().bind(item.nameProperty());
+               // setText(item.getName());
+                textProperty().bind(item.nameProperty());
                 setGraphic(getTreeItem().getGraphic());
                 setContextMenu(menu);
             }
