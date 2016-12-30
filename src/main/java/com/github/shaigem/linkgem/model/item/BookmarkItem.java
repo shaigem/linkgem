@@ -1,5 +1,6 @@
 package com.github.shaigem.linkgem.model.item;
 
+import com.github.shaigem.linkgem.util.LocationUtil;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -24,6 +25,9 @@ public class BookmarkItem extends Item {
     }
 
     public void setLocation(String location) {
+        if (!LocationUtil.validLocation(location)) {
+            location = "http://" + location;
+        }
         this.location.set(location);
     }
 
