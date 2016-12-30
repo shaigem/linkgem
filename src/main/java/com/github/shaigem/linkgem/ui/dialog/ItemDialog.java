@@ -11,7 +11,7 @@ import javafx.stage.StageStyle;
 /**
  * Created on 2016-12-30.
  */
-public abstract class ItemDialog extends Stage {
+public  class ItemDialog extends Stage {
 
     private enum ButtonType {
         CANCEL, OK
