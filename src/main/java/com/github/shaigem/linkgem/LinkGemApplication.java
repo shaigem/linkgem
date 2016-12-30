@@ -1,7 +1,7 @@
 package com.github.shaigem.linkgem;
 
 import com.airhacks.afterburner.injection.Injector;
-import com.github.shaigem.linkgem.gui.main.MainWindowView;
+import com.github.shaigem.linkgem.ui.main.MainWindowView;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
