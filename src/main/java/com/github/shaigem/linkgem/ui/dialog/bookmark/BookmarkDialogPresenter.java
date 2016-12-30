@@ -10,6 +10,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import org.controlsfx.validation.ValidationSupport;
+import org.controlsfx.validation.Validator;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -25,6 +27,8 @@ public class BookmarkDialogPresenter implements Initializable, DialogBasedItemEd
     private BookmarkItem editingBookmark;
     private boolean add;
 
+    private ValidationSupport locationValidationSupport;
+
     @FXML
     TextField nameTextField;
     @FXML
@@ -39,7 +43,10 @@ public class BookmarkDialogPresenter implements Initializable, DialogBasedItemEd
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // empty
+        locationValidationSupport = new ValidationSupport();
+        locationValidationSupport.registerValidator(locationTextField,
+                false, Validator.combine(Validator.createEmptyValidator("Cannot be empty")));
+        okButton.disableProperty().bind(locationValidationSupport.invalidProperty());
     }
 
     @Override
