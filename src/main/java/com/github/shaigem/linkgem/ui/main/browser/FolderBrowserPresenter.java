@@ -83,6 +83,7 @@ public class FolderBrowserPresenter implements Initializable {
                 textProperty().unbind();
                 setText(null);
                 setGraphic(null);
+                setContextMenu(null);
             } else {
                // setText(item.getName());
                 textProperty().bind(item.nameProperty());
