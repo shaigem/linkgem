@@ -48,7 +48,8 @@ public class FolderBrowserPresenter implements Initializable {
         // 2. broadcast event
         // 3. Change explorer view
         folderTreeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
-                eventStudio().broadcast(new SelectedFolderChangedEvent(oldValue == null ? null : oldValue.getValue(), newValue.getValue())));
+                eventStudio().broadcast(new SelectedFolderChangedEvent(oldValue == null ? null :
+                        oldValue.getValue(), newValue == null ? null : newValue.getValue())));
     }
 
     @EventListener
@@ -71,6 +72,7 @@ public class FolderBrowserPresenter implements Initializable {
 
     private final class CustomTreeCellImpl extends TreeCell<FolderItem> {
         private ContextMenu menu;
+
         CustomTreeCellImpl() {
             createContextMenu();
         }
@@ -79,13 +81,13 @@ public class FolderBrowserPresenter implements Initializable {
         public void updateItem(FolderItem item, boolean empty) {
             super.updateItem(item, empty);
             if (empty) {
-              //  setText(null);
+                //  setText(null);
                 textProperty().unbind();
                 setText(null);
                 setGraphic(null);
                 setContextMenu(null);
             } else {
-               // setText(item.getName());
+                // setText(item.getName());
                 textProperty().bind(item.nameProperty());
                 setGraphic(getTreeItem().getGraphic());
                 setContextMenu(menu);
@@ -94,17 +96,17 @@ public class FolderBrowserPresenter implements Initializable {
 
         private void createContextMenu() {
             menu = new ContextMenu();
+            final MenuItem editFolder = new MenuItem("Edit Folder...");
+            editFolder.setOnAction(event -> eventStudio().broadcast(new OpenItemDialogRequest(getItem(), getItem(), false)));
+            final SeparatorMenuItem separatorMenuItem = new SeparatorMenuItem();
+
             final MenuItem newFolder = new MenuItem("Add Folder...");
             newFolder.setOnAction(event -> eventStudio().broadcast(new OpenItemDialogRequest(getItem(), new FolderItem("New Folder"), true)));
+
             final MenuItem newBookmark = new MenuItem("Add Bookmark...");
             newBookmark.setOnAction(event -> eventStudio().broadcast(new OpenItemDialogRequest(getItem(),
                     new BookmarkItem("New Bookmark"), true)));
-
-            //      newFolder.setOnAction(event -> eventStudio().broadcast(new AddItemRequest(getItem(), ItemType.BOOKMARK)));
-            //  final MenuItem newBookmark = new MenuItem("Add Bookmark...");
-            //  newBookmark.setOnAction(event -> eventStudio().broadcast(new AddItemToFolderEvent
-            //          (getItem(), new BookmarkItem("New Bookmark"))));
-            menu.getItems().addAll(newFolder, newBookmark);//, newBookmark);
+            menu.getItems().addAll(editFolder, separatorMenuItem, newFolder, newBookmark);
         }
 
         private String getString() {

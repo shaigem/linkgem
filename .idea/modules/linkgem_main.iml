@@ -12,6 +12,7 @@
     <orderEntry type="library" name="Gradle: com.airhacks:afterburner.fx:1.7.0" level="project" />
     <orderEntry type="library" name="Gradle: org.sejda:eventstudio:1.0.5" level="project" />
     <orderEntry type="library" name="Gradle: org.controlsfx:controlsfx:8.40.12" level="project" />
+    <orderEntry type="library" name="Gradle: de.jensd:fontawesomefx:8.9" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.5" level="project" />
   </component>
 </module>

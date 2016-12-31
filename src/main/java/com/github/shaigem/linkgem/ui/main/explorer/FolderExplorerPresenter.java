@@ -73,11 +73,11 @@ public class FolderExplorerPresenter implements Initializable {
         final ToggleGroup toggleGroup = new ToggleGroup();
         final SegmentedButton segmentedButton = new SegmentedButton();
         final ToggleButton tableToggleButton = FolderViewMode.TABLE.getFolderView().getToggleButton();
-       // final ToggleButton gridToggleButton = FolderViewMode.GRID.getFolderView().getToggleButton();
+      final ToggleButton gridToggleButton = FolderViewMode.GRID.getFolderView().getToggleButton();
 
         tableToggleButton.setSelected(true);
         segmentedButton.setToggleGroup(toggleGroup);
-        segmentedButton.getButtons().addAll(tableToggleButton);
+        segmentedButton.getButtons().addAll(tableToggleButton, gridToggleButton);
         rightToolbarSection.getChildren().addAll(segmentedButton);
 
         toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {

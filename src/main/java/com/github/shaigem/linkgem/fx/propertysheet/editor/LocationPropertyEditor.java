@@ -1,9 +1,9 @@
-package com.github.shaigem.linkgem.fx.propertysheet;
+package com.github.shaigem.linkgem.fx.propertysheet.editor;
 
 import com.github.shaigem.linkgem.util.LocationUtil;
 import org.controlsfx.control.PropertySheet;
 
-public class LocationPropertyEditor extends StringPropertyEditorWithValidation {
+public class LocationPropertyEditor extends StringPropertyEditorWithEmptyValidation {
 
     public LocationPropertyEditor(PropertySheet.Item aItem) {
         super(aItem);

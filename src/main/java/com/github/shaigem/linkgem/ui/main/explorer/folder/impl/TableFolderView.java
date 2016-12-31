@@ -67,10 +67,11 @@ public class TableFolderView extends AbstractFolderView {
 
     private void createColumns() {
         TableColumn<Item, String> nameColumn = new TableColumn<>("Name");
-        TableColumn<Item, String> locationColumn = new TableColumn<>("Location");
+        //TableColumn<Item, String> locationColumn = new TableColumn<>("Location");
         nameColumn.setCellValueFactory(e -> e.getValue().nameProperty());
+        //locationColumn.setCellValueFactory(e -> e.getValue().locationProperty());
         tableView.getColumns().add(nameColumn);
-        tableView.getColumns().add(locationColumn);
+        //tableView.getColumns().add(locationColumn);
     }
 
     private ContextMenu createContextMenu() {

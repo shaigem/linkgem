@@ -1,5 +1,6 @@
 package com.github.shaigem.linkgem.ui.main.explorer.editor;
 
+import com.github.shaigem.linkgem.fx.propertysheet.ItemPropertyEditor;
 import com.github.shaigem.linkgem.fx.propertysheet.PropertyEditorItem;
 import com.github.shaigem.linkgem.ui.events.ItemSelectionChangedEvent;
 import com.github.shaigem.linkgem.model.item.BookmarkItem;
@@ -46,15 +47,18 @@ public class ItemEditorPresenter implements Initializable {
         setPropertySheetVisibility(true);
 
         final PropertyEditorItem<String> nameItem = (new PropertyEditorItem<>
-                (DEFAULT_CATEGORY, editingItem.nameProperty(), "Name", "Stuff"));
+                (DEFAULT_CATEGORY, editingItem.nameProperty(), "Name", "Stuff",
+                        ItemPropertyEditor.NAME));
 
         final PropertyEditorItem<String> descriptionItem = (new PropertyEditorItem<>
-                (DEFAULT_CATEGORY, editingItem.descriptionProperty(), "Description", ""));
+                (DEFAULT_CATEGORY, editingItem.descriptionProperty(), "Description", "",
+                        ItemPropertyEditor.DEFAULT));
 
         if (editingItem instanceof BookmarkItem) {
             final BookmarkItem bookmarkItem = (BookmarkItem) editingItem;
             final PropertyEditorItem<String> locationItem = (new PropertyEditorItem<>
-                    (DEFAULT_CATEGORY, bookmarkItem.locationProperty(), "Link", ""));
+                    (DEFAULT_CATEGORY, bookmarkItem.locationProperty(), "Link", "",
+                            ItemPropertyEditor.LOCATION));
             propertySheet.getItems().setAll(nameItem, locationItem, descriptionItem);
         } else {
             propertySheet.getItems().setAll(nameItem, descriptionItem);

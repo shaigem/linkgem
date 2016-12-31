@@ -13,18 +13,14 @@ public class PropertyEditorItem<T> implements PropertySheet.Item {
     private final String category;
     private final String name;
     private final String description;
-    private final Class<? extends PropertyEditor<?>> propertyEditor;
+    private final ItemPropertyEditor propertyEditor;
 
-    public PropertyEditorItem(String aCategory, Property<T> aProperty, String aName, String aDescription,Class<? extends PropertyEditor<?>> aPropertyEditor) {
-        property = aProperty;
-        category = aCategory;
-        name = aName;
-        description = aDescription;
-        propertyEditor = aPropertyEditor;
-    }
-
-    public PropertyEditorItem(String aCategory, Property<T> aProperty, String aName, String aDescription) {
-        this(aCategory, aProperty, aName, aDescription, StringPropertyEditor.class);
+    public PropertyEditorItem(String category, Property<T> property, String name, String description, ItemPropertyEditor propertyEditor) {
+        this.property = property;
+        this.category = category;
+        this.name = name;
+        this.description = description;
+        this.propertyEditor = propertyEditor;
     }
 
     @Override
@@ -48,13 +44,13 @@ public class PropertyEditorItem<T> implements PropertySheet.Item {
     }
 
     @Override
-    public Object getValue() {
-        return property.getValue();
+    public void setValue(Object aValue) {
+        property.setValue((T) aValue);
     }
 
     @Override
-    public void setValue(Object aValue) {
-        property.setValue((T) aValue);
+    public Object getValue() {
+        return property.getValue();
     }
 
     @Override
@@ -64,7 +60,7 @@ public class PropertyEditorItem<T> implements PropertySheet.Item {
 
     @Override
     public Optional<Class<? extends PropertyEditor<?>>> getPropertyEditorClass() {
-        return Optional.ofNullable(propertyEditor);
+        return Optional.ofNullable(propertyEditor.getPropertyEditorClass());
     }
 
 }
