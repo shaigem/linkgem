@@ -21,7 +21,6 @@ import static org.sejda.eventstudio.StaticStudio.eventStudio;
  */
 public class ItemEditorPresenter implements Initializable {
 
-
     private Item editingItem;
 
     @FXML
