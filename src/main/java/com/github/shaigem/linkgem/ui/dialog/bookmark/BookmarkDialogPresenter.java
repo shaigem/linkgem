@@ -8,7 +8,6 @@ import com.github.shaigem.linkgem.ui.events.OpenItemDialogRequest;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
@@ -27,14 +26,12 @@ public class BookmarkDialogPresenter implements Initializable, DialogBasedItemEd
     private BookmarkItem editingBookmark;
     private boolean add;
 
-    private ValidationSupport locationValidationSupport;
-
     @FXML
     TextField nameTextField;
     @FXML
     TextField locationTextField;
     @FXML
-    TextArea descriptionTextArea;
+    TextField descriptionTextField;
 
     @FXML
     Button okButton;
@@ -43,7 +40,7 @@ public class BookmarkDialogPresenter implements Initializable, DialogBasedItemEd
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        locationValidationSupport = new ValidationSupport();
+        ValidationSupport locationValidationSupport = new ValidationSupport();
         locationValidationSupport.registerValidator(locationTextField,
                 false, Validator.combine(Validator.createEmptyValidator("Cannot be empty")));
         okButton.disableProperty().bind(locationValidationSupport.invalidProperty());
@@ -56,14 +53,14 @@ public class BookmarkDialogPresenter implements Initializable, DialogBasedItemEd
         this.add = request.isAdd();
         nameTextField.setText(editingBookmark.getName());
         locationTextField.setText(editingBookmark.getLocation());
-        descriptionTextArea.setText(editingBookmark.getDescription());
+        descriptionTextField.setText(editingBookmark.getDescription());
     }
 
     @Override
     public void saveProperties() {
         editingBookmark.setName(nameTextField.getText());
         editingBookmark.setLocation(locationTextField.getText());
-        editingBookmark.setDescription(descriptionTextArea.getText());
+        editingBookmark.setDescription(descriptionTextField.getText());
         if (add) {
             eventStudio().broadcast(new AddItemToFolderEvent(folder, editingBookmark));
         }
