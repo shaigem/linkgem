@@ -1,5 +1,7 @@
 package com.github.shaigem.linkgem.model.item;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -12,10 +14,12 @@ public abstract class Item {
 
     private StringProperty name;
     private StringProperty description;
+    private ObjectProperty<ItemType> itemType;
 
-    public Item(final String name, final String description) {
+    public Item(final String name, final String description, final ItemType type) {
         this.name = new SimpleStringProperty(name);
         this.description = new SimpleStringProperty(description);
+        this.itemType = new SimpleObjectProperty<>(type);
     }
 
     public void setName(String name) {
@@ -24,7 +28,6 @@ public abstract class Item {
         }
         this.name.set(name);
     }
-
     public void setDescription(String description) {
         this.description.set(description);
     }
@@ -37,13 +40,16 @@ public abstract class Item {
         return description.get();
     }
 
-
     public StringProperty nameProperty() {
         return name;
     }
 
     public StringProperty descriptionProperty() {
         return description;
+    }
+
+    public ObjectProperty<ItemType> itemTypeProperty() {
+        return itemType;
     }
 
     @Override

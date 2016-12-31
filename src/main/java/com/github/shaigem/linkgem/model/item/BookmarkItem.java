@@ -12,7 +12,7 @@ public class BookmarkItem extends Item {
     private StringProperty location;
 
     public BookmarkItem(String name, String description, String location) {
-        super(name, description);
+        super(name, description, ItemType.BOOKMARK);
         this.location = new SimpleStringProperty(location);
     }
 

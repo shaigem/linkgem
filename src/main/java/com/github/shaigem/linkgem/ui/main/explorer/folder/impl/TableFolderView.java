@@ -1,13 +1,16 @@
 package com.github.shaigem.linkgem.ui.main.explorer.folder.impl;
 
 import com.github.shaigem.linkgem.model.item.BookmarkItem;
+import com.github.shaigem.linkgem.model.item.ItemType;
 import com.github.shaigem.linkgem.ui.events.ItemSelectionChangedEvent;
 import com.github.shaigem.linkgem.ui.events.OpenFolderRequest;
+import com.github.shaigem.linkgem.ui.events.OpenItemDialogRequest;
 import com.github.shaigem.linkgem.ui.main.explorer.folder.AbstractFolderView;
 import com.github.shaigem.linkgem.ui.main.explorer.folder.FolderViewMode;
 import com.github.shaigem.linkgem.model.item.FolderItem;
 import com.github.shaigem.linkgem.model.item.Item;
 import javafx.scene.control.*;
+import javafx.stage.Screen;
 
 import static org.sejda.eventstudio.StaticStudio.eventStudio;
 
@@ -15,6 +18,8 @@ import static org.sejda.eventstudio.StaticStudio.eventStudio;
  * Created on 2016-12-27.
  */
 public class TableFolderView extends AbstractFolderView {
+
+    // TODO add options to hide certain columns?
 
     private TableView<Item> tableView;
 
@@ -32,6 +37,7 @@ public class TableFolderView extends AbstractFolderView {
                     if (rowData instanceof FolderItem) {
                         eventStudio().broadcast(new OpenFolderRequest((FolderItem) rowData));
                     }
+
                 }
             });
             return row;
@@ -67,9 +73,10 @@ public class TableFolderView extends AbstractFolderView {
     }
 
     private void createColumns() {
-        TableColumn<Item, String> nameColumn = new TableColumn<>("Name");
-        TableColumn<Item, String> locationColumn = new TableColumn<>("Location");
+        final TableColumn<Item, String> nameColumn = new TableColumn<>("Name");
         nameColumn.setCellValueFactory(e -> e.getValue().nameProperty());
+
+        final TableColumn<Item, String> locationColumn = new TableColumn<>("Location");
         locationColumn.setCellValueFactory(e -> {
             if (e.getValue() instanceof BookmarkItem) {
                 final BookmarkItem bookmarkItem = (BookmarkItem) e.getValue();
@@ -77,11 +84,64 @@ public class TableFolderView extends AbstractFolderView {
             }
             return null;
         });
+        locationColumn.setCellFactory(column -> new TooltipTableCell());
+
+        final TableColumn<Item, String> descriptionColumn = new TableColumn<>("Description");
+        descriptionColumn.setCellValueFactory(e -> e.getValue().descriptionProperty());
+        descriptionColumn.setCellFactory(column -> new TooltipTableCell());
+
+        final TableColumn<Item, ItemType> typeColumn = new TableColumn<>("Type");
+        typeColumn.setCellValueFactory(e -> e.getValue().itemTypeProperty());
+
         tableView.getColumns().add(nameColumn);
         tableView.getColumns().add(locationColumn);
+        tableView.getColumns().add(descriptionColumn);
+        tableView.getColumns().add(typeColumn);
     }
 
     private ContextMenu createContextMenu() {
-        return new ContextMenu();
+        // TODO a Add Item In action? Allows user to add a item inside a selected folder
+        // TODO remove item action
+        final ContextMenu contextMenu = new ContextMenu();
+        final MenuItem newFolder = new MenuItem("Add Folder...");
+        newFolder.setOnAction(event -> eventStudio().broadcast
+                (new OpenItemDialogRequest(getViewingFolder(), new FolderItem("New Folder"), true)));
+
+        final MenuItem newBookmark = new MenuItem("Add Bookmark...");
+        newBookmark.setOnAction(event -> eventStudio().broadcast(new OpenItemDialogRequest(getViewingFolder(),
+                new BookmarkItem("New Bookmark"), true)));
+        contextMenu.getItems().addAll(newFolder, newBookmark);
+        return contextMenu;
+    }
+
+
+    private final static class TooltipTableCell extends TableCell<Item, String> {
+
+        final Tooltip tooltip;
+
+        TooltipTableCell() {
+            tooltip = new Tooltip();
+            tooltip.setMaxWidth(Screen.getPrimary().getVisualBounds().getWidth() / 3);
+            tooltip.setWrapText(true);
+        }
+
+        @Override
+        protected void updateItem(String item, boolean empty) {
+            super.updateItem(item, empty);
+            if (item == null || empty) {
+                setText(null);
+                setGraphic(null);
+                setTooltip(null);
+            } else {
+                setText(item);
+                if (!item.isEmpty()) {
+                    tooltip.setText(item);
+                    setTooltip(tooltip);
+                } else {
+                    tooltip.setText("");
+                    setTooltip(null);
+                }
+            }
+        }
     }
 }

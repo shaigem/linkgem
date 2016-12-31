@@ -13,7 +13,7 @@ public class FolderItem extends Item {
     private ObservableList<Item> children;
 
     public FolderItem(String name, String description) {
-        super(name, description);
+        super(name, description, ItemType.FOLDER);
         this.children = FXCollections.observableArrayList();
     }
 

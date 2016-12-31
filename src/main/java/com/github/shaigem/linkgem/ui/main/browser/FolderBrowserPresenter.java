@@ -96,6 +96,7 @@ public class FolderBrowserPresenter implements Initializable {
 
         private void createContextMenu() {
             menu = new ContextMenu();
+             // TODO remove item action
             final MenuItem editFolder = new MenuItem("Edit Folder...");
             editFolder.setOnAction(event -> eventStudio().broadcast(new OpenItemDialogRequest(getItem(), getItem(), false)));
             final SeparatorMenuItem separatorMenuItem = new SeparatorMenuItem();
