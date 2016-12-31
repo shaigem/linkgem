@@ -21,7 +21,6 @@ import static org.sejda.eventstudio.StaticStudio.eventStudio;
  */
 public class ItemEditorPresenter implements Initializable {
 
-    private static final String DEFAULT_CATEGORY = "Default";
 
     private Item editingItem;
 
@@ -46,18 +45,18 @@ public class ItemEditorPresenter implements Initializable {
     private void updatePropertySheetItems() {
         setPropertySheetVisibility(true);
 
-        final PropertyEditorItem<String> nameItem = (new PropertyEditorItem<>
-                (DEFAULT_CATEGORY, editingItem.nameProperty(), "Name", "Stuff",
+        final PropertyEditorItem<String> nameItem = (new PropertyEditorItem<>(editingItem.nameProperty(), "Name",
+                        "The name of the item",
                         ItemPropertyEditor.NAME));
 
         final PropertyEditorItem<String> descriptionItem = (new PropertyEditorItem<>
-                (DEFAULT_CATEGORY, editingItem.descriptionProperty(), "Description", "",
+                (editingItem.descriptionProperty(), "Description", "The description of the item",
                         ItemPropertyEditor.DEFAULT));
 
         if (editingItem instanceof BookmarkItem) {
             final BookmarkItem bookmarkItem = (BookmarkItem) editingItem;
             final PropertyEditorItem<String> locationItem = (new PropertyEditorItem<>
-                    (DEFAULT_CATEGORY, bookmarkItem.locationProperty(), "Link", "",
+                    (bookmarkItem.locationProperty(), "Location", "The URL/location of the item",
                             ItemPropertyEditor.LOCATION));
             propertySheet.getItems().setAll(nameItem, locationItem, descriptionItem);
         } else {

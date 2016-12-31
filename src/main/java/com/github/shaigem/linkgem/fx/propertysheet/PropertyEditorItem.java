@@ -10,14 +10,12 @@ import java.util.Optional;
 public class PropertyEditorItem<T> implements PropertySheet.Item {
 
     private final Property<T> property;
-    private final String category;
     private final String name;
     private final String description;
     private final ItemPropertyEditor propertyEditor;
 
-    public PropertyEditorItem(String category, Property<T> property, String name, String description, ItemPropertyEditor propertyEditor) {
+    public PropertyEditorItem(Property<T> property, String name, String description, ItemPropertyEditor propertyEditor) {
         this.property = property;
-        this.category = category;
         this.name = name;
         this.description = description;
         this.propertyEditor = propertyEditor;
@@ -30,7 +28,8 @@ public class PropertyEditorItem<T> implements PropertySheet.Item {
 
     @Override
     public String getCategory() {
-        return category;
+        // don't care about categories
+        return "Default";
     }
 
     @Override
