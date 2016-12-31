@@ -25,10 +25,7 @@ public class BookmarkItem extends Item {
     }
 
     public void setLocation(String location) {
-        if (!LocationUtil.validLocation(location)) {
-            location = "http://" + location;
-        }
-        this.location.set(location);
+        this.location.set(LocationUtil.addHttp(location));
     }
 
     public String getLocation() {

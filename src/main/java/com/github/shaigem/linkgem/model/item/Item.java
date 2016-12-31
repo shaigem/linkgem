@@ -8,6 +8,8 @@ import javafx.beans.property.StringProperty;
  */
 public abstract class Item {
 
+    private static final String DEFAULT_NAME = "<No Name>";
+
     private StringProperty name;
     private StringProperty description;
 
@@ -18,7 +20,7 @@ public abstract class Item {
 
     public void setName(String name) {
         if(name.isEmpty()) {
-            name = "<No Name>";
+            name = DEFAULT_NAME;
         }
         this.name.set(name);
     }
