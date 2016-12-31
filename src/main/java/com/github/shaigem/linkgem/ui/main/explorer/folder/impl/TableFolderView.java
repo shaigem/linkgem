@@ -1,5 +1,6 @@
 package com.github.shaigem.linkgem.ui.main.explorer.folder.impl;
 
+import com.github.shaigem.linkgem.model.item.BookmarkItem;
 import com.github.shaigem.linkgem.ui.events.ItemSelectionChangedEvent;
 import com.github.shaigem.linkgem.ui.events.OpenFolderRequest;
 import com.github.shaigem.linkgem.ui.main.explorer.folder.AbstractFolderView;
@@ -67,15 +68,20 @@ public class TableFolderView extends AbstractFolderView {
 
     private void createColumns() {
         TableColumn<Item, String> nameColumn = new TableColumn<>("Name");
-        //TableColumn<Item, String> locationColumn = new TableColumn<>("Location");
+        TableColumn<Item, String> locationColumn = new TableColumn<>("Location");
         nameColumn.setCellValueFactory(e -> e.getValue().nameProperty());
-        //locationColumn.setCellValueFactory(e -> e.getValue().locationProperty());
+        locationColumn.setCellValueFactory(e -> {
+            if (e.getValue() instanceof BookmarkItem) {
+                final BookmarkItem bookmarkItem = (BookmarkItem) e.getValue();
+                return bookmarkItem.locationProperty();
+            }
+            return null;
+        });
         tableView.getColumns().add(nameColumn);
-        //tableView.getColumns().add(locationColumn);
+        tableView.getColumns().add(locationColumn);
     }
 
     private ContextMenu createContextMenu() {
-        final ContextMenu contextMenu = new ContextMenu();
-        return contextMenu;
+        return new ContextMenu();
     }
 }
