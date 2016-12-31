@@ -4,6 +4,7 @@ import com.github.shaigem.linkgem.ui.listeners.ItemDialogListener;
 import com.github.shaigem.linkgem.ui.main.browser.FolderBrowserView;
 import com.github.shaigem.linkgem.ui.main.explorer.FolderExplorerView;
 import com.github.shaigem.linkgem.ui.main.explorer.editor.ItemEditorView;
+import com.github.shaigem.linkgem.util.TooltipUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Side;
@@ -30,6 +31,7 @@ public class MainWindowPresenter implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         initializeItemSidebar();
         initializeExplorer();
+        TooltipUtil.changeDefaultTooltipActivationDuration();
         eventStudio().add(new ItemDialogListener(), 0, ReferenceStrength.STRONG);
     }
 
