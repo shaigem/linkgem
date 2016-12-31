@@ -28,7 +28,6 @@ public class PropertyEditorItem<T> implements PropertySheet.Item {
 
     @Override
     public String getCategory() {
-        // don't care about categories
         return "Default";
     }
 
@@ -61,5 +60,4 @@ public class PropertyEditorItem<T> implements PropertySheet.Item {
     public Optional<Class<? extends PropertyEditor<?>>> getPropertyEditorClass() {
         return Optional.ofNullable(propertyEditor.getPropertyEditorClass());
     }
-
 }
