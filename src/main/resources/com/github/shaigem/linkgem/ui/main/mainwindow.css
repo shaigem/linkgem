@@ -1,0 +1,24 @@
+.icon-button, .icon-button:focused {
+    -fx-background-color: white;
+    -fx-background-insets: 0.0;
+    -fx-background-radius: 3.0;
+}
+.icon-button:focused {
+    /*-fx-background-color: -focus-border-color, white;
+    -fx-background-insets: 0.0, 0.5;
+    -fx-background-radius: 3.0; */
+}
+.icon-button:hover {
+    -fx-background-color: derive( #EEEEEE, -10%), #EEEEEE;
+    -fx-background-insets: 0.0, 0.3;
+    -fx-background-radius: 3.0;
+    -fx-translate-y: -1.0;
+    -fx-effect: dropshadow(gaussian, rgba(0.0, 0.0, 0.0, 0.2), 6.0, 0.0, 0.0, 4.0);
+}
+.icon-button:armed {
+    -fx-background-color: derive(#EEEEEE, -18.0%);
+    -fx-background-insets: 0.0;
+    -fx-translate-y: -2.0;
+    -fx-effect: dropshadow(gaussian, rgba(0.0, 0.0, 0.0, 0.2), 10.0, 0.0, 0.0, 10.0);;
+    -fx-opacity: 0.7;
+}

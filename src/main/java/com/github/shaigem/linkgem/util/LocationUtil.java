@@ -9,7 +9,6 @@ public class LocationUtil {
         return string.matches("^(https?|ftp)://.*$");
     }
 
-
     public static String addHttp(String string) {
         // if the string does not contain http, https or ftp, add it to the string
         if (!LocationUtil.validLocation(string)) {

@@ -17,7 +17,6 @@ public class LinkGemApplication extends Application {
         primaryStage.setScene(scene);
         primaryStage.setTitle("LinkGem");
         primaryStage.show();
-
     }
 
     @Override
