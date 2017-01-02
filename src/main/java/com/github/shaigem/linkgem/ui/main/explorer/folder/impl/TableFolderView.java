@@ -70,7 +70,7 @@ public class TableFolderView extends AbstractFolderView {
 
     @Override
     public ToggleButton createToggleButton() {
-        return iconToggleButton(FolderViewMode.TABLE, MaterialDesignIcon.TABLE, "1.8em");
+        return iconToggleButton(FolderViewMode.TABLE, MaterialDesignIcon.TABLE);
     }
 
     private void createColumns() {

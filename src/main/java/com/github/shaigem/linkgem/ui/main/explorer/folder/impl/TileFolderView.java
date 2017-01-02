@@ -65,7 +65,7 @@ public class TileFolderView extends AbstractFolderView {
 
     @Override
     public ToggleButton createToggleButton() {
-        return iconToggleButton(FolderViewMode.GRID, MaterialDesignIcon.GRID, "1.8em");
+        return iconToggleButton(FolderViewMode.GRID, MaterialDesignIcon.GRID);
     }
 
     @Override

@@ -8,12 +8,18 @@ import com.github.shaigem.linkgem.ui.main.explorer.folder.impl.TileFolderView;
  */
 public enum FolderViewMode {
 
-    TABLE(new TableFolderView()), GRID(new TileFolderView());
+    TABLE("Table", new TableFolderView()), GRID("Grid", new TileFolderView());
 
+    private String name;
     private AbstractFolderView folderView;
 
-    FolderViewMode(AbstractFolderView folderView) {
+    FolderViewMode(String name, AbstractFolderView folderView) {
+        this.name = name;
         this.folderView = folderView;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public AbstractFolderView getFolderView() {
