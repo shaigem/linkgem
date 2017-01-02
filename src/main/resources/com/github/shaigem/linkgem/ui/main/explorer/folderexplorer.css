@@ -17,6 +17,12 @@
 
 }
 
+.table-view .placeholder {
+    -fx-font-family: "Roboto Regular";
+    -fx-font-size: 16px;
+
+}
+
 .table-view .column-header, .table-view .filler {
     -fx-background-color: white;
 }

@@ -27,6 +27,8 @@ public class TableFolderView extends AbstractFolderView {
     @Override
     public void createControl() {
         tableView = new TableView<>();
+        final Label placeholder = new Label("Folder contains no items");
+        tableView.setPlaceholder(placeholder);
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tableView.setEditable(false);
         createColumns();

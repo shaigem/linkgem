@@ -4,9 +4,9 @@
 <?import javafx.scene.layout.StackPane?>
 <?import org.controlsfx.control.PropertySheet?>
 
-<StackPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.shaigem.linkgem.ui.main.explorer.editor.ItemEditorPresenter">
+<StackPane styleClass="item-editor-root" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.shaigem.linkgem.ui.main.explorer.editor.ItemEditorPresenter">
    <children>
-      <Label text="No item selected" />
-      <PropertySheet fx:id="propertySheet" modeSwitcherVisible="false" searchBoxVisible="false" visible="false" />
+      <Label styleClass="item-editor-no-item-label" text="No item selected" />
+      <PropertySheet fx:id="propertySheet" modeSwitcherVisible="false" searchBoxVisible="false" styleClass="item-editor-property-sheet" visible="false" />
    </children>
 </StackPane>

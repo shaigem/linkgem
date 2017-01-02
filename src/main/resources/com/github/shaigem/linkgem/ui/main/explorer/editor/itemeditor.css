@@ -1,0 +1,25 @@
+.item-editor-root {
+    -fx-background-color: -fx-control-inner-background;
+}
+
+.item-editor-no-item-label {
+    -fx-font-family: "Roboto Regular";
+    -fx-font-size: 16px;
+}
+
+.item-editor-property-sheet {
+    -fx-font-family: "Roboto Regular";
+}
+
+.item-editor-property-sheet .label {
+    -fx-font-family: "Roboto Bold";
+}
+
+.item-editor-property-sheet .scroll-pane .property-pane {
+    -fx-background-color: -fx-control-inner-background;
+}
+
+.item-editor-property-sheet .scroll-pane {
+    -fx-fit-to-height: true;
+    -fx-background-color: -fx-control-inner-background;
+}
