@@ -1,6 +1,6 @@
 package com.github.shaigem.linkgem.ui.main.browser;
 
-import com.github.shaigem.linkgem.fx.FolderBrowserToolbar;
+import com.github.shaigem.linkgem.fx.ThemeTitledToolbar;
 import com.github.shaigem.linkgem.model.item.BookmarkItem;
 import com.github.shaigem.linkgem.model.item.FolderItem;
 import com.github.shaigem.linkgem.repository.FolderRepository;
@@ -59,8 +59,7 @@ public class FolderBrowserPresenter implements Initializable {
     }
 
     private void initializeToolbar() {
-        final FolderBrowserToolbar toolbar = new FolderBrowserToolbar();
-        toolbarPane.getChildren().add(toolbar);
+        toolbarPane.getChildren().add(new ThemeTitledToolbar("Browser"));
     }
 
     private void setupCreateButton() {
