@@ -39,6 +39,8 @@ public class FolderExplorerPresenter implements Initializable {
     @FXML
     StackPane itemsView;
 
+    private  ThemeTitledToolbar toolbar;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         viewingFolder = folderRepository.getRootFolder();
@@ -53,11 +55,12 @@ public class FolderExplorerPresenter implements Initializable {
         if (viewingFolder != null) {
             currentViewModeSetting.getFolderView().onFolderChanged();
         }
+        toolbar.getTitleLabel().textProperty().bind(viewingFolder.nameProperty());
         System.out.println("Selected Folder Changed!");
     }
 
     private void initToolbar() {
-        final ThemeTitledToolbar toolbar = new ThemeTitledToolbar("Explorer");
+        toolbar = new ThemeTitledToolbar("Explorer");
 
         final ToggleGroup toggleGroup = new ToggleGroup();
         final SegmentedButton segmentedButton = new SegmentedButton();

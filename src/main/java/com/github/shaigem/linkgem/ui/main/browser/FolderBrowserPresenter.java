@@ -103,7 +103,6 @@ public class FolderBrowserPresenter implements Initializable {
         CustomTreeCellImpl() {
             createContextMenu();
             setGraphicTextGap(10);
-
         }
 
         @Override
