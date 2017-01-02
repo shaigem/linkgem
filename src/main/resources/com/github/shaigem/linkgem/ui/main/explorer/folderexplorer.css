@@ -52,27 +52,34 @@
 /*.table-view .table-row-cell:selected { */
 .table-view:focused > .virtual-flow > .clipped-container > .sheet > .table-row-cell:filled:selected,
 .table-view:focused > .virtual-flow > .clipped-container > .sheet > .table-row-cell .table-cell:selected {
-    -fx-background-color: -linkgem-selection-bar;
-    -fx-background-insets: 0;
+    /*  -fx-background-color: -linkgem-selection-bar;
+      -fx-background-insets: 0;
+      */
+    -fx-background-color: -border-color, -linkgem-selection-bar, -linkgem-selection-bar;
+    -fx-background-insets: 0.0, 0.0 0.0 1.5 0, 1.5;
+    -fx-background-radius: 0.0, 0.0;
 }
 
 /* Selected when control is not focused */
 .table-row-cell:filled:selected,
 .table-row-cell:filled > .table-cell:selected {
-    -fx-background-color: -linkgem-selection-bar-non-focused
+    /* -fx-background-color: -linkgem-selection-bar-non-focused */
+    -fx-background-color: -border-color, -linkgem-selection-bar-non-focused, -linkgem-selection-bar-non-focused;
+    -fx-background-insets: 0.0, 0.0 0.0 1.5 0, 1.5;
+    -fx-background-radius: 0.0, 0.0;
 
+}
+
+.table-row-cell:filled {
+    -fx-background-color: -border-color, -fx-control-inner-background, -fx-control-inner-background;
+    -fx-background-insets: 0.0, 0.0 0.0 1.5 0, 1.5;
+    -fx-background-radius: 0.0, 0.0;
 }
 
 .table-view .table-row-cell {
     -fx-cell-size: 30;
     /*    -fx-background-color: transparent; */
-    -fx-background-insets: 0;
-}
-
-.table-view .table-row-cell:filled,
-.table-view .table-row-cell:filled:selected {
-    -fx-border-color: -border-color;
-    -fx-border-width: 0 0 1 0;
+    /*    -fx-background-insets: 0; */
 }
 
 .table-view .table-column {

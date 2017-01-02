@@ -21,13 +21,15 @@
 
 /* Selected when control is not focused */
 .tree-cell:filled:selected {
-    -fx-border-color: -linkgem-theme-color;
-    -fx-border-width: 3px, 0, 0, 0;
-    -fx-border-style: hidden hidden hidden solid;
-    -fx-background-color: -linkgem-selection-bar-non-focused;
+    -fx-background-color: -linkgem-theme-color, -linkgem-selection-bar-non-focused, -linkgem-selection-bar-non-focused;
+    -fx-background-insets: 0.0, 0.0 0.0 0.0 3, 3;
+    -fx-background-radius: 0.0, 0.0;
+  /*  -fx-background-color: -linkgem-selection-bar-non-focused; */
 }
 
 /* Selected when control is focused */
 .tree-view:focused > .virtual-flow > .clipped-container > .sheet > .tree-cell:focused {
-    -fx-background-color: -linkgem-selection-bar;
+    -fx-background-color: -linkgem-theme-color, -linkgem-selection-bar, -linkgem-selection-bar;
+    -fx-background-insets: 0.0, 0.0 0.0 0.0 3, 3;
+    -fx-background-radius: 0.0, 0.0;
 }
