@@ -1,14 +1,15 @@
 package com.github.shaigem.linkgem.ui.main.explorer.folder.impl;
 
 import com.github.shaigem.linkgem.model.item.BookmarkItem;
+import com.github.shaigem.linkgem.model.item.FolderItem;
+import com.github.shaigem.linkgem.model.item.Item;
 import com.github.shaigem.linkgem.model.item.ItemType;
 import com.github.shaigem.linkgem.ui.events.ItemSelectionChangedEvent;
 import com.github.shaigem.linkgem.ui.events.OpenFolderRequest;
 import com.github.shaigem.linkgem.ui.events.OpenItemDialogRequest;
 import com.github.shaigem.linkgem.ui.main.explorer.folder.AbstractFolderView;
 import com.github.shaigem.linkgem.ui.main.explorer.folder.FolderViewMode;
-import com.github.shaigem.linkgem.model.item.FolderItem;
-import com.github.shaigem.linkgem.model.item.Item;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import javafx.scene.control.*;
 import javafx.stage.Screen;
 
@@ -66,10 +67,8 @@ public class TableFolderView extends AbstractFolderView {
     }
 
     @Override
-    public ToggleButton getToggleButton() {
-        final ToggleButton toggleButton = new ToggleButton("Table");
-        toggleButton.setUserData(FolderViewMode.TABLE);
-        return toggleButton;
+    public ToggleButton createToggleButton() {
+        return iconToggleButton(FolderViewMode.TABLE, MaterialDesignIcon.TABLE, "1.8em");
     }
 
     private void createColumns() {

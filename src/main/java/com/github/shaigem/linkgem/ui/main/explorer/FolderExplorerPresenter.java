@@ -1,16 +1,16 @@
 package com.github.shaigem.linkgem.ui.main.explorer;
 
+import com.github.shaigem.linkgem.fx.ThemeTitledToolbar;
+import com.github.shaigem.linkgem.model.item.FolderItem;
+import com.github.shaigem.linkgem.repository.FolderRepository;
 import com.github.shaigem.linkgem.ui.events.SelectedFolderChangedEvent;
 import com.github.shaigem.linkgem.ui.main.explorer.folder.AbstractFolderView;
 import com.github.shaigem.linkgem.ui.main.explorer.folder.FolderViewMode;
-import com.github.shaigem.linkgem.model.item.FolderItem;
-import com.github.shaigem.linkgem.repository.FolderRepository;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import org.controlsfx.control.SegmentedButton;
 import org.sejda.eventstudio.annotation.EventListener;
@@ -34,13 +34,7 @@ public class FolderExplorerPresenter implements Initializable {
     private FolderRepository folderRepository;
 
     @FXML
-    HBox toolbar;
-    @FXML
-    HBox leftToolbarSection;
-    @FXML
-    HBox centerToolbarSection;
-    @FXML
-    HBox rightToolbarSection;
+    StackPane toolbarPane;
 
     @FXML
     StackPane itemsView;
@@ -63,22 +57,16 @@ public class FolderExplorerPresenter implements Initializable {
     }
 
     private void initToolbar() {
-        leftToolbarSection.spacingProperty().bind(toolbar.spacingProperty());
-        centerToolbarSection.spacingProperty().bind(toolbar.spacingProperty());
-        rightToolbarSection.spacingProperty().bind(toolbar.spacingProperty());
-        initViewToggles();
-    }
+        final ThemeTitledToolbar toolbar = new ThemeTitledToolbar("Explorer");
 
-    private void initViewToggles() {
         final ToggleGroup toggleGroup = new ToggleGroup();
         final SegmentedButton segmentedButton = new SegmentedButton();
-        final ToggleButton tableToggleButton = FolderViewMode.TABLE.getFolderView().getToggleButton();
-      final ToggleButton gridToggleButton = FolderViewMode.GRID.getFolderView().getToggleButton();
-
+        final ToggleButton tableToggleButton = FolderViewMode.TABLE.getFolderView().createToggleButton();
+        final ToggleButton gridToggleButton = FolderViewMode.GRID.getFolderView().createToggleButton();
         tableToggleButton.setSelected(true);
         segmentedButton.setToggleGroup(toggleGroup);
         segmentedButton.getButtons().addAll(tableToggleButton, gridToggleButton);
-        rightToolbarSection.getChildren().addAll(segmentedButton);
+        toolbar.getRightSection().getChildren().addAll(segmentedButton);
 
         toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null) {
@@ -88,7 +76,9 @@ public class FolderExplorerPresenter implements Initializable {
                 updateViewModeSetting((FolderViewMode) newValue.getUserData());
             }
         });
+        toolbarPane.getChildren().addAll(toolbar);
     }
+
 
     private void updateViewModeSetting(FolderViewMode viewSetting) {
         if (this.currentViewModeSetting != viewSetting) {

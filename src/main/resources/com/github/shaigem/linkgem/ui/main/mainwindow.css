@@ -1,24 +1,348 @@
-.icon-button, .icon-button:focused {
+/*
+ Fonts
+ */
+
+/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+@font-face {
+    font-family: "Roboto Regular";
+    src: url("../../../../../../font/roboto/Roboto-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Roboto Medium";
+    src: url("../../../../../../font/roboto/Roboto-Medium.ttf");
+}
+
+@font-face {
+    font-family: "Roboto Light";
+    src: url("../../../../../../font/roboto/Roboto-Light.ttf");
+}
+
+@font-face {
+    font-family: "Roboto Bold";
+    src: url("../../../../../../font/roboto/Roboto-Bold.ttf");
+}
+
+.main-content {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 4.0, 0.0, 0.0, 1.0);
+}
+
+.main-root {
+    -linkgem-theme-color: #3399CC;
+    -linkgem-selection-bar: derive(#DEDEDE, 15%);
+    -linkgem-selection-bar-non-focused: derive(#DEDEDE, 30%);
+    -bg-color: #EEEEEE;
+    -border-color: derive(-bg-color, -10%);
+    -flat-bg-color: #EEEEEE;
+    -focus-border-color: rgba(0.0, 0.0, 0.0, 0.2);
+}
+
+.tooltip {
+    -fx-opacity: 0.9;
+    -fx-background-radius: 0px;
+    -fx-font-size: 12px;
+    -fx-text-fill: white;
+    -fx-background-color: #616161;
+    -fx-font-family: "Roboto Medium";
+}
+
+/*
+ * Text Field
+ */
+.text-field {
+    -fx-background-color: -fx-text-box-border, -fx-control-inner-background;
+    -fx-background-insets: 0.0, 1.0;
+    -fx-background-radius: 0.0, 0.0;
+}
+
+.text-field:focused {
+    -fx-background-color: -linkgem-theme-color, derive(#D4D4D4, -5.0%), -fx-control-inner-background;
+    -fx-background-insets: 0.0, 0.0 0.0 2.0 0.0, 2.0 2.0 2.0 2.0;
+    -fx-background-radius: 0.0, 0.0;
+}
+
+/*
+* Common scroll bar
+ */
+
+.scroll-bar:vertical .increment-button,
+.scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-padding: 2px;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #DEDEDE;
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 2em;
+}
+
+.scroll-bar {
+    -fx-background-color: transparent;
+}
+
+/*
+* Common button
+ */
+
+.linkgem-button, .linkgem-button:focused {
     -fx-background-color: white;
     -fx-background-insets: 0.0;
     -fx-background-radius: 3.0;
+    -fx-effect: dropshadow(gaussian, rgba(0.0, 0.0, 0.0, 0.6), 3.0, 0.0, 0.0, 0.0);
 }
-.icon-button:focused {
+
+.linkgem-button:focused {
     /*-fx-background-color: -focus-border-color, white;
     -fx-background-insets: 0.0, 0.5;
     -fx-background-radius: 3.0; */
 }
-.icon-button:hover {
-    -fx-background-color: derive( #EEEEEE, -10%), #EEEEEE;
+
+.linkgem-button:hover {
+    -fx-background-color: derive(#EEEEEE, -10%), #EEEEEE;
     -fx-background-insets: 0.0, 0.3;
     -fx-background-radius: 3.0;
     -fx-translate-y: -1.0;
     -fx-effect: dropshadow(gaussian, rgba(0.0, 0.0, 0.0, 0.2), 6.0, 0.0, 0.0, 4.0);
 }
-.icon-button:armed {
+
+.linkgem-button:armed {
+    -fx-background-color: derive(#EEEEEE, -18.0%);
+    -fx-background-insets: 0.0;
+    -fx-translate-y: -2.0;
+    -fx-effect: dropshadow(gaussian, rgba(0.0, 0.0, 0.0, 0.2), 10.0, 0.0, 0.0, 10.0);
+    -fx-opacity: 0.7;
+}
+
+/*
+* Split Pane
+*/
+.split-pane:horizontal > .split-pane-divider {
+    -fx-background-color: -fx-box-border, -fx-background;
+    -fx-padding: 0 0.50em 0 0.50em;
+
+}
+
+.split-pane:vertical > .split-pane-divider {
+    -fx-background-color: -fx-box-border, -fx-background;
+    -fx-padding: 0 0.50em 0 0.50em;
+}
+
+.split-pane > .split-pane-divider > .horizontal-grabber {
+    -fx-padding: 5 1 5 1;
+    -fx-background-color: dimgray;
+    -fx-background-insets: 1 0 -1 0, 0;
+    -fx-shape: "M0 0 L0 0 L2 0 L2 2 L0 2 Z M0 4 L0 4 L2 4 L2 6 L0 6 Z M0 8 L0 8 L2 8 L2 10 L0 10 Z";
+}
+
+.split-pane > .split-pane-divider > .vertical-grabber {
+    -fx-padding: 1 5 1 5;
+    -fx-background-color: dimgray;
+    -fx-background-insets: 1 0 -1 0, 0;
+    -fx-shape: "M0 0 L0 0 L2 0 L2 2 L0 2 Z M4 0 L4 0 L4 2 L6 2 L6 0 Z M8 0 L8 0 L8 2 L10 2 L10 0 Z";
+}
+
+/*
+ Common Style Settings
+ */
+
+.linkgem-title-label {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-family: "Roboto Regular";
+}
+
+.linkgem-toolbar-content {
+    -fx-background-color: -linkgem-theme-color;
+}
+
+.linkgem-toggle-button, .linkgem-toggle-button:focused {
+    -fx-background-color: white;
+    -fx-background-insets: 0.0;
+    -fx-background-radius: 0.0;
+}
+.linkgem-toggle-button:selected .glyph-icon {
+    -fx-fill: black;
+}
+
+.linkgem-toggle-button:selected {
+    -fx-background-color: -fx-shadow-highlight-color,
+    linear-gradient(to bottom, derive(-fx-outer-border, -20%), -fx-outer-border),
+    linear-gradient(to bottom,
+            derive(-fx-color, -22%) 0%,
+            derive(-fx-color, -13%) 20%,
+            derive(-fx-color, -11%) 50%);
+    -fx-background-insets: 0.0;
+}
+
+.linkgem-toggle-button:selected:focused {
+    -fx-background-color: -fx-focus-color,
+    linear-gradient(to bottom,
+            derive(-fx-color, -22%) 0%,
+            derive(-fx-color, -13%) 20%,
+            derive(-fx-color, -11%) 50%),
+    -fx-faint-focus-color,
+    linear-gradient(to bottom,
+            derive(-fx-color, -22%) 0%,
+            derive(-fx-color, -13%) 20%,
+            derive(-fx-color, -11%) 50%);
+    -fx-background-insets: 0.0;
+}
+
+.linkgem-toggle-button:hover {
+    -fx-background-color: derive(#EEEEEE, -10%), #EEEEEE;
+    -fx-background-insets: 0.0, 0.3;
+    -fx-translate-y: -1.0;
+    -fx-effect: dropshadow(gaussian, rgba(0.0, 0.0, 0.0, 0.2), 6.0, 0.0, 0.0, 4.0);
+}
+
+.linkgem-toggle-button:armed {
+    -fx-background-color: derive(#EEEEEE, -18.0%);
+    -fx-background-insets: 0.0;
+    -fx-translate-y: -2.0;
+    -fx-effect: dropshadow(gaussian, rgba(0.0, 0.0, 0.0, 0.2), 10.0, 0.0, 0.0, 10.0);
+    -fx-opacity: 0.7;
+}
+
+/*
+* Context menu and menu items
+*/
+.context-menu {
+    -fx-background-color: -border-color, -fx-control-inner-background;
+}
+
+.menu-bar > .container > .menu-button:hover,
+.menu-bar > .container > .menu-button:focused,
+.menu-bar > .container > .menu-button:showing,
+.menu:hover {
+    -fx-background-color: #E5E5E5;
+}
+
+.menu .label {
+    -fx-font-size: 14px;
+    -fx-font-family: "Roboto";
+}
+
+.menu-bar > .container > .menu-button:hover > .label,
+.menu-bar > .container > .menu-button:focused > .label,
+.menu-bar > .container > .menu-button:showing > .label,
+.menu:hover .label {
+    -fx-text-fill: black;
+}
+
+.menu:disabled .label {
+    -fx-opacity: 1.0;
+}
+
+.menu-item:focused,
+.menu-item:hover {
+    -fx-background-color: #EEEEEE;
+}
+
+.menu-item:focused > .label,
+.menu-item:hover > .label {
+    -fx-text-fill: black;
+}
+
+.menu-item > .label {
+    -fx-font-size: 15px;
+    -fx-font-family: "Roboto";
+}
+
+.menu-item:disabled > .label {
+    -fx-opacity: 1.0;
+}
+
+.radio-menu-item:focused:checked > .left-container > .radio {
+    -fx-background-color: gray;
+}
+
+/*
+ Main Toolbar section
+ */
+.main-toolbar {
+    -fx-background-color: #D4D4D4, white;
+    -fx-spacing: 5;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 6.0, 0.0, 0.0, 1.0);
+    -fx-font-size: 12px;
+    -fx-font-family: "Roboto Regular";
+}
+
+.main-toolbar-button {
+    -fx-font-size: 1.2em;
+    -fx-graphic-text-gap: 0.6em;
+}
+
+.main-toolbar-button, .main-toolbar-button:focused {
+    -fx-background-color: white;
+    -fx-background-insets: 0.0;
+    -fx-background-radius: 3.0;
+}
+
+.main-toolbar-button:hover {
+    -fx-background-color: derive(#EEEEEE, -10%), #EEEEEE;
+    -fx-background-insets: 0.0, 0.3;
+    -fx-background-radius: 3.0;
+    -fx-translate-y: -1.0;
+    -fx-effect: dropshadow(gaussian, rgba(0.0, 0.0, 0.0, 0.2), 6.0, 0.0, 0.0, 4.0);
+}
+
+.main-toolbar-button:armed {
     -fx-background-color: derive(#EEEEEE, -18.0%);
     -fx-background-insets: 0.0;
     -fx-translate-y: -2.0;
     -fx-effect: dropshadow(gaussian, rgba(0.0, 0.0, 0.0, 0.2), 10.0, 0.0, 0.0, 10.0);;
+    -fx-opacity: 0.7;
+}
+
+/*
+  Icon Button
+ */
+
+.icon-button, .icon-button:focused {
+    -fx-background-color: white;
+    -fx-background-insets: 0.0;
+    -fx-background-radius: 3.0;
+}
+
+.icon-button:focused {
+    /*-fx-background-color: -focus-border-color, white;
+    -fx-background-insets: 0.0, 0.5;
+    -fx-background-radius: 3.0; */
+}
+
+.icon-button:hover {
+    -fx-background-color: derive(#EEEEEE, -10%), #EEEEEE;
+    -fx-background-insets: 0.0, 0.3;
+    -fx-background-radius: 3.0;
+    -fx-translate-y: -1.0;
+    -fx-effect: dropshadow(gaussian, rgba(0.0, 0.0, 0.0, 0.2), 6.0, 0.0, 0.0, 4.0);
+}
+
+.icon-button:armed {
+    -fx-background-color: derive(#EEEEEE, -18.0%);
+    -fx-background-insets: 0.0;
+    -fx-translate-y: -2.0;
+    -fx-effect: dropshadow(gaussian, rgba(0.0, 0.0, 0.0, 0.2), 10.0, 0.0, 0.0, 10.0);
     -fx-opacity: 0.7;
 }

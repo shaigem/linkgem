@@ -1,15 +1,21 @@
 package com.github.shaigem.linkgem.ui.main.browser;
 
+import com.github.shaigem.linkgem.fx.FolderBrowserToolbar;
 import com.github.shaigem.linkgem.model.item.BookmarkItem;
 import com.github.shaigem.linkgem.model.item.FolderItem;
 import com.github.shaigem.linkgem.repository.FolderRepository;
 import com.github.shaigem.linkgem.ui.events.AddItemToFolderEvent;
-import com.github.shaigem.linkgem.ui.events.OpenItemDialogRequest;
 import com.github.shaigem.linkgem.ui.events.OpenFolderRequest;
+import com.github.shaigem.linkgem.ui.events.OpenItemDialogRequest;
 import com.github.shaigem.linkgem.ui.events.SelectedFolderChangedEvent;
+import de.jensd.fx.glyphs.GlyphsDude;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.materialicons.MaterialIcon;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import org.sejda.eventstudio.annotation.EventListener;
 
 import javax.inject.Inject;
@@ -23,17 +29,26 @@ import static org.sejda.eventstudio.StaticStudio.eventStudio;
  */
 public class FolderBrowserPresenter implements Initializable {
 
+    public final static Text OPEN_FOLDER_ICON = GlyphsDude.createIcon(FontAwesomeIcon.FOLDER_OPEN);
+
+    public final static Text FOLDER_ICON = GlyphsDude.createIcon(FontAwesomeIcon.FOLDER);
+
     @Inject
     private FolderRepository folderRepository;
 
-
+    @FXML
+    StackPane toolbarPane;
     @FXML
     TreeView<FolderItem> folderTreeView;
+    @FXML
+    Button createButton;
 
     private TreeItem<FolderItem> rootFolder;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initializeToolbar();
+        setupCreateButton();
         rootFolder = folderRepository.getRootFolder().getAsTreeItem();
         rootFolder.setExpanded(true);
         folderTreeView.setRoot(rootFolder);
@@ -41,6 +56,18 @@ public class FolderBrowserPresenter implements Initializable {
         listenForTreeViewSelection();
         folderTreeView.getSelectionModel().selectFirst();
         eventStudio().addAnnotatedListeners(this);
+    }
+
+    private void initializeToolbar() {
+        final FolderBrowserToolbar toolbar = new FolderBrowserToolbar();
+        toolbarPane.getChildren().add(toolbar);
+    }
+
+    private void setupCreateButton() {
+        final Text icon = GlyphsDude.createIcon(MaterialIcon.CREATE_NEW_FOLDER, "1.6em");
+        createButton.setGraphic(icon);
+        createButton.setOnAction(event -> eventStudio().broadcast(new OpenItemDialogRequest(rootFolder.getValue(),
+                new FolderItem("New Folder"), true)));
     }
 
     private void listenForTreeViewSelection() {
@@ -63,7 +90,6 @@ public class FolderBrowserPresenter implements Initializable {
         event.getItemToAdd().ifPresent(itemToAdd -> {
             folderToAddTo.addItem(itemToAdd);
             if (itemToAdd instanceof FolderItem) {
-                // TODO add item dialog
                 folderRepository.getFolders().add((FolderItem) itemToAdd);
                 folderToAddTo.getAsTreeItem().getChildren().add(((FolderItem) itemToAdd).getAsTreeItem());
             }
@@ -71,32 +97,39 @@ public class FolderBrowserPresenter implements Initializable {
     }
 
     private final class CustomTreeCellImpl extends TreeCell<FolderItem> {
+
         private ContextMenu menu;
+        private Text icon;
 
         CustomTreeCellImpl() {
             createContextMenu();
+            setGraphicTextGap(10);
+
         }
 
         @Override
         public void updateItem(FolderItem item, boolean empty) {
             super.updateItem(item, empty);
-            if (empty) {
+            if (item == null || empty) {
                 //  setText(null);
                 textProperty().unbind();
                 setText(null);
                 setGraphic(null);
                 setContextMenu(null);
             } else {
+                icon = getTreeItem().isExpanded() && !getTreeItem().isLeaf() ?
+                        GlyphsDude.createIcon(FontAwesomeIcon.FOLDER_OPEN, "1.4em")
+                        : GlyphsDude.createIcon(FontAwesomeIcon.FOLDER, "1.4em");
                 // setText(item.getName());
                 textProperty().bind(item.nameProperty());
-                setGraphic(getTreeItem().getGraphic());
+                setGraphic(icon);
                 setContextMenu(menu);
             }
         }
 
         private void createContextMenu() {
             menu = new ContextMenu();
-             // TODO remove item action
+            // TODO remove item action
             final MenuItem editFolder = new MenuItem("Edit Folder...");
             editFolder.setOnAction(event -> eventStudio().broadcast(new OpenItemDialogRequest(getItem(), getItem(), false)));
             final SeparatorMenuItem separatorMenuItem = new SeparatorMenuItem();

@@ -1,0 +1,33 @@
+.browser-root {
+    -fx-background-color: -border-color, -fx-control-inner-background;
+    -fx-faint-focus-color: -fx-control-inner-background;
+    -fx-focus-color: -fx-control-inner-background;
+    -fx-box-border: -fx-control-inner-background;
+}
+
+/*
+ * Tree cell
+ */
+
+.tree-cell {
+    -fx-font-family: "Roboto Regular";
+    -fx-font-size: 1.2em;
+}
+
+/* Selected tree row */
+.tree-view:focused > .virtual-flow > .clipped-container > .sheet > .tree-cell:filled:selected {
+    -fx-background: #DEDEDE;
+}
+
+/* Selected when control is not focused */
+.tree-cell:filled:selected {
+    -fx-border-color: -linkgem-theme-color;
+    -fx-border-width: 3px, 0, 0, 0;
+    -fx-border-style: hidden hidden hidden solid;
+    -fx-background-color: -linkgem-selection-bar-non-focused;
+}
+
+/* Selected when control is focused */
+.tree-view:focused > .virtual-flow > .clipped-container > .sheet > .tree-cell:focused {
+    -fx-background-color: -linkgem-selection-bar;
+}

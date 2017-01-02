@@ -1,0 +1,90 @@
+.explorer-root {
+    -fx-background-color: -border-color, -fx-control-inner-background;
+    -fx-faint-focus-color: transparent;
+    -fx-focus-color: transparent;
+    -fx-box-border: transparent;
+}
+
+/*
+* Table View
+*/
+
+.table-view {
+    -fx-table-cell-border-color: transparent;
+    -fx-background-radius: 3px;
+    -fx-background-color: white;
+    -fx-background-insets: 0;
+
+}
+
+.table-view .column-header, .table-view .filler {
+    -fx-background-color: white;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header {
+    -fx-border-width: 0 1 1 0;
+    -fx-border-color: rgba(1, 1, 1, 0.20);
+    -fx-pref-height: 41;
+}
+
+.table-view .column-header .label {
+    -fx-font-family: "Roboto Regular";
+    -fx-font-size: 12px;
+    -fx-alignment: CENTER-LEFT;
+    -fx-font-weight: normal;
+}
+
+.table-view .table-row-cell .table-cell {
+    -fx-border-width: 1 0 0 0;
+}
+
+.table-view .table-row-cell:selected .table-cell {
+    -fx-font-family: "Roboto Regular";
+    -fx-text-fill: black;
+    -fx-border-width: 0 0 0 0;
+}
+
+/* Selected when control is focused */
+/*.table-view .table-row-cell:selected { */
+.table-view:focused > .virtual-flow > .clipped-container > .sheet > .table-row-cell:filled:selected,
+.table-view:focused > .virtual-flow > .clipped-container > .sheet > .table-row-cell .table-cell:selected {
+    -fx-background-color: -linkgem-selection-bar;
+    -fx-background-insets: 0;
+}
+
+/* Selected when control is not focused */
+.table-row-cell:filled:selected,
+.table-row-cell:filled > .table-cell:selected {
+    -fx-background-color: -linkgem-selection-bar-non-focused
+
+}
+
+.table-view .table-row-cell {
+    -fx-cell-size: 30;
+    /*    -fx-background-color: transparent; */
+    -fx-background-insets: 0;
+}
+
+.table-view .table-row-cell:filled,
+.table-view .table-row-cell:filled:selected {
+    -fx-border-color: -border-color;
+    -fx-border-width: 0 0 1 0;
+}
+
+.table-view .table-column {
+    -fx-alignment: CENTER-LEFT;
+    -fx-padding: 0 0 0 16;
+}
+
+.table-view .table-cell {
+    -fx-font-family: "Roboto Regular";
+    -fx-font-size: 12px;
+}
+
+.table-view .corner {
+    -fx-background-color: transparent;
+}

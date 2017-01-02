@@ -1,5 +1,6 @@
 package com.github.shaigem.linkgem.ui.main;
 
+import com.github.shaigem.linkgem.fx.MainToolbar;
 import com.github.shaigem.linkgem.ui.listeners.ItemDialogListener;
 import com.github.shaigem.linkgem.ui.main.browser.FolderBrowserView;
 import com.github.shaigem.linkgem.ui.main.explorer.FolderExplorerView;
@@ -9,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Side;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import org.controlsfx.control.MasterDetailPane;
 import org.sejda.eventstudio.ReferenceStrength;
 
@@ -23,20 +25,26 @@ import static org.sejda.eventstudio.StaticStudio.eventStudio;
 public class MainWindowPresenter implements Initializable {
 
     @FXML
+    VBox root;
+    @FXML
     StackPane itemSidebarPane;
     @FXML
     StackPane explorerPane;
+    @FXML
+    StackPane toolbarPane;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initializeToolbar();
         initializeItemSidebar();
         initializeExplorer();
         TooltipUtil.changeDefaultTooltipActivationDuration();
         eventStudio().add(new ItemDialogListener(), 0, ReferenceStrength.STRONG);
     }
 
-    @FXML
-    private void onPlaceholderAction() {
+    private void initializeToolbar() {
+        final MainToolbar toolbar = new MainToolbar();
+        toolbarPane.getChildren().add(toolbar);
     }
 
     private void initializeItemSidebar() {

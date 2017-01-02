@@ -4,6 +4,7 @@ import com.github.shaigem.linkgem.model.item.Item;
 import com.github.shaigem.linkgem.ui.main.explorer.folder.AbstractFolderView;
 import com.github.shaigem.linkgem.ui.main.explorer.folder.FolderViewMode;
 import com.github.shaigem.linkgem.ui.main.explorer.tile.ItemTileView;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import javafx.scene.control.Control;
 import javafx.scene.control.ToggleButton;
 import org.controlsfx.control.GridCell;
@@ -26,7 +27,7 @@ public class TileFolderView extends AbstractFolderView {
         gridView.setCellWidth(150);
         gridView.setCellFactory(gridView -> new TestGridCell());
         if (getViewingFolder() != null) {
-           gridView.setItems(getViewingFolder().getChildren());
+            gridView.setItems(getViewingFolder().getChildren());
         }
     }
 
@@ -63,11 +64,8 @@ public class TileFolderView extends AbstractFolderView {
     }
 
     @Override
-    public ToggleButton getToggleButton() {
-        final ToggleButton toggleButton = new ToggleButton("Tile");
-        toggleButton.setUserData(FolderViewMode.GRID);
-        return toggleButton;
-
+    public ToggleButton createToggleButton() {
+        return iconToggleButton(FolderViewMode.GRID, MaterialDesignIcon.GRID, "1.8em");
     }
 
     @Override
