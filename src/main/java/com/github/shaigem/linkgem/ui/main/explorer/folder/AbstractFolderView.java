@@ -6,10 +6,13 @@ import com.github.shaigem.linkgem.model.item.FolderItem;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import javafx.scene.control.Control;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+
+import java.util.List;
 
 /**
  * Created on 2016-12-27.
@@ -25,6 +28,8 @@ public abstract class AbstractFolderView {
     public abstract void destroy();
 
     public abstract ToggleButton createToggleButton();
+
+    public abstract List<MenuItem> createSettings();
 
     public abstract Control getControl();
 

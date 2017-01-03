@@ -16,9 +16,20 @@ public class RandomColorGenerator {
     private Random random = new Random(System.currentTimeMillis());
 
     public Color getRandomColor() {
-        return new Color(random.nextDouble(), random.nextDouble(), random.nextDouble(), 1.0);
-    }
+        int red = random.nextInt(256);
+        int green = random.nextInt(256);
+        int blue = random.nextInt(256);
 
+        final Color mix = Color.BLACK;
+        // mix the color
+        if (mix != null) {
+            red = (int) ((red + mix.getRed() * 255) / 2);
+            green = (int) ((green + mix.getGreen() * 255) / 2);
+            blue = (int) ((blue + mix.getBlue() * 255) / 2);
+        }
+
+        return Color.rgb(red,green,blue);
+    }
 
     private static class LazyHolder {
         static final RandomColorGenerator INSTANCE = new RandomColorGenerator();

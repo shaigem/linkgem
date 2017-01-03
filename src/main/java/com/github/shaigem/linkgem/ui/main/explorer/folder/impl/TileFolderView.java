@@ -6,9 +6,13 @@ import com.github.shaigem.linkgem.ui.main.explorer.folder.FolderViewMode;
 import com.github.shaigem.linkgem.ui.main.explorer.tile.ItemTileView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import javafx.scene.control.Control;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ToggleButton;
 import org.controlsfx.control.GridCell;
 import org.controlsfx.control.GridView;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created on 2016-12-28.
@@ -16,7 +20,6 @@ import org.controlsfx.control.GridView;
 public class TileFolderView extends AbstractFolderView {
 
     private GridView<Item> gridView;
-
 
     @Override
     public void createControl() {
@@ -71,5 +74,10 @@ public class TileFolderView extends AbstractFolderView {
     @Override
     public Control getControl() {
         return gridView;
+    }
+
+    @Override
+    public List<MenuItem> createSettings() {
+        return Collections.emptyList();
     }
 }

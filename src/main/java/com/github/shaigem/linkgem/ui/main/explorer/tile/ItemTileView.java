@@ -13,6 +13,7 @@ import javafx.scene.shape.Rectangle;
 
 /**
  * Created on 2016-12-31.
+ * @author Ronnie Tran
  */
 public class ItemTileView extends BorderPane {
 

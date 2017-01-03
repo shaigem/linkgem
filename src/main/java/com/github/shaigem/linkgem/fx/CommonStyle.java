@@ -6,6 +6,7 @@ package com.github.shaigem.linkgem.fx;
 public enum CommonStyle {
 
     BUTTON("linkgem-button"),
+    ICON_MENU_BUTTON("linkgem-button", "linkgem-icon-menu-button"),
     TOGGLE_BUTTON("linkgem-toggle-button"),
     TITLE_LABEL("linkgem-title-label"),
     TOOLBAR_CONTENT("linkgem-toolbar-content");

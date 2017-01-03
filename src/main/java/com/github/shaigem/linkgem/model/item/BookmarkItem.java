@@ -31,4 +31,5 @@ public class BookmarkItem extends Item {
     public String getLocation() {
         return location.get();
     }
+
 }

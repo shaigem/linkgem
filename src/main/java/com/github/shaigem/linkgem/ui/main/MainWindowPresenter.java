@@ -40,6 +40,7 @@ public class MainWindowPresenter implements Initializable {
         initializeExplorer();
         TooltipUtil.changeDefaultTooltipActivationDuration();
         eventStudio().add(new ItemDialogListener(), 0, ReferenceStrength.STRONG);
+
     }
 
     private void initializeToolbar() {

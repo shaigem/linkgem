@@ -20,6 +20,8 @@ public class ItemTileController {
         parentView.getDescriptionLabel().setText(item.getDescription().isEmpty() ? "No description" : item.getDescription());
         if (item instanceof BookmarkItem) {
             parentView.getLocationLabel().setText(((BookmarkItem) item).getLocation());
+        } else {
+            parentView.getLocationLabel().setText("");
         }
         parentView.setBackgroundFill(item.getBackgroundColor());
     }

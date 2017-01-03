@@ -108,7 +108,7 @@
 .linkgem-button, .linkgem-button:focused {
     -fx-background-color: white;
     -fx-background-insets: 0.0;
-    -fx-background-radius: 3.0;
+    -fx-background-radius: 0.0;
     -fx-effect: dropshadow(gaussian, rgba(0.0, 0.0, 0.0, 0.6), 3.0, 0.0, 0.0, 0.0);
 }
 
@@ -121,7 +121,7 @@
 .linkgem-button:hover {
     -fx-background-color: derive(#EEEEEE, -10%), #EEEEEE;
     -fx-background-insets: 0.0, 0.3;
-    -fx-background-radius: 3.0;
+    -fx-background-radius: 0.0;
     -fx-translate-y: -1.0;
     -fx-effect: dropshadow(gaussian, rgba(0.0, 0.0, 0.0, 0.2), 6.0, 0.0, 0.0, 4.0);
 }
@@ -172,15 +172,37 @@
     -fx-font-family: "Roboto Regular";
 }
 
+/*
+ * Icon menu button
+ */
+
+.linkgem-icon-menu-button {
+
+}
+
+.linkgem-icon-menu-button > .arrow-button,
+.linkgem-icon-menu-button > .arrow-button > .arrow {
+    -fx-padding: 0;
+    -fx-background-insets: 0;
+}
+
+/*
+ * Default Toolbar Header
+ */
 .linkgem-toolbar-content {
     -fx-background-color: -linkgem-theme-color;
 }
+
+/*
+ * Toggle button
+ */
 
 .linkgem-toggle-button, .linkgem-toggle-button:focused {
     -fx-background-color: white;
     -fx-background-insets: 0.0;
     -fx-background-radius: 0.0;
 }
+
 .linkgem-toggle-button:selected .glyph-icon {
     -fx-fill: black;
 }
@@ -273,6 +295,7 @@
     -fx-opacity: 1.0;
 }
 
+.check-menu-item:focused:checked > .left-container > .check,
 .radio-menu-item:focused:checked > .left-container > .radio {
     -fx-background-color: gray;
 }

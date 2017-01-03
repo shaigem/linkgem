@@ -1,16 +1,21 @@
 package com.github.shaigem.linkgem.ui.main.explorer;
 
+import com.github.shaigem.linkgem.fx.CommonStyle;
 import com.github.shaigem.linkgem.fx.ThemeTitledToolbar;
 import com.github.shaigem.linkgem.model.item.FolderItem;
 import com.github.shaigem.linkgem.repository.FolderRepository;
 import com.github.shaigem.linkgem.ui.events.SelectedFolderChangedEvent;
 import com.github.shaigem.linkgem.ui.main.explorer.folder.AbstractFolderView;
 import com.github.shaigem.linkgem.ui.main.explorer.folder.FolderViewMode;
+import de.jensd.fx.glyphs.GlyphsDude;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.StackPane;
 import org.controlsfx.control.SegmentedButton;
 import org.sejda.eventstudio.annotation.EventListener;
@@ -39,7 +44,8 @@ public class FolderExplorerPresenter implements Initializable {
     @FXML
     StackPane itemsView;
 
-    private  ThemeTitledToolbar toolbar;
+    private ThemeTitledToolbar toolbar;
+    private MenuButton viewSettingsMenuButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -62,14 +68,22 @@ public class FolderExplorerPresenter implements Initializable {
     private void initToolbar() {
         toolbar = new ThemeTitledToolbar("Explorer");
 
+        // load all toggle buttons to the right section
         final ToggleGroup toggleGroup = new ToggleGroup();
-        final SegmentedButton segmentedButton = new SegmentedButton();
+        final SegmentedButton viewSegmentedButton = new SegmentedButton();
         final ToggleButton tableToggleButton = FolderViewMode.TABLE.getFolderView().createToggleButton();
         final ToggleButton gridToggleButton = FolderViewMode.GRID.getFolderView().createToggleButton();
         tableToggleButton.setSelected(true);
-        segmentedButton.setToggleGroup(toggleGroup);
-        segmentedButton.getButtons().addAll(tableToggleButton, gridToggleButton);
-        toolbar.getRightSection().getChildren().addAll(segmentedButton);
+        viewSegmentedButton.setToggleGroup(toggleGroup);
+        viewSegmentedButton.getButtons().addAll(tableToggleButton, gridToggleButton);
+
+        viewSettingsMenuButton = new MenuButton();
+        viewSettingsMenuButton.setTooltip(new Tooltip("Change view-specific settings"));
+        viewSettingsMenuButton.setGraphic(GlyphsDude.createIcon(MaterialDesignIcon.SETTINGS, "1.8em"));
+        viewSettingsMenuButton.getStyleClass().addAll(CommonStyle.ICON_MENU_BUTTON.getStyleClasses());
+        viewSettingsMenuButton.getItems().setAll(currentViewModeSetting.getFolderView().createSettings());
+
+        toolbar.getRightSection().getChildren().addAll(viewSegmentedButton, viewSettingsMenuButton);
 
         toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null) {
@@ -81,7 +95,6 @@ public class FolderExplorerPresenter implements Initializable {
         });
         toolbarPane.getChildren().addAll(toolbar);
     }
-
 
     private void updateViewModeSetting(FolderViewMode viewSetting) {
         if (this.currentViewModeSetting != viewSetting) {
@@ -101,6 +114,9 @@ public class FolderExplorerPresenter implements Initializable {
             folderView.setFolderExplorerPresenter(this);
         }
         folderView.createControl();
+        if (viewSettingsMenuButton != null) {
+            viewSettingsMenuButton.getItems().setAll(folderView.createSettings());
+        }
         itemsView.getChildren().setAll(folderView.getControl());
     }
 

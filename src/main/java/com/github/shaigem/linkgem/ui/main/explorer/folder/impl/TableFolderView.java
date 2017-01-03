@@ -13,6 +13,9 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import javafx.scene.control.*;
 import javafx.stage.Screen;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.sejda.eventstudio.StaticStudio.eventStudio;
 
 /**
@@ -59,6 +62,24 @@ public class TableFolderView extends AbstractFolderView {
     }
 
     @Override
+    public List<MenuItem> createSettings() {
+        final List<MenuItem> menuItems = new ArrayList<>();
+        for (TableColumn<Item, ?> itemTableColumn : tableView.getColumns()) {
+            final String columnName = itemTableColumn.getText();
+            final CheckMenuItem checkMenuItem = new CheckMenuItem
+                    ("Show " + columnName + " Column");
+            checkMenuItem.setSelected(true);
+            itemTableColumn.visibleProperty().bindBidirectional(checkMenuItem.selectedProperty());
+            if (columnName.equals("Name")) {
+                // we must always show the name column so don't allow users to hide it
+                checkMenuItem.setDisable(true);
+            }
+            menuItems.add(checkMenuItem);
+        }
+        return menuItems;
+    }
+
+    @Override
     public void destroy() {
         tableView = null;
     }
@@ -76,7 +97,6 @@ public class TableFolderView extends AbstractFolderView {
     private void createColumns() {
         final TableColumn<Item, String> nameColumn = new TableColumn<>("Name");
         nameColumn.setCellValueFactory(e -> e.getValue().nameProperty());
-
         final TableColumn<Item, String> locationColumn = new TableColumn<>("Location");
         locationColumn.setCellValueFactory(e -> {
             if (e.getValue() instanceof BookmarkItem) {
@@ -114,7 +134,6 @@ public class TableFolderView extends AbstractFolderView {
         contextMenu.getItems().addAll(newFolder, newBookmark);
         return contextMenu;
     }
-
 
     private final static class TooltipTableCell extends TableCell<Item, String> {
 

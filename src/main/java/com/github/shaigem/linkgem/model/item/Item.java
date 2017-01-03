@@ -24,7 +24,6 @@ public abstract class Item {
         this.description = new SimpleStringProperty(description);
         this.itemType = new SimpleObjectProperty<>(type);
         this.backgroundColor = new SimpleObjectProperty<>(RandomColorGenerator.getInstance().getRandomColor());
-
     }
 
     public void setName(String name) {
@@ -45,6 +44,7 @@ public abstract class Item {
     public String getDescription() {
         return description.get();
     }
+
 
     public Color getBackgroundColor() {
         return backgroundColor.get();
