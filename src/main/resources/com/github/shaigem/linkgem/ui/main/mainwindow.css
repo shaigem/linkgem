@@ -166,11 +166,7 @@
  Common Style Settings
  */
 
-.linkgem-title-label {
-    -fx-text-fill: white;
-    -fx-font-size: 16px;
-    -fx-font-family: "Roboto Regular";
-}
+
 
 /*
  * Icon menu button
@@ -180,18 +176,8 @@
 
 }
 
-.linkgem-icon-menu-button > .arrow-button,
-.linkgem-icon-menu-button > .arrow-button > .arrow {
-    -fx-padding: 0;
-    -fx-background-insets: 0;
-}
 
-/*
- * Default Toolbar Header
- */
-.linkgem-toolbar-content {
-    -fx-background-color: -linkgem-theme-color;
-}
+
 
 /*
  * Toggle button

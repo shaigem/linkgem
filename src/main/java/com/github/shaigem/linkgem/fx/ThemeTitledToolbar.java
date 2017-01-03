@@ -13,9 +13,10 @@ public class ThemeTitledToolbar extends CustomToolbar {
         if(title.isEmpty()) {
             title = "No Title";
         }
-        getStyleClass().addAll(CommonStyle.TOOLBAR_CONTENT.getStyleClasses());
+        getStylesheets().add(ThemeTitledToolbar.class.getResource("themetoolbar.css").toExternalForm());
+        getStyleClass().addAll("toolbar-parent");
         titleLabel = new Label(title);
-        titleLabel.getStyleClass().addAll(CommonStyle.TITLE_LABEL.getStyleClasses());
+        titleLabel.getStyleClass().addAll("toolbar-title");
         getLeftSection().getChildren().addAll(titleLabel);
     }
 

@@ -2,12 +2,9 @@ package com.github.shaigem.linkgem.ui.main.explorer.folder.impl;
 
 import com.github.shaigem.linkgem.model.item.Item;
 import com.github.shaigem.linkgem.ui.main.explorer.folder.AbstractFolderView;
-import com.github.shaigem.linkgem.ui.main.explorer.folder.FolderViewMode;
 import com.github.shaigem.linkgem.ui.main.explorer.tile.ItemTileView;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import javafx.scene.control.Control;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.ToggleButton;
 import org.controlsfx.control.GridCell;
 import org.controlsfx.control.GridView;
 
@@ -64,11 +61,6 @@ public class TileFolderView extends AbstractFolderView {
     @Override
     public void destroy() {
         gridView = null;
-    }
-
-    @Override
-    public ToggleButton createToggleButton() {
-        return iconToggleButton(FolderViewMode.GRID, MaterialDesignIcon.GRID);
     }
 
     @Override

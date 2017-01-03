@@ -6,10 +6,8 @@ import com.github.shaigem.linkgem.model.item.Item;
 import com.github.shaigem.linkgem.model.item.ItemType;
 import com.github.shaigem.linkgem.ui.events.ItemSelectionChangedEvent;
 import com.github.shaigem.linkgem.ui.events.OpenFolderRequest;
-import com.github.shaigem.linkgem.ui.events.OpenItemDialogRequest;
+import com.github.shaigem.linkgem.ui.main.explorer.FolderExplorerPresenter;
 import com.github.shaigem.linkgem.ui.main.explorer.folder.AbstractFolderView;
-import com.github.shaigem.linkgem.ui.main.explorer.folder.FolderViewMode;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import javafx.scene.control.*;
 import javafx.stage.Screen;
 
@@ -89,10 +87,6 @@ public class TableFolderView extends AbstractFolderView {
         return tableView;
     }
 
-    @Override
-    public ToggleButton createToggleButton() {
-        return iconToggleButton(FolderViewMode.TABLE, MaterialDesignIcon.TABLE);
-    }
 
     private void createColumns() {
         final TableColumn<Item, String> nameColumn = new TableColumn<>("Name");
@@ -125,12 +119,9 @@ public class TableFolderView extends AbstractFolderView {
         // TODO remove item action
         final ContextMenu contextMenu = new ContextMenu();
         final MenuItem newFolder = new MenuItem("Add Folder...");
-        newFolder.setOnAction(event -> eventStudio().broadcast
-                (new OpenItemDialogRequest(getViewingFolder(), new FolderItem("New Folder"), true)));
-
+        newFolder.setOnAction(event -> performExplorerAction(FolderExplorerPresenter.ExplorerAction.ADD_FOLDER));
         final MenuItem newBookmark = new MenuItem("Add Bookmark...");
-        newBookmark.setOnAction(event -> eventStudio().broadcast(new OpenItemDialogRequest(getViewingFolder(),
-                new BookmarkItem("New Bookmark"), true)));
+        newBookmark.setOnAction(event -> performExplorerAction(FolderExplorerPresenter.ExplorerAction.ADD_BOOKMARK));
         contextMenu.getItems().addAll(newFolder, newBookmark);
         return contextMenu;
     }

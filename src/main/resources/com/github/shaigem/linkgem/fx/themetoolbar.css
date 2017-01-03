@@ -1,0 +1,84 @@
+.toolbar-parent {
+    -fx-background-color: -linkgem-theme-color;
+
+}
+
+.glyph-icon {
+    -fx-fill: white;
+}
+
+.button {
+    -fx-background-color: -linkgem-theme-color;
+}
+
+.button:hover {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0.0, 0.3;
+    -fx-effect: dropshadow(gaussian, rgba(0.0, 0.0, 0.0, 0.2), 6.0, 0.0, 0.0, 4.0);
+}
+
+.button:armed {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0.0;
+    -fx-effect: dropshadow(gaussian, rgba(0.0, 0.0, 0.0, 0.2), 10.0, 0.0, 0.0, 10.0);
+    -fx-opacity: 0.7;
+}
+
+.toolbar-title {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-family: "Roboto Regular";
+}
+
+.menu-button:hover {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0.0, 0.3;
+    -fx-effect: dropshadow(gaussian, rgba(0.0, 0.0, 0.0, 0.2), 6.0, 0.0, 0.0, 4.0);
+}
+
+.menu-button:armed {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0.0;
+    -fx-effect: dropshadow(gaussian, rgba(0.0, 0.0, 0.0, 0.2), 10.0, 0.0, 0.0, 10.0);
+    -fx-opacity: 0.7;
+}
+
+.menu-button {
+    -fx-background-color: -linkgem-theme-color;
+}
+
+.menu-button > .arrow-button,
+.menu-button > .arrow-button > .arrow {
+    -fx-padding: 0;
+    -fx-background-insets: 0;
+}
+
+.toggle-button, .toggle-button:focused {
+    -fx-pref-width: 10;
+    -fx-background-color: -linkgem-theme-color;
+    -fx-background-insets: 0.0;
+    -fx-background-radius: 0.0;
+}
+
+.toggle-button:selected {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0.0;
+}
+
+.toggle-button:selected:focused {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0.0;
+}
+
+.toggle-button:hover {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0.0, 0.3;
+    -fx-effect: dropshadow(gaussian, rgba(0.0, 0.0, 0.0, 0.2), 6.0, 0.0, 0.0, 4.0);
+}
+
+.toggle-button:armed {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0.0;
+    -fx-effect: dropshadow(gaussian, rgba(0.0, 0.0, 0.0, 0.2), 10.0, 0.0, 0.0, 10.0);
+    -fx-opacity: 0.7;
+}

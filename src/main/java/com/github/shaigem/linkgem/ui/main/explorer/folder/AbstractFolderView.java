@@ -1,16 +1,9 @@
 package com.github.shaigem.linkgem.ui.main.explorer.folder;
 
-import com.github.shaigem.linkgem.fx.CommonStyle;
-import com.github.shaigem.linkgem.ui.main.explorer.FolderExplorerPresenter;
 import com.github.shaigem.linkgem.model.item.FolderItem;
-import de.jensd.fx.glyphs.GlyphsDude;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
+import com.github.shaigem.linkgem.ui.main.explorer.FolderExplorerPresenter;
 import javafx.scene.control.Control;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.Tooltip;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 
 import java.util.List;
 
@@ -27,27 +20,18 @@ public abstract class AbstractFolderView {
 
     public abstract void destroy();
 
-    public abstract ToggleButton createToggleButton();
-
     public abstract List<MenuItem> createSettings();
 
     public abstract Control getControl();
 
-    protected ToggleButton iconToggleButton(FolderViewMode folderViewMode, MaterialDesignIcon icon) {
-        final ToggleButton toggleButton = new ToggleButton();
-        Text iconText = GlyphsDude.createIcon(icon, "1.8em");
-        iconText.setFill(Color.web("#B9B9B9")); // gray
-        toggleButton.setGraphic(iconText);
-        toggleButton.setUserData(folderViewMode);
-        toggleButton.getStyleClass().addAll(CommonStyle.TOGGLE_BUTTON.getStyleClasses());
-        toggleButton.setTooltip(new Tooltip(folderViewMode.getName() + " mode"));
-        return toggleButton;
+    protected void performExplorerAction(FolderExplorerPresenter.ExplorerAction explorerAction) {
+        getFolderExplorerPresenter().performAction(explorerAction);
     }
-
 
     protected FolderItem getViewingFolder() {
         return getFolderExplorerPresenter().getViewingFolder();
     }
+
 
     public void setFolderExplorerPresenter(FolderExplorerPresenter folderExplorerPresenter) {
         this.folderExplorerPresenter = folderExplorerPresenter;
