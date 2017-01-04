@@ -16,12 +16,12 @@ public class FolderRepository {
 
     private ObservableList<FolderItem> folderItems = FXCollections.observableArrayList();
 
-    public ObservableList<Item> getAllBookmarkItems(FolderItem folderItem) {
+    public ObservableList<Item> getAllItems(FolderItem folderItem) {
         ObservableList<Item> items = FXCollections.observableArrayList();
         for (Item item : folderItem.getChildren()) {
             if (item instanceof FolderItem) {
                 items.add(item);
-                items.addAll(getAllBookmarkItems((FolderItem) item));
+                items.addAll(getAllItems((FolderItem) item));
             } else {
                 items.add(item);
             }

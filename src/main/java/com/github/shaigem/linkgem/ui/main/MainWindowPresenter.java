@@ -59,7 +59,6 @@ public class MainWindowPresenter implements Initializable {
         eventStudio().addAnnotatedListeners(this);
     }
 
-
     @EventListener(priority = 100)
     private void onSelectedFolderChanged(SelectedFolderChangedEvent event) {
         FolderItem viewingFolder = event.getNewFolder();
@@ -70,7 +69,6 @@ public class MainWindowPresenter implements Initializable {
             }
         }
     }
-
 
     private void initializeToolbar() {
         toolbar = new MainToolbar();

@@ -155,36 +155,37 @@ public class FolderExplorerPresenter implements Initializable {
     }
 
 
-    private FilteredList<Item> filteredData;
-    private SortedList<Item> sortedData;
+    private FilteredList<Item> searchData;
+    private SortedList<Item> sortedSearchData;
 
     @EventListener
     private void onSearchItemRequest(SearchItemRequest request) {
         final String searchTerm = request.getSearchTerm();
-        if (filteredData == null) {
-            filteredData = new FilteredList<>(folderRepository.getSearchFolder().getChildren(), p -> true);
-            sortedData = new SortedList<>(filteredData);
-            sortedData.comparatorProperty().bind(itemTableView.comparatorProperty());
+        if (searchData == null) {
+            searchData = new FilteredList<>(folderRepository.getSearchFolder().getChildren(), p -> true);
+            sortedSearchData = new SortedList<>(searchData);
+            sortedSearchData.comparatorProperty().bind(itemTableView.comparatorProperty());
         }
 
-        if (searchTerm.isEmpty()) {
+        if (searchTerm.isEmpty()) { // open the master folder if search is empty
             eventStudio().broadcast(new OpenFolderRequest(folderRepository.getMasterFolder()));
             return;
         }
-
-        filteredData.setPredicate(person -> {
+        searchData.setPredicate(item -> {
             if (searchTerm.isEmpty()) {
                 return true;
             }
-
             String lowerCaseFilter = searchTerm.toLowerCase();
-            return person.getName().toLowerCase().contains(lowerCaseFilter);
+            if (item.getName().toLowerCase().contains(lowerCaseFilter)) {
+                return true;
+            } else if (item instanceof BookmarkItem && ((BookmarkItem) item).getLocation().toLowerCase().contains(lowerCaseFilter)) {
+                return true;
+            }
+            return false;
         });
-
-        ObservableList<Item> items =
-                folderRepository.getAllBookmarkItems(folderRepository.getMasterFolder());
+        ObservableList<Item> items = folderRepository.getAllItems(folderRepository.getMasterFolder());
         folderRepository.getSearchFolder().getChildren().setAll(items);
-
+        // open the search folder to show the results
         eventStudio().broadcast(new OpenFolderRequest(folderRepository.getSearchFolder()));
     }
 
@@ -197,7 +198,7 @@ public class FolderExplorerPresenter implements Initializable {
             final boolean isSearchFolder = viewingFolder == folderRepository.getSearchFolder();
             placeholder.setText(isSearchFolder ? "Search returned no results" : DEFAULT_PLACEHOLDER_TEXT);
             if (isSearchFolder) {
-                itemTableView.setItems(sortedData);
+                itemTableView.setItems(sortedSearchData);
             } else {
                 itemTableView.setItems(children);
             }
