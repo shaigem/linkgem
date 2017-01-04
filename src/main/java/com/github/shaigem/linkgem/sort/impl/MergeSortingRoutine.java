@@ -65,8 +65,7 @@ public class MergeSortingRoutine extends SortingRoutine {
         while (i < sortedLeftHalfArray.length && j < sortedRightHalfArray.length) { // contains unused numbers still
             String leftHalfName = sortedLeftHalfArray[i].getName().toLowerCase();
             String rightHalfName = sortedRightHalfArray[j].getName().toLowerCase();
-            if (descending ? (leftHalfName.compareTo(rightHalfName) >=
-                   rightHalfName.compareTo(leftHalfName)) :
+            if (descending ? (leftHalfName.compareTo(rightHalfName) >= rightHalfName.compareTo(leftHalfName)) :
                     (leftHalfName.compareTo(rightHalfName) <= rightHalfName.compareTo(leftHalfName))) {
                 resultArray[k] = sortedLeftHalfArray[i];
                 i++;

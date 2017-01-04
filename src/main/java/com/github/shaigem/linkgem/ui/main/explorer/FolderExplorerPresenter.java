@@ -8,18 +8,22 @@ import com.github.shaigem.linkgem.model.item.ItemType;
 import com.github.shaigem.linkgem.repository.FolderRepository;
 import com.github.shaigem.linkgem.sort.SortOrder;
 import com.github.shaigem.linkgem.sort.impl.MergeSortingRoutine;
-import com.github.shaigem.linkgem.ui.events.ItemSelectionChangedEvent;
-import com.github.shaigem.linkgem.ui.events.OpenFolderRequest;
-import com.github.shaigem.linkgem.ui.events.OpenItemDialogRequest;
-import com.github.shaigem.linkgem.ui.events.SelectedFolderChangedEvent;
+import com.github.shaigem.linkgem.ui.events.*;
 import com.github.shaigem.linkgem.ui.main.MainWindowPresenter;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
-import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import org.sejda.eventstudio.annotation.EventListener;
 
@@ -40,7 +44,7 @@ public class FolderExplorerPresenter implements Initializable {
 
     private MainWindowPresenter mainWindowPresenter;
 
-    private FolderItem viewingFolder;
+    private ObjectProperty<FolderItem> viewingFolder;
 
     @Inject
     private FolderRepository folderRepository;
@@ -61,13 +65,34 @@ public class FolderExplorerPresenter implements Initializable {
     @FXML
     TableColumn<Item, ItemType> typeColumn;
 
+    @FXML
+    MenuItem addBookmarkMenuItem;
+    @FXML
+    MenuItem addFolderMenuItem;
+
+    private final static String DEFAULT_PLACEHOLDER_TEXT = "Folder contains no items";
+
+    private Label placeholder;
     private ThemeTitledToolbar toolbar;
     private MenuButton viewSettingsMenuButton;
 
+    private BooleanProperty viewingFolderIsReadOnly;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        viewingFolder = folderRepository.getRootFolder();
-        final Label placeholder = new Label("Folder contains no items");
+        viewingFolder = new SimpleObjectProperty<>(folderRepository.getMasterFolder());
+        viewingFolderIsReadOnly = new SimpleBooleanProperty();
+        // TODO add more menu items
+        addBookmarkMenuItem.disableProperty().bind(viewingFolderIsReadOnly);
+        addFolderMenuItem.disableProperty().bind(viewingFolderIsReadOnly);
+        initTable();
+        initToolbar();
+        initColumns();
+        eventStudio().addAnnotatedListeners(this);
+    }
+
+    private void initTable() {
+        placeholder = new Label(DEFAULT_PLACEHOLDER_TEXT);
         itemTableView.setPlaceholder(placeholder);
         itemTableView.setRowFactory(tv -> {
             TableRow<Item> row = new TableRow<>();
@@ -84,14 +109,10 @@ public class FolderExplorerPresenter implements Initializable {
         });
         itemTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
                 eventStudio().broadcast(new ItemSelectionChangedEvent(newValue)));
-        initToolbar();
-        initColumns();
-        eventStudio().addAnnotatedListeners(this);
     }
 
     private void initColumns() {
         nameColumn.setCellValueFactory(e -> e.getValue().nameProperty());
-        final TableColumn<Item, String> locationColumn = new TableColumn<>("Location");
         locationColumn.setCellValueFactory(e -> {
             if (e.getValue() instanceof BookmarkItem) {
                 final BookmarkItem bookmarkItem = (BookmarkItem) e.getValue();
@@ -133,55 +154,128 @@ public class FolderExplorerPresenter implements Initializable {
                 (new OpenItemDialogRequest(getViewingFolder(), new FolderItem("New Folder"), true));
     }
 
+
+    private FilteredList<Item> filteredData;
+    private SortedList<Item> sortedData;
+
+    @EventListener
+    private void onSearchItemRequest(SearchItemRequest request) {
+        final String searchTerm = request.getSearchTerm();
+        if (filteredData == null) {
+            filteredData = new FilteredList<>(folderRepository.getSearchFolder().getChildren(), p -> true);
+            sortedData = new SortedList<>(filteredData);
+            sortedData.comparatorProperty().bind(itemTableView.comparatorProperty());
+        }
+
+        if (searchTerm.isEmpty()) {
+            eventStudio().broadcast(new OpenFolderRequest(folderRepository.getMasterFolder()));
+            return;
+        }
+
+        filteredData.setPredicate(person -> {
+            if (searchTerm.isEmpty()) {
+                return true;
+            }
+
+            String lowerCaseFilter = searchTerm.toLowerCase();
+            return person.getName().toLowerCase().contains(lowerCaseFilter);
+        });
+
+        ObservableList<Item> items =
+                folderRepository.getAllBookmarkItems(folderRepository.getMasterFolder());
+        folderRepository.getSearchFolder().getChildren().setAll(items);
+
+        eventStudio().broadcast(new OpenFolderRequest(folderRepository.getSearchFolder()));
+    }
+
     @EventListener
     private void onSelectedFolderChanged(SelectedFolderChangedEvent event) {
         FolderItem viewingFolder = event.getNewFolder();
         if (viewingFolder != null) {
-            itemTableView.setItems(viewingFolder.getChildren());
-            toolbar.getTitleLabel().textProperty().bind(viewingFolder.nameProperty());
+            setViewingFolder(viewingFolder);
+            final ObservableList<Item> children = viewingFolder.getChildren();
+            final boolean isSearchFolder = viewingFolder == folderRepository.getSearchFolder();
+            placeholder.setText(isSearchFolder ? "Search returned no results" : DEFAULT_PLACEHOLDER_TEXT);
+            if (isSearchFolder) {
+                itemTableView.setItems(sortedData);
+            } else {
+                itemTableView.setItems(children);
+            }
             System.out.println("Selected Folder Changed!");
         }
     }
 
     private void initToolbar() {
         toolbar = new ThemeTitledToolbar("Explorer");
+        createLeftSectionToolbarItems();
         createRightSectionToolbarItems();
         toolbarPane.getChildren().addAll(toolbar);
     }
 
-    private void createRightSectionToolbarItems() {
-        createViewSettingsMenu();
-        final Button deleteButton = new Button();
-        deleteButton.setGraphic(GlyphsDude.createIcon(MaterialDesignIcon.DELETE, "1.8em"));
-        deleteButton.setContextMenu(new ContextMenu(new MenuItem("Delete All")));
-        deleteButton.setOnAction(event -> performAction(ExplorerAction.DELETE));
-
-        final Button addBookmarkButton = new Button();
-        addBookmarkButton.setTooltip(new Tooltip("Add a new bookmark"));
-        addBookmarkButton.setGraphic(GlyphsDude.createIcon(MaterialDesignIcon.BOOKMARK_PLUS, "1.8em"));
-        addBookmarkButton.setOnAction(event -> performAction(ExplorerAction.ADD_BOOKMARK));
-
-        final Button addFolderButton = new Button();
-        addFolderButton.setTooltip(new Tooltip("Add a new folder"));
-        addFolderButton.setGraphic(GlyphsDude.createIcon(MaterialDesignIcon.FOLDER_PLUS, "1.8em"));
-        addFolderButton.setOnAction(event -> performAction(ExplorerAction.ADD_FOLDER));
-
-        toolbar.getRightSection().getChildren().addAll(addFolderButton, addBookmarkButton, deleteButton, viewSettingsMenuButton);
+    private void createLeftSectionToolbarItems() {
+        final Button editViewingFolderButton = new Button();
+        editViewingFolderButton.visibleProperty().bind(viewingFolderIsReadOnly.not());
+        editViewingFolderButton.setTooltip(new Tooltip("Edit the viewing folder"));
+        editViewingFolderButton.setGraphic(GlyphsDude.createIcon(MaterialDesignIcon.PENCIL, "1.8em"));
+        editViewingFolderButton.setOnAction(event -> eventStudio().broadcast(new OpenItemDialogRequest(getViewingFolder(), getViewingFolder(), false)));
+        toolbar.getLeftSection().getChildren().addAll(editViewingFolderButton);
     }
 
+    private void createRightSectionToolbarItems() {
+        createViewSettingsMenu();
+        //     final Button deleteButton = new Button();
+
+        //    deleteButton.setGraphic(GlyphsDude.createIcon(MaterialDesignIcon.DELETE, "1.8em"));
+        //    deleteButton.setContextMenu(new ContextMenu(new MenuItem("Delete All")));
+        //   deleteButton.setOnAction(event -> performAction(ExplorerAction.DELETE));
+
+        final Button addBookmarkButton = createFolderActionButton(GlyphsDude.createIcon(MaterialDesignIcon.BOOKMARK_PLUS, "1.8em"),
+                "Add a new bookmark", ExplorerAction.ADD_BOOKMARK);
+
+        final Button addFolderButton = createFolderActionButton
+                (GlyphsDude.createIcon(MaterialDesignIcon.FOLDER_PLUS, "1.8em"),
+                        "Add a new folder"
+                        , ExplorerAction.ADD_FOLDER);
+
+        toolbar.getRightSection().getChildren().addAll(addFolderButton, addBookmarkButton/*, deleteButton */, viewSettingsMenuButton);
+    }
+
+    /**
+     * Create a button which performs folder actions such as adding an item to a folder.
+     *
+     * @param icon              the button's icon
+     * @param tooltip           the tooltip text
+     * @param explorerAction    the action
+     * @param disableIfReadOnly indicate if this button should disable if the folder is read-only (cannot edit folder but can edit contents)
+     * @return the button
+     */
+    private Button createFolderActionButton(Text icon, String tooltip, ExplorerAction explorerAction, boolean disableIfReadOnly) {
+        final Button button = new Button();
+        button.setGraphic(icon);
+        button.setTooltip(new Tooltip(tooltip));
+        button.setOnAction(event -> performAction(explorerAction));
+        if (disableIfReadOnly) {
+            button.disableProperty().bind(viewingFolderIsReadOnly);
+        }
+        return button;
+    }
+
+    private Button createFolderActionButton(Text icon, String tooltip, ExplorerAction explorerAction) {
+        return this.createFolderActionButton(icon, tooltip, explorerAction, true);
+    }
 
     private void createViewSettingsMenu() {
         viewSettingsMenuButton = new MenuButton();
-        viewSettingsMenuButton.setTooltip(new Tooltip("Change view-specific settings"));
-        viewSettingsMenuButton.setGraphic(GlyphsDude.createIcon(MaterialDesignIcon.SETTINGS, "1.8em"));
+        viewSettingsMenuButton.setGraphic(GlyphsDude.createIcon(MaterialDesignIcon.MENU, "1.8em"));
 
         final MenuItem sortAscendingMenuItem = new MenuItem("Sort by Ascending (A-Z)");
         sortAscendingMenuItem.setOnAction(event -> performManualSorting(SortOrder.ASCENDING));
         final MenuItem sortDescendingMenuItem = new MenuItem("Sort by Descending (Z-A)");
         sortDescendingMenuItem.setOnAction(event -> performManualSorting(SortOrder.DESCENDING));
 
-        sortAscendingMenuItem.disableProperty().bind(Bindings.isEmpty(getViewingFolder().getChildren()));
-        sortDescendingMenuItem.disableProperty().bind(Bindings.isEmpty(getViewingFolder().getChildren()));
+        //TODO
+        //     sortAscendingMenuItem.disableProperty().bind(Bindings.isEmpty(itemTableView.getItems()));
+        //    sortDescendingMenuItem.disableProperty().bind(Bindings.isEmpty(itemTableView.getItems()));
 
         viewSettingsMenuButton.getItems().add(sortAscendingMenuItem);
         viewSettingsMenuButton.getItems().add(sortDescendingMenuItem);
@@ -202,10 +296,15 @@ public class FolderExplorerPresenter implements Initializable {
     }
 
 
-    public FolderItem getViewingFolder() {
-        return viewingFolder;
+    public void setViewingFolder(FolderItem viewingFolder) {
+        this.viewingFolder.set(viewingFolder);
+        viewingFolderIsReadOnly.bind(viewingFolder.readOnlyProperty());
+        toolbar.getTitleLabel().textProperty().bind(viewingFolder.nameProperty());
     }
 
+    public FolderItem getViewingFolder() {
+        return viewingFolder.get();
+    }
 
     public void setMainWindowPresenter(MainWindowPresenter mainWindowPresenter) {
         this.mainWindowPresenter = mainWindowPresenter;

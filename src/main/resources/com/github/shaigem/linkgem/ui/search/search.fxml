@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.StackPane?>
+<?import org.controlsfx.control.textfield.CustomTextField?>
+
+
+<StackPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.shaigem.linkgem.ui.search.SearchPresenter">
+   <children>
+      <CustomTextField fx:id="searchTextField" promptText="Search Bookmarks" />
+   </children>
+</StackPane>

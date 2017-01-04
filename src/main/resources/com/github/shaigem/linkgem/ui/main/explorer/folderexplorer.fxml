@@ -28,8 +28,8 @@
                      <contextMenu>
                         <ContextMenu>
                           <items>
-                            <MenuItem mnemonicParsing="false" onAction="#onAddFolderAction" text="Add Folder..." />
-                              <MenuItem mnemonicParsing="false" onAction="#onAddBookmarkAction" text="Add Bookmark..." />
+                            <MenuItem fx:id="addFolderMenuItem" mnemonicParsing="false" onAction="#onAddFolderAction" text="Add Folder..." />
+                              <MenuItem fx:id="addBookmarkMenuItem" mnemonicParsing="false" onAction="#onAddBookmarkAction" text="Add Bookmark..." />
                           </items>
                         </ContextMenu>
                      </contextMenu>

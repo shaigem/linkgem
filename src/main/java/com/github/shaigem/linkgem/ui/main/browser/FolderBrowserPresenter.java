@@ -9,6 +9,7 @@ import com.github.shaigem.linkgem.ui.events.*;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.materialicons.MaterialIcon;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -37,15 +38,16 @@ public class FolderBrowserPresenter implements Initializable {
     @FXML
     Button createButton;
 
-    private TreeItem<FolderItem> rootFolder;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeToolbar();
         setupCreateButton();
-        rootFolder = folderRepository.getRootFolder().getAsTreeItem();
+        TreeItem<FolderItem> rootFolder = new TreeItem<>();
         rootFolder.setExpanded(true);
+        folderTreeView.setShowRoot(false);
         folderTreeView.setRoot(rootFolder);
+        rootFolder.getChildren().add(folderRepository.getMasterFolder().getAsTreeItem());
+        rootFolder.getChildren().add(folderRepository.getSearchFolder().getAsTreeItem());
         folderTreeView.setCellFactory((v) -> new CustomTreeCellImpl());
         listenForTreeViewSelection();
         folderTreeView.getSelectionModel().selectFirst();
@@ -59,7 +61,7 @@ public class FolderBrowserPresenter implements Initializable {
     private void setupCreateButton() {
         final Text icon = GlyphsDude.createIcon(MaterialIcon.CREATE_NEW_FOLDER, "1.6em");
         createButton.setGraphic(icon);
-        createButton.setOnAction(event -> eventStudio().broadcast(new OpenItemDialogRequest(rootFolder.getValue(),
+        createButton.setOnAction(event -> eventStudio().broadcast(new OpenItemDialogRequest(folderRepository.getMasterFolder(),
                 new FolderItem("New Folder"), true)));
     }
 
@@ -75,9 +77,10 @@ public class FolderBrowserPresenter implements Initializable {
     @EventListener
     private void onDeleteItem(DeleteItemEvent event) {
         final Item deletedItem = event.getDeletedItem();
+        // TODO
         if (deletedItem instanceof FolderItem) {
-            folderRepository.getFolders().remove(deletedItem);
-            rootFolder.getChildren().remove(((FolderItem) deletedItem).getAsTreeItem());
+            //   folderRepository.getFolders().remove(deletedItem);
+            //    rootFolder.getChildren().remove(((FolderItem) deletedItem).getAsTreeItem());
         }
     }
 
@@ -131,17 +134,25 @@ public class FolderBrowserPresenter implements Initializable {
         private void createContextMenu() {
             menu = new ContextMenu();
             // TODO remove item action
-            final MenuItem editFolder = new MenuItem("Edit Folder...");
+            final MenuItem editFolder = createMenuItem("Edit Folder...");
             editFolder.setOnAction(event -> eventStudio().broadcast(new OpenItemDialogRequest(getItem(), getItem(), false)));
             final SeparatorMenuItem separatorMenuItem = new SeparatorMenuItem();
 
-            final MenuItem newFolder = new MenuItem("Add Folder...");
+            final MenuItem newFolder = createMenuItem("Add Folder...");
             newFolder.setOnAction(event -> eventStudio().broadcast(new OpenItemDialogRequest(getItem(), new FolderItem("New Folder"), true)));
 
-            final MenuItem newBookmark = new MenuItem("Add Bookmark...");
+            final MenuItem newBookmark = createMenuItem("Add Bookmark...");
             newBookmark.setOnAction(event -> eventStudio().broadcast(new OpenItemDialogRequest(getItem(),
                     new BookmarkItem("New Bookmark"), true)));
             menu.getItems().addAll(editFolder, separatorMenuItem, newFolder, newBookmark);
+        }
+
+        private MenuItem createMenuItem(String text) {
+            final MenuItem item = new MenuItem(text);
+            // TODO change this when we add a remove button
+            item.disableProperty().bind(Bindings.when(itemProperty().isEqualTo(folderRepository.getSearchFolder())).
+                    then(true).otherwise(false));
+            return item;
         }
 
         private String getString() {
