@@ -3,6 +3,7 @@ package com.github.shaigem.linkgem.ui.main;
 import com.github.shaigem.linkgem.fx.MainToolbar;
 import com.github.shaigem.linkgem.ui.listeners.ItemDialogListener;
 import com.github.shaigem.linkgem.ui.main.browser.FolderBrowserView;
+import com.github.shaigem.linkgem.ui.main.explorer.FolderExplorerPresenter;
 import com.github.shaigem.linkgem.ui.main.explorer.FolderExplorerView;
 import com.github.shaigem.linkgem.ui.main.explorer.editor.ItemEditorView;
 import com.github.shaigem.linkgem.util.TooltipUtil;
@@ -33,6 +34,8 @@ public class MainWindowPresenter implements Initializable {
     @FXML
     StackPane toolbarPane;
 
+    private MainToolbar toolbar;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeToolbar();
@@ -44,7 +47,7 @@ public class MainWindowPresenter implements Initializable {
     }
 
     private void initializeToolbar() {
-        final MainToolbar toolbar = new MainToolbar();
+   toolbar = new MainToolbar();
         toolbarPane.getChildren().add(toolbar);
     }
 
@@ -56,11 +59,17 @@ public class MainWindowPresenter implements Initializable {
     private void initializeExplorer() {
         final MasterDetailPane masterDetailPane = new MasterDetailPane();
         final FolderExplorerView folderExplorerView = new FolderExplorerView();
+        final FolderExplorerPresenter explorerPresenter = (FolderExplorerPresenter) folderExplorerView.getPresenter();
+        explorerPresenter.setMainWindowPresenter(this);
         final ItemEditorView editorView = new ItemEditorView();
         masterDetailPane.setMasterNode(folderExplorerView.getView());
         masterDetailPane.setDetailNode(editorView.getView());
         masterDetailPane.setDetailSide(Side.BOTTOM);
         masterDetailPane.setShowDetailNode(true);
         explorerPane.getChildren().add(masterDetailPane);
+    }
+
+    public MainToolbar getToolbar() {
+        return toolbar;
     }
 }

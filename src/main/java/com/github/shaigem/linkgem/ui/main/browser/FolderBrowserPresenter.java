@@ -3,11 +3,9 @@ package com.github.shaigem.linkgem.ui.main.browser;
 import com.github.shaigem.linkgem.fx.ThemeTitledToolbar;
 import com.github.shaigem.linkgem.model.item.BookmarkItem;
 import com.github.shaigem.linkgem.model.item.FolderItem;
+import com.github.shaigem.linkgem.model.item.Item;
 import com.github.shaigem.linkgem.repository.FolderRepository;
-import com.github.shaigem.linkgem.ui.events.AddItemToFolderEvent;
-import com.github.shaigem.linkgem.ui.events.OpenFolderRequest;
-import com.github.shaigem.linkgem.ui.events.OpenItemDialogRequest;
-import com.github.shaigem.linkgem.ui.events.SelectedFolderChangedEvent;
+import com.github.shaigem.linkgem.ui.events.*;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.materialicons.MaterialIcon;
@@ -28,10 +26,6 @@ import static org.sejda.eventstudio.StaticStudio.eventStudio;
  * Created on 2016-12-21.
  */
 public class FolderBrowserPresenter implements Initializable {
-
-    public final static Text OPEN_FOLDER_ICON = GlyphsDude.createIcon(FontAwesomeIcon.FOLDER_OPEN);
-
-    public final static Text FOLDER_ICON = GlyphsDude.createIcon(FontAwesomeIcon.FOLDER);
 
     @Inject
     private FolderRepository folderRepository;
@@ -76,6 +70,15 @@ public class FolderBrowserPresenter implements Initializable {
         folderTreeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
                 eventStudio().broadcast(new SelectedFolderChangedEvent(oldValue == null ? null :
                         oldValue.getValue(), newValue == null ? null : newValue.getValue())));
+    }
+
+    @EventListener
+    private void onDeleteItem(DeleteItemEvent event) {
+        final Item deletedItem = event.getDeletedItem();
+        if (deletedItem instanceof FolderItem) {
+            folderRepository.getFolders().remove(deletedItem);
+            rootFolder.getChildren().remove(((FolderItem) deletedItem).getAsTreeItem());
+        }
     }
 
     @EventListener

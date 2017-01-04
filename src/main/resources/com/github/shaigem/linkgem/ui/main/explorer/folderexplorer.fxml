@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -9,7 +13,28 @@
       <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="333.0" prefWidth="444.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <StackPane fx:id="toolbarPane" minHeight="40.0" prefHeight="40.0" />
-            <StackPane fx:id="itemsView" VBox.vgrow="ALWAYS" />
+            <StackPane fx:id="itemsView" VBox.vgrow="ALWAYS">
+               <children>
+                  <TableView fx:id="itemTableView" prefHeight="200.0" prefWidth="200.0">
+                    <columns>
+                      <TableColumn fx:id="nameColumn" prefWidth="75.0" text="Name" />
+                        <TableColumn fx:id="descriptionColumn" prefWidth="75.0" text="Description" />
+                        <TableColumn fx:id="locationColumn" prefWidth="75.0" text="Location" />
+                        <TableColumn fx:id="typeColumn" prefWidth="75.0" text="Type" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                     <contextMenu>
+                        <ContextMenu>
+                          <items>
+                            <MenuItem mnemonicParsing="false" onAction="#onAddFolderAction" text="Add Folder..." />
+                              <MenuItem mnemonicParsing="false" onAction="#onAddBookmarkAction" text="Add Bookmark..." />
+                          </items>
+                        </ContextMenu>
+                     </contextMenu>
+                  </TableView>
+               </children></StackPane>
          </children>
       </VBox>
    </children>

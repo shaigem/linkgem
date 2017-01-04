@@ -239,6 +239,11 @@
     -fx-background-color: -border-color, -fx-control-inner-background;
 }
 
+.context-menu .separator:horizontal .line {
+    -fx-border-color: gray transparent transparent transparent;
+    -fx-border-insets: 1 0 0 0;
+}
+
 .menu-bar > .container > .menu-button:hover,
 .menu-bar > .container > .menu-button:focused,
 .menu-bar > .container > .menu-button:showing,
