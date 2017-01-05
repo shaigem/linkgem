@@ -36,6 +36,11 @@ public class MainWindowPresenter implements Initializable {
     @Inject
     private FolderRepository folderRepository;
 
+    @Inject
+    FolderExplorerView folderExplorerView;
+    @Inject
+    FolderBrowserView folderBrowserView;
+
     @FXML
     VBox root;
     @FXML
@@ -82,13 +87,13 @@ public class MainWindowPresenter implements Initializable {
     }
 
     private void initializeItemSidebar() {
-        final FolderBrowserView itemSidebarView = new FolderBrowserView();
-        itemSidebarPane.getChildren().add(itemSidebarView.getView());
+      //  folderBrowserView = new FolderBrowserView();
+        itemSidebarPane.getChildren().add(folderBrowserView.getView());
     }
 
     private void initializeExplorer() {
         final MasterDetailPane masterDetailPane = new MasterDetailPane();
-        final FolderExplorerView folderExplorerView = new FolderExplorerView();
+   //     final FolderExplorerView folderExplorerView = new FolderExplorerView();
         final FolderExplorerPresenter explorerPresenter = (FolderExplorerPresenter) folderExplorerView.getPresenter();
         explorerPresenter.setMainWindowPresenter(this);
         final ItemEditorView editorView = new ItemEditorView();

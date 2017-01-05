@@ -2,12 +2,13 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-
 
 <VBox spacing="10.0" styleClass="browser-root" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.shaigem.linkgem.ui.main.browser.FolderBrowserPresenter">
    <children>
@@ -24,6 +25,16 @@
             </Button>
          </children>
       </HBox>
-      <TreeView fx:id="folderTreeView" prefHeight="319.0" prefWidth="218.0" styleClass="linkgem-tree-view" VBox.vgrow="ALWAYS" />
+      <TreeView fx:id="folderTreeView" prefHeight="319.0" prefWidth="218.0" styleClass="linkgem-tree-view" VBox.vgrow="ALWAYS">
+         <contextMenu>
+            <ContextMenu>
+              <items>
+                  <MenuItem fx:id="editFolderMenuItem" mnemonicParsing="false" onAction="#onEditFolderAction" text="Edit Folder..." />
+                <MenuItem fx:id="addFolderMenuItem" mnemonicParsing="false" onAction="#onAddFolderAction" text="Add Folder..." />
+                  <MenuItem fx:id="addBookmarkMenuItem" mnemonicParsing="false" onAction="#onAddBookmarkAction" text="Add Bookmark..." />
+                  <MenuItem fx:id="deleteFolderMenuItem" mnemonicParsing="false" onAction="#onDeleteFolderAction" text="Delete" />
+              </items>
+            </ContextMenu>
+         </contextMenu></TreeView>
    </children>
 </VBox>

@@ -42,7 +42,7 @@ import static org.sejda.eventstudio.StaticStudio.eventStudio;
 public class FolderExplorerPresenter implements Initializable {
 
     public enum ExplorerAction {
-        ADD_FOLDER, ADD_BOOKMARK, DELETE
+        ADD_FOLDER, ADD_BOOKMARK, DELETE, SHOW_IN_FOLDER
     }
 
     private MainWindowPresenter mainWindowPresenter;
@@ -74,6 +74,10 @@ public class FolderExplorerPresenter implements Initializable {
     MenuItem addBookmarkMenuItem;
     @FXML
     MenuItem addFolderMenuItem;
+    @FXML
+    MenuItem showInFolderMenuItem;
+    @FXML
+    MenuItem deleteSelectedItemMenuItem;
 
     private final static String DEFAULT_PLACEHOLDER_TEXT = "Folder contains no items";
 
@@ -166,6 +170,9 @@ public class FolderExplorerPresenter implements Initializable {
             case ADD_FOLDER:
                 onAddFolderAction();
                 break;
+            case DELETE: // deletes the selected item
+                onDeleteItemAction();
+                break;
 
         }
     }
@@ -182,6 +189,20 @@ public class FolderExplorerPresenter implements Initializable {
                 (new OpenItemDialogRequest(getViewingFolder(), new FolderItem("New Folder"), true));
     }
 
+    @FXML
+    private void onDeleteItemAction() {
+     /*   final Item selectedItem = itemTableView.getSelectionModel().getSelectedItem();
+
+        if (selectedItem instanceof FolderItem) {
+            eventStudio().broadcast(new DeleteFolderRequest(selectedItem));
+        } else if (selectedItem instanceof BookmarkItem) {
+           folderRepository.getMasterFolder().getChildren().remove(selectedItem);
+        }
+*/
+        // TODO deleting!
+        //  eventStudio().broadcast
+        //        (new OpenItemDialogRequest(getViewingFolder(), new FolderItem("New Folder"), true));
+    }
 
     private FilteredList<Item> searchData;
     private SortedList<Item> sortedSearchData;
@@ -216,6 +237,7 @@ public class FolderExplorerPresenter implements Initializable {
         // open the search folder to show the results
         eventStudio().broadcast(new OpenFolderRequest(folderRepository.getSearchFolder()));
     }
+
 
     @EventListener
     private void onSelectedFolderChanged(SelectedFolderChangedEvent event) {
@@ -302,22 +324,21 @@ public class FolderExplorerPresenter implements Initializable {
         final MenuItem sortDescendingMenuItem = new MenuItem("Sort by Descending (Z-A)");
         sortDescendingMenuItem.setOnAction(event -> performManualSorting(SortOrder.DESCENDING));
 
-        //TODO
-        //     sortAscendingMenuItem.disableProperty().bind(Bindings.isEmpty(itemTableView.getItems()));
-        //    sortDescendingMenuItem.disableProperty().bind(Bindings.isEmpty(itemTableView.getItems()));
-
         viewSettingsMenuButton.getItems().add(sortAscendingMenuItem);
         viewSettingsMenuButton.getItems().add(sortDescendingMenuItem);
         viewSettingsMenuButton.getItems().add(new SeparatorMenuItem());
 
-        for (TableColumn<Item, ?> itemTableColumn : itemTableView.getColumns()) {
+        // loop through all of the columns except for the first one which is the icon column and create a
+        // menu item which allows users to toggle which column to display
+        for (int i = 1; i < itemTableView.getColumns().size(); i++) {
+            final TableColumn<Item, ?> itemTableColumn = itemTableView.getColumns().get(i);
             final String columnName = itemTableColumn.getText();
             final CheckMenuItem checkMenuItem = new CheckMenuItem
                     ("Show " + columnName + " Column");
             checkMenuItem.setSelected(true);
             itemTableColumn.visibleProperty().bindBidirectional(checkMenuItem.selectedProperty());
+            // we must always show the name column so don't allow users to hide it!
             if (columnName.equals("Name")) {
-                // we must always show the name column so don't allow users to hide it
                 checkMenuItem.setDisable(true);
             }
             viewSettingsMenuButton.getItems().add(checkMenuItem);
@@ -345,7 +366,6 @@ public class FolderExplorerPresenter implements Initializable {
 
     private void performManualSorting(SortOrder order) {
         if (getViewingFolder().getChildren().isEmpty()) {
-            // just in case!
             return;
         }
         Item[] itemsToSort = new Item[getViewingFolder().getChildren().size()];
@@ -384,7 +404,5 @@ public class FolderExplorerPresenter implements Initializable {
             }
         }
     }
-
-
 }
 

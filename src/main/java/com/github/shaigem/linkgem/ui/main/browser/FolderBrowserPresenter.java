@@ -3,14 +3,12 @@ package com.github.shaigem.linkgem.ui.main.browser;
 import com.github.shaigem.linkgem.fx.ThemeTitledToolbar;
 import com.github.shaigem.linkgem.model.item.BookmarkItem;
 import com.github.shaigem.linkgem.model.item.FolderItem;
-import com.github.shaigem.linkgem.model.item.Item;
 import com.github.shaigem.linkgem.repository.FolderRepository;
 import com.github.shaigem.linkgem.ui.events.*;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialicons.MaterialIcon;
-import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -39,6 +37,15 @@ public class FolderBrowserPresenter implements Initializable {
     @FXML
     Button createButton;
 
+    @FXML
+    MenuItem addFolderMenuItem;
+    @FXML
+    MenuItem addBookmarkMenuItem;
+    @FXML
+    MenuItem editFolderMenuItem;
+    @FXML
+    MenuItem deleteFolderMenuItem;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeToolbar();
@@ -52,7 +59,35 @@ public class FolderBrowserPresenter implements Initializable {
         folderTreeView.setCellFactory((v) -> new CustomTreeCellImpl());
         listenForTreeViewSelection();
         folderTreeView.getSelectionModel().selectFirst();
+        // folderTreeView.setContextMenu( new ItemContextMenu(this, folderRepository.getMasterFolder()));
         eventStudio().addAnnotatedListeners(this);
+    }
+
+
+    @FXML
+    private void onEditFolderAction() {
+        final FolderItem selectedFolder = folderTreeView.getSelectionModel().getSelectedItem().getValue();
+        eventStudio().broadcast(new OpenItemDialogRequest(selectedFolder,
+                selectedFolder, false));
+    }
+
+    @FXML
+    private void onAddFolderAction() {
+        final FolderItem selectedFolder = folderTreeView.getSelectionModel().getSelectedItem().getValue();
+        eventStudio().broadcast(new OpenItemDialogRequest(selectedFolder,
+                new FolderItem("New Folder"), true));
+    }
+
+    @FXML
+    private void onAddBookmarkAction() {
+        final FolderItem selectedFolder = folderTreeView.getSelectionModel().getSelectedItem().getValue();
+        eventStudio().broadcast(new OpenItemDialogRequest(selectedFolder,
+                new BookmarkItem("New Bookmark"), true));
+    }
+
+    @FXML
+    private void onDeleteFolderAction() {
+
     }
 
     private void initializeToolbar() {
@@ -70,19 +105,25 @@ public class FolderBrowserPresenter implements Initializable {
         // 1. Selection on treeview changes
         // 2. broadcast event
         // 3. Change explorer view
-        folderTreeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
-                eventStudio().broadcast(new SelectedFolderChangedEvent(oldValue == null ? null :
-                        oldValue.getValue(), newValue == null ? null : newValue.getValue())));
+        folderTreeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                final boolean selectedFolderIsReadOnly = newValue.getValue().isReadOnly();
+                addFolderMenuItem.setDisable(selectedFolderIsReadOnly);
+                addBookmarkMenuItem.setDisable(selectedFolderIsReadOnly);
+                editFolderMenuItem.setDisable(selectedFolderIsReadOnly);
+                deleteFolderMenuItem.setDisable(selectedFolderIsReadOnly);
+            }
+            eventStudio().broadcast(new SelectedFolderChangedEvent(oldValue == null ? null :
+                    oldValue.getValue(), newValue == null ? null : newValue.getValue()));
+        });
     }
 
     @EventListener
-    private void onDeleteItem(DeleteItemEvent event) {
-        final Item deletedItem = event.getDeletedItem();
-        // TODO
-        if (deletedItem instanceof FolderItem) {
-            //   folderRepository.getFolders().remove(deletedItem);
-            //    rootFolder.getChildren().remove(((FolderItem) deletedItem).getAsTreeItem());
-        }
+    private void onDeleteFolderRequest(DeleteFolderRequest event) {
+        final FolderItem itemToDelete = (FolderItem) event.getItemToDelete();
+        folderRepository.getMasterFolder().getAsTreeItem().getChildren().remove(itemToDelete.getAsTreeItem());
+        folderRepository.getMasterFolder().getChildren().remove(itemToDelete);
+        // TODO master folder
     }
 
     @EventListener
@@ -104,11 +145,9 @@ public class FolderBrowserPresenter implements Initializable {
 
     private final class CustomTreeCellImpl extends TreeCell<FolderItem> {
 
-        private ContextMenu menu;
         private Text icon;
 
         CustomTreeCellImpl() {
-            createContextMenu();
             setGraphicTextGap(10);
         }
 
@@ -120,9 +159,8 @@ public class FolderBrowserPresenter implements Initializable {
                 textProperty().unbind();
                 setText(null);
                 setGraphic(null);
-                setContextMenu(null);
             } else {
-                if(item == folderRepository.getSearchFolder()) {
+                if (item == folderRepository.getSearchFolder()) {
                     icon = GlyphsDude.createIcon(MaterialDesignIcon.MAGNIFY, "1.6em");
                 } else {
                     icon = getTreeItem().isExpanded() && !getTreeItem().isLeaf() ?
@@ -132,32 +170,7 @@ public class FolderBrowserPresenter implements Initializable {
                 // setText(item.getName());
                 textProperty().bind(item.nameProperty());
                 setGraphic(icon);
-                setContextMenu(menu);
             }
-        }
-
-        private void createContextMenu() {
-            menu = new ContextMenu();
-            // TODO remove item action
-            final MenuItem editFolder = createMenuItem("Edit Folder...");
-            editFolder.setOnAction(event -> eventStudio().broadcast(new OpenItemDialogRequest(getItem(), getItem(), false)));
-            final SeparatorMenuItem separatorMenuItem = new SeparatorMenuItem();
-
-            final MenuItem newFolder = createMenuItem("Add Folder...");
-            newFolder.setOnAction(event -> eventStudio().broadcast(new OpenItemDialogRequest(getItem(), new FolderItem("New Folder"), true)));
-
-            final MenuItem newBookmark = createMenuItem("Add Bookmark...");
-            newBookmark.setOnAction(event -> eventStudio().broadcast(new OpenItemDialogRequest(getItem(),
-                    new BookmarkItem("New Bookmark"), true)));
-            menu.getItems().addAll(editFolder, separatorMenuItem, newFolder, newBookmark);
-        }
-
-        private MenuItem createMenuItem(String text) {
-            final MenuItem item = new MenuItem(text);
-            // TODO change this when we add a remove button
-            item.disableProperty().bind(Bindings.when(itemProperty().isEqualTo(folderRepository.getSearchFolder())).
-                    then(true).otherwise(false));
-            return item;
         }
 
         private String getString() {
