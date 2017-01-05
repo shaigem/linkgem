@@ -13,15 +13,14 @@ public class LocationUtil {
     }
 
     public static String getDomainFromLocation(String location) {
-        String u = null;
+        String url = null;
         try {
-            u = URLDecoder.decode(location, "UTF-8").replaceFirst("(\\.[^/]+).*$", "$1");
+            url = URLDecoder.decode(location, "UTF-8").replaceFirst("(\\.[^/]+).*$", "$1");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        return u;
+        return url;
     }
-
 
     public static String addHttp(String string) {
         // if the string does not contain http, https or ftp, add it to the string
