@@ -22,9 +22,12 @@ import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
+import javafx.util.Callback;
 import org.sejda.eventstudio.annotation.EventListener;
 
 import javax.inject.Inject;
@@ -56,6 +59,8 @@ public class FolderExplorerPresenter implements Initializable {
 
     @FXML
     TableView<Item> itemTableView;
+    @FXML
+    TableColumn<Item, Image> iconColumn;
     @FXML
     TableColumn<Item, String> nameColumn;
     @FXML
@@ -112,6 +117,29 @@ public class FolderExplorerPresenter implements Initializable {
     }
 
     private void initColumns() {
+        iconColumn.setCellValueFactory(e -> e.getValue().iconProperty());
+        iconColumn.setCellFactory(new Callback<TableColumn<Item, Image>, TableCell<Item, Image>>() {
+            @Override
+            public TableCell<Item, Image> call(TableColumn<Item, Image> param) {
+                return new TableCell<Item, Image>() {
+
+                    private final ImageView imageView = new ImageView();
+
+                    @Override
+                    protected void updateItem(Image item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty) {
+                            setText(null);
+                            setGraphic(null);
+                        } else {
+                            imageView.setImage(item);
+                            setGraphic(imageView);
+                        }
+                    }
+                };
+            }
+        });
+
         nameColumn.setCellValueFactory(e -> e.getValue().nameProperty());
         locationColumn.setCellValueFactory(e -> {
             if (e.getValue() instanceof BookmarkItem) {

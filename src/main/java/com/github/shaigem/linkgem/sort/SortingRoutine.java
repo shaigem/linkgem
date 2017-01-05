@@ -45,21 +45,6 @@ public abstract class SortingRoutine {
         // we will instead have the sorting algorithm return a new array that contains the sorted data
         Item[] copyOfArray = new Item[array.length];
         System.arraycopy(array, 0, copyOfArray, 0, array.length);
-        // measure the time it takes to execute the sorting
         return sortOrder == SortOrder.ASCENDING ? sortAscending(copyOfArray) : sortDescending(copyOfArray);
     }
-
-    /**
-     * Swaps the values of two elements in the given array.
-     *
-     * @param array the array to swap values
-     * @param i     the first element
-     * @param j     the second element
-     */
-    protected void swap(int[] array, int i, int j) {
-        int temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
-
 }

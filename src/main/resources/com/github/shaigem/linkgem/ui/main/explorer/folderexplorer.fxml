@@ -17,8 +17,9 @@
                <children>
                   <TableView fx:id="itemTableView" prefHeight="200.0" prefWidth="200.0">
                     <columns>
-                      <TableColumn fx:id="nameColumn" prefWidth="75.0" text="Name" />
-                        <TableColumn fx:id="descriptionColumn" prefWidth="75.0" text="Description" />
+                        <TableColumn fx:id="iconColumn" editable="false" maxWidth="50.0" minWidth="50.0" prefWidth="40.0" resizable="false" sortable="false" />
+                      <TableColumn fx:id="nameColumn" prefWidth="106.4000244140625" text="Name" />
+                        <TableColumn fx:id="descriptionColumn" prefWidth="133.0" text="Description" />
                         <TableColumn fx:id="locationColumn" prefWidth="75.0" text="Location" />
                         <TableColumn fx:id="typeColumn" prefWidth="75.0" text="Type" />
                     </columns>

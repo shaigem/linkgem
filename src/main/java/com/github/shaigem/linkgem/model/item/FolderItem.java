@@ -1,5 +1,6 @@
 package com.github.shaigem.linkgem.model.item;
 
+import com.github.shaigem.linkgem.favicon.IconManager;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
@@ -17,7 +18,7 @@ public class FolderItem extends Item {
     private ObservableList<Item> children;
 
     public FolderItem(String name, String description, boolean readOnly) {
-        super(name, description, ItemType.FOLDER);
+        super(IconManager.getInstance().getDefaultFolderIcon(), name, description, ItemType.FOLDER);
         this.readOnly = new SimpleBooleanProperty(readOnly);
         this.children = FXCollections.observableArrayList();
     }

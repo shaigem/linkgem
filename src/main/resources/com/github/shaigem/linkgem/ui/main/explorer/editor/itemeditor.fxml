@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.StackPane?>
 <?import org.controlsfx.control.PropertySheet?>
@@ -7,6 +8,9 @@
 <StackPane styleClass="item-editor-root" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.shaigem.linkgem.ui.main.explorer.editor.ItemEditorPresenter">
    <children>
       <Label styleClass="item-editor-no-item-label" text="No item selected" />
-      <PropertySheet fx:id="propertySheet" modeSwitcherVisible="false" searchBoxVisible="false" styleClass="item-editor-property-sheet" visible="false" />
+      <PropertySheet fx:id="propertySheet" modeSwitcherVisible="false" searchBoxVisible="false" styleClass="item-editor-property-sheet" visible="false" StackPane.alignment="CENTER">
+         <StackPane.margin>
+            <Insets top="10.0" />
+         </StackPane.margin></PropertySheet>
    </children>
 </StackPane>

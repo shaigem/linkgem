@@ -1,11 +1,10 @@
 package com.github.shaigem.linkgem.model.item;
 
-import com.github.shaigem.linkgem.util.RandomColorGenerator;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.scene.paint.Color;
+import javafx.scene.image.Image;
 
 /**
  * Created on 2016-12-21.
@@ -14,16 +13,20 @@ public abstract class Item {
 
     private static final String DEFAULT_NAME = "<No Name>";
 
+    private ObjectProperty<Image> icon;
     private StringProperty name;
     private StringProperty description;
     private ObjectProperty<ItemType> itemType;
-    private ObjectProperty<Color> backgroundColor;
 
-    public Item(final String name, final String description, final ItemType type) {
+    public Item(final Image defaultIcon, final String name, final String description, final ItemType type) {
+        this.icon = new SimpleObjectProperty<>(defaultIcon);
         this.name = new SimpleStringProperty(name.isEmpty() ? DEFAULT_NAME : name);
         this.description = new SimpleStringProperty(description);
         this.itemType = new SimpleObjectProperty<>(type);
-        this.backgroundColor = new SimpleObjectProperty<>(RandomColorGenerator.getInstance().getRandomColor());
+    }
+
+    public Item(final String name, final String description, final ItemType type) {
+        this(null, name, description, type);
     }
 
     public void setName(String name) {
@@ -46,8 +49,12 @@ public abstract class Item {
     }
 
 
-    public Color getBackgroundColor() {
-        return backgroundColor.get();
+    public void setIcon(Image icon) {
+        this.icon.set(icon);
+    }
+
+    public ObjectProperty<Image> iconProperty() {
+        return icon;
     }
 
     public StringProperty nameProperty() {
@@ -60,10 +67,6 @@ public abstract class Item {
 
     public ObjectProperty<ItemType> itemTypeProperty() {
         return itemType;
-    }
-
-    public ObjectProperty<Color> backgroundColorProperty() {
-        return backgroundColor;
     }
 
     @Override

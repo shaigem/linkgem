@@ -14,15 +14,15 @@ ext {
     eventStudioVersion = '1.0.5'
     controlsFxVersion = '8.40.12'
     fontAwesomeFxVersion = '8.9'
-    jsoupVersion = '1.10.2'
+    caffeineVersion = '2.3.5'
 }
 
 dependencies {
     compile group: 'com.airhacks', name: 'afterburner.fx', version: afterburnerFxVersion
     compile group: 'org.sejda', name: 'eventstudio', version: eventStudioVersion
     compile group: 'org.controlsfx', name: 'controlsfx', version: controlsFxVersion
+    compile group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: caffeineVersion
     compile group: 'de.jensd', name: 'fontawesomefx', version: fontAwesomeFxVersion
-    compile group: 'org.jsoup', name: 'jsoup', version: jsoupVersion
     compile group: 'org.jclarion', name: 'image4j', version: '0.7'
     //  compile 'org.slf4j:slf4j-api:1.7.21'
     //compile 'ch.qos.logback:logback-classic:1.1.7'

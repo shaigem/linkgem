@@ -13,8 +13,8 @@
     <orderEntry type="library" name="Gradle: com.airhacks:afterburner.fx:1.7.0" level="project" />
     <orderEntry type="library" name="Gradle: org.sejda:eventstudio:1.0.5" level="project" />
     <orderEntry type="library" name="Gradle: org.controlsfx:controlsfx:8.40.12" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.ben-manes.caffeine:caffeine:2.3.5" level="project" />
     <orderEntry type="library" name="Gradle: de.jensd:fontawesomefx:8.9" level="project" />
-    <orderEntry type="library" name="Gradle: org.jsoup:jsoup:1.10.2" level="project" />
     <orderEntry type="library" name="Gradle: org.jclarion:image4j:0.7" level="project" />
     <orderEntry type="library" name="Gradle: junit:junit:4.11" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.5" level="project" />

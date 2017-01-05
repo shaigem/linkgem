@@ -99,7 +99,6 @@ public class MainWindowPresenter implements Initializable {
         explorerPane.getChildren().add(masterDetailPane);
     }
 
-
     private void resetSearch() {
         toolbar.getSearchPresenter().resetText();
         folderRepository.getSearchFolder().getChildren().clear();
