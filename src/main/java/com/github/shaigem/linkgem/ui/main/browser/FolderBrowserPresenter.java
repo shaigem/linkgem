@@ -8,6 +8,7 @@ import com.github.shaigem.linkgem.repository.FolderRepository;
 import com.github.shaigem.linkgem.ui.events.*;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialicons.MaterialIcon;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
@@ -121,9 +122,13 @@ public class FolderBrowserPresenter implements Initializable {
                 setGraphic(null);
                 setContextMenu(null);
             } else {
-                icon = getTreeItem().isExpanded() && !getTreeItem().isLeaf() ?
-                        GlyphsDude.createIcon(FontAwesomeIcon.FOLDER_OPEN, "1.4em")
-                        : GlyphsDude.createIcon(FontAwesomeIcon.FOLDER, "1.4em");
+                if(item == folderRepository.getSearchFolder()) {
+                    icon = GlyphsDude.createIcon(MaterialDesignIcon.MAGNIFY, "1.6em");
+                } else {
+                    icon = getTreeItem().isExpanded() && !getTreeItem().isLeaf() ?
+                            GlyphsDude.createIcon(FontAwesomeIcon.FOLDER_OPEN, "1.6em")
+                            : GlyphsDude.createIcon(FontAwesomeIcon.FOLDER, "1.6em");
+                }
                 // setText(item.getName());
                 textProperty().bind(item.nameProperty());
                 setGraphic(icon);

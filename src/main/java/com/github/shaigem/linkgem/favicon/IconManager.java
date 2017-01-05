@@ -13,7 +13,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Manages bookmark icons.
+ * Manages the icons used by this program.
  *
  * @author Ronnie T.
  */
