@@ -34,17 +34,14 @@
                 <RowConstraints vgrow="ALWAYS" />
                 <RowConstraints vgrow="ALWAYS" />
                   <RowConstraints vgrow="ALWAYS" />
-                  <RowConstraints vgrow="ALWAYS" />
               </rowConstraints>
                <children>
                   <Label text="Name: " />
                   <Label text="Link: " GridPane.rowIndex="1" />
-                  <Label text="Description" GridPane.rowIndex="3" />
+                  <Label text="Description" GridPane.rowIndex="2" />
                   <TextField fx:id="nameTextField" promptText="Enter name" GridPane.columnIndex="1" />
                   <TextField fx:id="locationTextField" promptText="Enter location/URL" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField fx:id="descriptionTextField" promptText="Enter a short description" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <Label text="Tags" GridPane.rowIndex="2" />
-                  <Button fx:id="tagButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="289.0" text="Click to Add/Edit Tags" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+                  <TextField fx:id="descriptionTextField" promptText="Enter a short description" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                </children>
             </GridPane>
       </children>

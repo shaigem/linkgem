@@ -5,6 +5,7 @@ import com.github.shaigem.linkgem.ui.search.SearchView;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
@@ -27,13 +28,14 @@ public class MainToolbar extends CustomToolbar {
         getLeftSection().getChildren().addAll(logoView);
 
 
-         searchView = new SearchView();
+        //   final Button saveAllButton = button(GlyphsDude.createIcon(MaterialDesignIcon.CONTENT_SAVE_ALL, "1.8em")
+        //         , "Save all changes");
 
-
+        searchView = new SearchView();
         final Button aboutButton =
                 button(GlyphsDude.createIcon(FontAwesomeIcon.COG, "1.8em"), "");
 
-        getRightSection().getChildren().addAll(searchView.getViewWithoutRootContainer(), aboutButton);
+        getRightSection().getChildren().addAll(searchView.getViewWithoutRootContainer(), /*saveAllButton ,*/ aboutButton);
         eventStudio().addAnnotatedListeners(this);
     }
 
@@ -45,8 +47,9 @@ public class MainToolbar extends CustomToolbar {
         return (SearchPresenter) searchView.getPresenter();
     }
 
-    private Button button(Text icon, String text) {
-        Button button = button(text);
+    private Button button(Text icon, String tooltipText) {
+        Button button = button(tooltipText);
+        button.setTooltip(new Tooltip(tooltipText));
         button.setGraphic(icon);
         return button;
     }
