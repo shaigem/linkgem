@@ -24,11 +24,8 @@ import static org.sejda.eventstudio.StaticStudio.eventStudio;
 public class LinkGemApplication extends Application {
 
 
-    private Stage primaryStage;
-
     @Override
     public void start(Stage primaryStage) throws Exception {
-        this.primaryStage = primaryStage;
         Scene scene = new Scene(new MainWindowView().getView());
         primaryStage.setScene(scene);
         primaryStage.setTitle("LinkGem");
@@ -37,8 +34,7 @@ public class LinkGemApplication extends Application {
     }
 
     /**
-     * When the user tries to close the application, create a popup dialog thanking them for using the software
-     * and also asking them if they would like to save any changes.
+     * Create a popup dialog thanking the user for using the software and also ask them if they would like to save any changes.
      */
     private void showThanksDialog() {
         final Alert alert = new Alert(Alert.AlertType.INFORMATION);
