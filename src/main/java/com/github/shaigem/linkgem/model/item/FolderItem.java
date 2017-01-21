@@ -28,7 +28,8 @@ public class FolderItem extends Item {
     }
 
     public boolean addItem(Item item) {
-        return children.add(item);
+        final boolean added = children.add(item);
+        return added;
     }
 
     public ObservableList<Item> getChildren() {

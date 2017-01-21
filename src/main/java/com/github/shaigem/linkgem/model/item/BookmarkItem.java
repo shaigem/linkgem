@@ -15,6 +15,9 @@ public class BookmarkItem extends Item {
     public BookmarkItem(String name, String description, String location) {
         super(IconManager.getInstance().getDefaultBookmarkIcon(), name, description, ItemType.BOOKMARK);
         this.location = new SimpleStringProperty(location);
+        if(!location.isEmpty()) {
+            IconManager.getInstance().getIconForLocation(location).thenAcceptAsync(this::setIcon);
+        }
         this.location.addListener((observable, oldValue, newValue) -> {
             if(!newValue.isEmpty()) {
                 IconManager.getInstance().getIconForLocation(newValue).thenAcceptAsync(this::setIcon);

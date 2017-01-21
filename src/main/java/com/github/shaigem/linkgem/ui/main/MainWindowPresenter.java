@@ -2,7 +2,9 @@ package com.github.shaigem.linkgem.ui.main;
 
 import com.github.shaigem.linkgem.fx.MainToolbar;
 import com.github.shaigem.linkgem.model.item.FolderItem;
+import com.github.shaigem.linkgem.serialization.BookmarkSerialization;
 import com.github.shaigem.linkgem.repository.FolderRepository;
+import com.github.shaigem.linkgem.ui.events.SaveAllEvent;
 import com.github.shaigem.linkgem.ui.events.SearchItemRequest;
 import com.github.shaigem.linkgem.ui.events.SelectedFolderChangedEvent;
 import com.github.shaigem.linkgem.ui.listeners.ItemDialogListener;
@@ -15,6 +17,7 @@ import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Side;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -59,6 +62,7 @@ public class MainWindowPresenter implements Initializable {
         initializeToolbar();
         initializeItemSidebar();
         initializeExplorer();
+        BookmarkSerialization.getInstance().deserialize(folderRepository.getMasterFolder());
         TooltipUtil.changeDefaultTooltipActivationDuration();
         eventStudio().add(new ItemDialogListener(), 0, ReferenceStrength.STRONG);
         eventStudio().addAnnotatedListeners(this);
@@ -75,6 +79,19 @@ public class MainWindowPresenter implements Initializable {
         }
     }
 
+    @EventListener
+    private void onSaveAll(SaveAllEvent event) {
+        boolean success = BookmarkSerialization.getInstance().serialize(folderRepository.getMasterFolder());
+
+        if (success) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Save Success");
+            alert.setHeaderText("Save Success!");
+            alert.setContentText("All of your bookmarks have been successfully saved!");
+            alert.show();
+        }
+    }
+
     private void initializeToolbar() {
         toolbar = new MainToolbar();
         toolbar.getSearchPresenter().textProperty().addListener((observable, oldValue, newValue) -> {
@@ -87,13 +104,13 @@ public class MainWindowPresenter implements Initializable {
     }
 
     private void initializeItemSidebar() {
-      //  folderBrowserView = new FolderBrowserView();
+        //  folderBrowserView = new FolderBrowserView();
         itemSidebarPane.getChildren().add(folderBrowserView.getView());
     }
 
     private void initializeExplorer() {
         final MasterDetailPane masterDetailPane = new MasterDetailPane();
-   //     final FolderExplorerView folderExplorerView = new FolderExplorerView();
+        //     final FolderExplorerView folderExplorerView = new FolderExplorerView();
         final FolderExplorerPresenter explorerPresenter = (FolderExplorerPresenter) folderExplorerView.getPresenter();
         explorerPresenter.setMainWindowPresenter(this);
         final ItemEditorView editorView = new ItemEditorView();

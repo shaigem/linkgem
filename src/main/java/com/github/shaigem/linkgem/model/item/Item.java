@@ -12,11 +12,11 @@ import javafx.scene.image.Image;
 public abstract class Item {
 
     private static final String DEFAULT_NAME = "<No Name>";
-
     private ObjectProperty<Image> icon;
     private StringProperty name;
     private StringProperty description;
     private ObjectProperty<ItemType> itemType;
+
 
     public Item(final Image defaultIcon, final String name, final String description, final ItemType type) {
         this.icon = new SimpleObjectProperty<>(defaultIcon);
@@ -40,17 +40,16 @@ public abstract class Item {
         this.description.set(description);
     }
 
+    public void setIcon(Image icon) {
+        this.icon.set(icon);
+    }
+
     public String getName() {
         return name.get();
     }
 
     public String getDescription() {
         return description.get();
-    }
-
-
-    public void setIcon(Image icon) {
-        this.icon.set(icon);
     }
 
     public ObjectProperty<Image> iconProperty() {
@@ -68,6 +67,7 @@ public abstract class Item {
     public ObjectProperty<ItemType> itemTypeProperty() {
         return itemType;
     }
+
 
     @Override
     public String toString() {
