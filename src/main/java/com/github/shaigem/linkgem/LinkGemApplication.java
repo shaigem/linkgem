@@ -33,32 +33,30 @@ public class LinkGemApplication extends Application {
         primaryStage.setScene(scene);
         primaryStage.setTitle("LinkGem");
         primaryStage.show();
-        setOnApplicationCloseRequest();
-
+        primaryStage.setOnCloseRequest(event -> showThanksDialog());
     }
 
     /**
      * When the user tries to close the application, create a popup dialog thanking them for using the software
      * and also asking them if they would like to save any changes.
      */
-    private void setOnApplicationCloseRequest() {
-        primaryStage.setOnCloseRequest(event -> {
-            final Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Thanks");
-            alert.setHeaderText("Thanks");
-            alert.setContentText("Thanks for using LinkGem! Before you go, would you like to " +
-                    "save any changes that you may have made?");
-            alert.setGraphic(GlyphsDude.createIcon(MaterialDesignIcon.CONTENT_SAVE_ALL, "2.5em"));
-            alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
-            final Optional<ButtonType> buttonType = alert.showAndWait();
-            buttonType.ifPresent(type -> {
-                if (type == ButtonType.YES) {
-                    eventStudio().broadcast(new SaveAllEvent());
-                } else {
-                    Platform.exit();
-                }
-            });
+    private void showThanksDialog() {
+        final Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Thanks");
+        alert.setHeaderText("Thanks");
+        alert.setContentText("Thanks for using LinkGem! Before you go, would you like to " +
+                "save any changes that you may have made?");
+        alert.setGraphic(GlyphsDude.createIcon(MaterialDesignIcon.CONTENT_SAVE_ALL, "2.5em"));
+        alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
+        final Optional<ButtonType> buttonType = alert.showAndWait();
+        buttonType.ifPresent(type -> {
+            if (type == ButtonType.YES) {
+                eventStudio().broadcast(new SaveAllEvent());
+            } else {
+                Platform.exit();
+            }
         });
+
     }
 
     @Override
