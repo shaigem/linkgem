@@ -6,7 +6,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
 /**
- * Created on 2017-01-01.
+ * A custom toolbar with a left, center and right section.
+ *
+ * @author Ronnie Tran
  */
 public class CustomToolbar extends HBox {
 

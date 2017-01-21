@@ -1,5 +1,8 @@
 package com.github.shaigem.linkgem.model.item;
 
+/**
+ * Represents the item type. It can either be a folder or a bookmark.
+ */
 public enum ItemType {
 
     FOLDER("Folder"), BOOKMARK("Bookmark");

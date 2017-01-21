@@ -7,7 +7,9 @@ import javafx.beans.property.StringProperty;
 import javafx.scene.image.Image;
 
 /**
- * Created on 2016-12-21.
+ * Base class for all items.
+ *
+ * @author Ronnie Tran
  */
 public abstract class Item {
 
@@ -17,7 +19,6 @@ public abstract class Item {
     private StringProperty name;
     private StringProperty description;
     private ObjectProperty<ItemType> itemType;
-
 
     public Item(final Image defaultIcon, final String name, final String description, final ItemType type) {
         this.parentFolder = new SimpleObjectProperty<>();

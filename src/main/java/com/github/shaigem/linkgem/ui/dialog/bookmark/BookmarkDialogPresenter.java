@@ -4,7 +4,7 @@ import com.github.shaigem.linkgem.model.item.BookmarkItem;
 import com.github.shaigem.linkgem.model.item.FolderItem;
 import com.github.shaigem.linkgem.ui.dialog.DialogBasedItemEditor;
 import com.github.shaigem.linkgem.ui.events.AddItemToFolderRequest;
-import com.github.shaigem.linkgem.ui.events.OpenItemDialogRequest;
+import com.github.shaigem.linkgem.ui.events.OpenItemEditorDialogRequest;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -18,12 +18,18 @@ import java.util.ResourceBundle;
 import static org.sejda.eventstudio.StaticStudio.eventStudio;
 
 /**
- * Created on 2016-12-30.
+ * Presenter which handles the presentation logic for a bookmark dialog.
+ *
+ * @author Ronnie Tran
  */
 public class BookmarkDialogPresenter implements Initializable, DialogBasedItemEditor {
 
-    private FolderItem folder;
+    private FolderItem workingFolder;
     private BookmarkItem editingBookmark;
+
+    /**
+     * Should the item that we are editing be added to the workingFolder or is the item only being edited.
+     */
     private boolean add;
 
     @FXML
@@ -47,8 +53,8 @@ public class BookmarkDialogPresenter implements Initializable, DialogBasedItemEd
     }
 
     @Override
-    public void initProperties(OpenItemDialogRequest request) {
-        this.folder = request.getWorkingFolder();
+    public void initProperties(OpenItemEditorDialogRequest request) {
+        this.workingFolder = request.getWorkingFolder();
         this.editingBookmark = (BookmarkItem) request.getWorkingItem();
         this.add = request.isAdd();
         nameTextField.setText(editingBookmark.getName());
@@ -62,7 +68,8 @@ public class BookmarkDialogPresenter implements Initializable, DialogBasedItemEd
         editingBookmark.setLocation(locationTextField.getText());
         editingBookmark.setDescription(descriptionTextField.getText());
         if (add) {
-            eventStudio().broadcast(new AddItemToFolderRequest(folder, editingBookmark));
+            // add the editing bookmark item to the folder that we are working with
+            eventStudio().broadcast(new AddItemToFolderRequest(workingFolder, editingBookmark));
         }
     }
 

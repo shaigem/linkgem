@@ -1,7 +1,9 @@
 package com.github.shaigem.linkgem.ui.events;
 
 /**
- * Created on 2017-01-03.
+ * Request to search for a item given a search term.
+ *
+ * @author Ronnie Tran
  */
 public class SearchItemRequest {
 

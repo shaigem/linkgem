@@ -3,14 +3,16 @@ package com.github.shaigem.linkgem.fx;
 import javafx.scene.control.Label;
 
 /**
- * Created on 2017-01-01.
+ * A custom toolbar that follows a theme style that is set in CSS. It also contains a title label by default.
+ *
+ * @author Ronnie Tran
  */
 public class ThemeTitledToolbar extends CustomToolbar {
 
     private Label titleLabel;
 
     public ThemeTitledToolbar(String title) {
-        if(title.isEmpty()) {
+        if (title.isEmpty()) {
             title = "No Title";
         }
         getStylesheets().add(ThemeTitledToolbar.class.getResource("themetoolbar.css").toExternalForm());

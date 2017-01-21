@@ -37,7 +37,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 
 /**
- * Created on 2016-12-30.
+ *
  */
 public abstract class NodeTextFieldSkin extends TextFieldSkin {
     private static final PseudoClass HAS_NO_SIDE_NODE = PseudoClass.getPseudoClass("no-side-nodes"); //$NON-NLS-1$
@@ -83,6 +83,7 @@ public abstract class NodeTextFieldSkin extends TextFieldSkin {
             getChildren().add(leftPane);
             left = newLeft;
         } else {
+            // now when it is null, it gets removed properly
             getChildren().remove(leftPane);
             leftPane = null;
             left = null;
@@ -97,6 +98,7 @@ public abstract class NodeTextFieldSkin extends TextFieldSkin {
             getChildren().add(rightPane);
             right = newRight;
         } else {
+            // now when it is null, it gets removed properly
             getChildren().remove(rightPane);
             rightPane = null;
             right = null;

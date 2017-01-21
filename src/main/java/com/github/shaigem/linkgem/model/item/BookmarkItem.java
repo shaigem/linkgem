@@ -6,7 +6,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
- * Created on 2016-12-21.
+ * Represents a bookmark item.
+ *
+ * @author Ronnie Tran
  */
 public class BookmarkItem extends Item {
 
@@ -15,11 +17,13 @@ public class BookmarkItem extends Item {
     public BookmarkItem(String name, String description, String location) {
         super(IconManager.getInstance().getDefaultBookmarkIcon(), name, description, ItemType.BOOKMARK);
         this.location = new SimpleStringProperty(location);
-        if(!location.isEmpty()) {
+        if (!location.isEmpty()) {
+            // fetch the icon and then set the bookmark's icon when it is successfully fetched.
             IconManager.getInstance().getIconForLocation(location).thenAcceptAsync(this::setIcon);
         }
         this.location.addListener((observable, oldValue, newValue) -> {
-            if(!newValue.isEmpty()) {
+            if (!newValue.isEmpty()) {
+                // when the location or URL changes, we fetch the icon again
                 IconManager.getInstance().getIconForLocation(newValue).thenAcceptAsync(this::setIcon);
             }
         });

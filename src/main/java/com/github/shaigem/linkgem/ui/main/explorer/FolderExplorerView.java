@@ -3,7 +3,7 @@ package com.github.shaigem.linkgem.ui.main.explorer;
 import com.airhacks.afterburner.views.FXMLView;
 
 /**
- * Created on 2016-12-25.
+ * Loads folderexplorer.fxml and its presenter.
  */
 public class FolderExplorerView extends FXMLView{
 }

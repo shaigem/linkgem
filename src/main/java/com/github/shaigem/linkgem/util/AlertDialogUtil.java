@@ -11,6 +11,12 @@ import java.io.StringWriter;
 
 public class AlertDialogUtil {
 
+    /**
+     * Creates an exception dialog. Shows any exceptions in a text area.
+     *
+     * @param ex the throwable
+     * @return the exception dialog
+     */
     public static Alert createExceptionDialog(Throwable ex) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
 // Create expandable Exception.

@@ -6,7 +6,9 @@ import com.github.shaigem.linkgem.model.item.Item;
 import java.util.Optional;
 
 /**
- * Created on 2016-12-27.
+ * Request for adding a item to a folder.
+ *
+ * @author Ronnie Tran
  */
 public class AddItemToFolderRequest {
 
@@ -22,6 +24,7 @@ public class AddItemToFolderRequest {
     public FolderItem getFolderToAddTo() {
         return folderToAddTo;
     }
+
     public Optional<Item> getItemToAdd() {
         return Optional.ofNullable(item);
     }

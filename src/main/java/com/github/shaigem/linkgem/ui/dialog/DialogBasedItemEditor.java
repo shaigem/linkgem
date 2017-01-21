@@ -1,15 +1,25 @@
 package com.github.shaigem.linkgem.ui.dialog;
 
-import com.github.shaigem.linkgem.ui.events.OpenItemDialogRequest;
+import com.github.shaigem.linkgem.ui.events.OpenItemEditorDialogRequest;
 import javafx.scene.control.Button;
 
 /**
- * Created on 2016-12-30.
+ * Basic interface which specifies what a dialog item editor should implement.
+ *
+ * @author Ronnie Tran
  */
 public interface DialogBasedItemEditor {
 
-    void initProperties(final OpenItemDialogRequest request);
+    /**
+     * Load all of the item's properties that are being edited.
+     *
+     * @param request the open item dialog request
+     */
+    void initProperties(final OpenItemEditorDialogRequest request);
 
+    /**
+     * Save any properties to the original items.
+     */
     void saveProperties();
 
     Button getOKButton();

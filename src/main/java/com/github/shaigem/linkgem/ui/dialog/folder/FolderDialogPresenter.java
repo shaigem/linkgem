@@ -3,7 +3,7 @@ package com.github.shaigem.linkgem.ui.dialog.folder;
 import com.github.shaigem.linkgem.model.item.FolderItem;
 import com.github.shaigem.linkgem.ui.dialog.DialogBasedItemEditor;
 import com.github.shaigem.linkgem.ui.events.AddItemToFolderRequest;
-import com.github.shaigem.linkgem.ui.events.OpenItemDialogRequest;
+import com.github.shaigem.linkgem.ui.events.OpenItemEditorDialogRequest;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -15,11 +15,13 @@ import java.util.ResourceBundle;
 import static org.sejda.eventstudio.StaticStudio.eventStudio;
 
 /**
- * Created on 2016-12-30.
+ * Handles the presentation logic for the folder editor dialog.
+ *
+ * @author Ronnie Tran
  */
 public class FolderDialogPresenter implements Initializable, DialogBasedItemEditor {
 
-    private FolderItem folder;
+    private FolderItem workingFolder;
     private FolderItem editingFolder;
     private boolean add;
 
@@ -39,8 +41,8 @@ public class FolderDialogPresenter implements Initializable, DialogBasedItemEdit
     }
 
     @Override
-    public void initProperties(OpenItemDialogRequest request) {
-        this.folder = request.getWorkingFolder();
+    public void initProperties(OpenItemEditorDialogRequest request) {
+        this.workingFolder = request.getWorkingFolder();
         this.editingFolder = (FolderItem) request.getWorkingItem();
         this.add = request.isAdd();
         nameTextField.setText(editingFolder.getName());
@@ -52,7 +54,8 @@ public class FolderDialogPresenter implements Initializable, DialogBasedItemEdit
         editingFolder.setName(nameTextField.getText());
         editingFolder.setDescription(descriptionTextField.getText());
         if (add) {
-            eventStudio().broadcast(new AddItemToFolderRequest(folder, editingFolder));
+
+            eventStudio().broadcast(new AddItemToFolderRequest(workingFolder, editingFolder));
         }
     }
 

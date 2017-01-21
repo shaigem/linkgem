@@ -7,9 +7,10 @@ import com.github.shaigem.linkgem.model.item.Item;
 import com.github.shaigem.linkgem.model.item.ItemType;
 import com.github.shaigem.linkgem.repository.FolderRepository;
 import com.github.shaigem.linkgem.sort.SortOrder;
-import com.github.shaigem.linkgem.sort.impl.MergeSortingRoutine;
+import com.github.shaigem.linkgem.sort.impl.BookmarkMergeSortingRoutine;
 import com.github.shaigem.linkgem.ui.events.*;
 import com.github.shaigem.linkgem.ui.main.MainWindowPresenter;
+import com.github.shaigem.linkgem.ui.main.explorer.editor.ChangeEditorItemRequest;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import javafx.beans.property.BooleanProperty;
@@ -38,16 +39,26 @@ import java.util.ResourceBundle;
 import static org.sejda.eventstudio.StaticStudio.eventStudio;
 
 /**
- * Created on 2016-12-25.
+ * Presenter which handles the presentation logic for the folder explorer.
+ * What a folder explorer does is allow users to explore the contents of a folder.
+ * The folder browser only allows you to browse for folders but a folder explorer allows users to explorer what is inside the folders.
+ *
+ * @author Ronnie Tran
  */
 public class FolderExplorerPresenter implements Initializable {
 
+    /**
+     * Actions that can be performed in the explorer view.
+     */
     public enum ExplorerAction {
         ADD_FOLDER, ADD_BOOKMARK, DELETE, SHOW_IN_FOLDER
     }
 
     private MainWindowPresenter mainWindowPresenter;
 
+    /**
+     * The item that is being shown in the explorer.
+     */
     private ObjectProperty<FolderItem> viewingFolder;
 
     @Inject
@@ -103,6 +114,9 @@ public class FolderExplorerPresenter implements Initializable {
         eventStudio().addAnnotatedListeners(this);
     }
 
+    /**
+     * Initializes settings and properties for the item table.
+     */
     private void initTable() {
         placeholder = new Label(DEFAULT_PLACEHOLDER_TEXT);
         itemTableView.setPlaceholder(placeholder);
@@ -112,19 +126,25 @@ public class FolderExplorerPresenter implements Initializable {
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
                     Item rowData = row.getItem();
                     if (rowData instanceof FolderItem) {
-                        eventStudio().broadcast(new OpenFolderRequest((FolderItem) rowData));
+                        // when a user double clicks on a folder, open it!
+                        eventStudio().broadcast(new OpenFolderInExplorerRequest((FolderItem) rowData));
                     }
 
                 }
             });
             return row;
         });
+        // when the item that is selected changes, update our editor to show the newly selected item's properties
         itemTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
-                eventStudio().broadcast(new ItemSelectionChangedEvent(newValue)));
+                eventStudio().broadcast(new ChangeEditorItemRequest(newValue)));
     }
 
+    /**
+     * Setup columns and how they will be displayed.
+     */
     private void initColumns() {
         iconColumn.setCellValueFactory(e -> e.getValue().iconProperty());
+        // icon column only shows the icon of a bookmark item
         iconColumn.setCellFactory(new Callback<TableColumn<Item, Image>, TableCell<Item, Image>>() {
             @Override
             public TableCell<Item, Image> call(TableColumn<Item, Image> param) {
@@ -146,8 +166,10 @@ public class FolderExplorerPresenter implements Initializable {
                 };
             }
         });
-
         nameColumn.setCellValueFactory(e -> e.getValue().nameProperty());
+        // name cell will have a tooltip when a user hovers over it
+        nameColumn.setCellFactory(column -> new TooltipTableCell());
+        // location property will only show if it is a bookmark, not a folder.
         locationColumn.setCellValueFactory(e -> {
             if (e.getValue() instanceof BookmarkItem) {
                 final BookmarkItem bookmarkItem = (BookmarkItem) e.getValue();
@@ -155,15 +177,20 @@ public class FolderExplorerPresenter implements Initializable {
             }
             return null;
         });
+        // location cell will have a tooltip when a user hovers over it
         locationColumn.setCellFactory(column -> new TooltipTableCell());
-
         descriptionColumn.setCellValueFactory(e -> e.getValue().descriptionProperty());
+        // description cell will have a tooltip when a user hovers over it
         descriptionColumn.setCellFactory(column -> new TooltipTableCell());
-
         typeColumn.setCellValueFactory(e -> e.getValue().itemTypeProperty());
 
     }
 
+    /**
+     * Perform an explorer action.
+     *
+     * @param action the action to perform.
+     */
     public void performAction(ExplorerAction action) {
 
         switch (action) {
@@ -180,24 +207,33 @@ public class FolderExplorerPresenter implements Initializable {
         }
     }
 
+    /**
+     * Adds a new bookmark to the viewing folder.
+     */
     @FXML
     private void onAddBookmarkAction() {
         eventStudio().broadcast
-                (new OpenItemDialogRequest(getViewingFolder(), new BookmarkItem("New Bookmark"), true));
+                (new OpenItemEditorDialogRequest(getViewingFolder(), new BookmarkItem("New Bookmark"), true));
     }
 
+    /**
+     * Adds a new folder to the viewing folder.
+     */
     @FXML
     private void onAddFolderAction() {
         eventStudio().broadcast
-                (new OpenItemDialogRequest(getViewingFolder(), new FolderItem("New Folder"), true));
+                (new OpenItemEditorDialogRequest(getViewingFolder(), new FolderItem("New Folder"), true));
     }
 
+    /**
+     * Deletes the selected item.
+     */
     @FXML
     private void onDeleteItemAction() {
         final Item selectedItem = itemTableView.getSelectionModel().getSelectedItem();
         final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Delete Selected Item");
-        alert.setHeaderText("Delete " +( selectedItem instanceof FolderItem ? "Folder" : "Bookmark") + ": " + selectedItem);
+        alert.setHeaderText("Delete " + (selectedItem instanceof FolderItem ? "Folder" : "Bookmark") + ": " + selectedItem);
         alert.setContentText("Are you sure you want to delete the selected folder?");
         final Optional<ButtonType> buttonType = alert.showAndWait();
         buttonType.ifPresent(type -> {
@@ -215,15 +251,24 @@ public class FolderExplorerPresenter implements Initializable {
         });
     }
 
+    /**
+     * When a user is searching for items, this action will allow users to go to the selected item's parent folder.
+     * Example: if the bookmark item that was searched for was found in folder Games, this action will go to the Games folder.
+     */
     @FXML
     private void onShowInFolderAction() {
         final Item selectedItem = itemTableView.getSelectionModel().getSelectedItem();
-        eventStudio().broadcast(new OpenFolderRequest(selectedItem.getParentFolder()));
+        eventStudio().broadcast(new OpenFolderInExplorerRequest(selectedItem.getParentFolder()));
     }
 
     private FilteredList<Item> searchData;
     private SortedList<Item> sortedSearchData;
 
+    /**
+     * Handles any search requests.
+     *
+     * @param request the request to search for an item
+     */
     @EventListener
     private void onSearchItemRequest(SearchItemRequest request) {
         final String searchTerm = request.getSearchTerm();
@@ -234,9 +279,11 @@ public class FolderExplorerPresenter implements Initializable {
         }
 
         if (searchTerm.isEmpty()) { // open the master folder if search is empty
-            eventStudio().broadcast(new OpenFolderRequest(folderRepository.getMasterFolder()));
+            eventStudio().broadcast(new OpenFolderInExplorerRequest(folderRepository.getMasterFolder()));
             return;
         }
+        // if the search term contains a item's name, show that data!
+        // if the search term contains a bookmark's URL, show that data!
         searchData.setPredicate(item -> {
             if (searchTerm.isEmpty()) {
                 return true;
@@ -249,15 +296,20 @@ public class FolderExplorerPresenter implements Initializable {
             }
             return false;
         });
-        ObservableList<Item> items = folderRepository.getAllItems(folderRepository.getMasterFolder());
+        ObservableList<Item> items = folderRepository.collectAllItems();
+        // search folder will initially contain every single item
         folderRepository.getSearchFolder().getChildren().setAll(items);
         // open the search folder to show the results
-        eventStudio().broadcast(new OpenFolderRequest(folderRepository.getSearchFolder()));
+        eventStudio().broadcast(new OpenFolderInExplorerRequest(folderRepository.getSearchFolder()));
     }
 
-
+    /**
+     * Listens if the browser has a different selected folder.
+     *
+     * @param event the event
+     */
     @EventListener
-    private void onSelectedFolderChanged(SelectedFolderChangedEvent event) {
+    private void onBrowserSelectedFolderChanged(BrowserSelectedFolderChangedEvent event) {
         FolderItem viewingFolder = event.getNewFolder();
         if (viewingFolder != null) {
             setViewingFolder(viewingFolder);
@@ -265,8 +317,10 @@ public class FolderExplorerPresenter implements Initializable {
             final boolean isSearchFolder = viewingFolder == folderRepository.getSearchFolder();
             placeholder.setText(isSearchFolder ? "Search returned no results" : DEFAULT_PLACEHOLDER_TEXT);
             if (isSearchFolder) {
+                // if it is a search folder, show the items that the search matches
                 itemTableView.setItems(sortedSearchData);
             } else {
+                // show the items of the new folder we are going to view
                 itemTableView.setItems(children);
             }
             System.out.println("Selected Folder Changed!");
@@ -285,7 +339,7 @@ public class FolderExplorerPresenter implements Initializable {
         editViewingFolderButton.visibleProperty().bind(viewingFolderIsReadOnly.not());
         editViewingFolderButton.setTooltip(new Tooltip("Edit the viewing folder"));
         editViewingFolderButton.setGraphic(GlyphsDude.createIcon(MaterialDesignIcon.PENCIL, "1.8em"));
-        editViewingFolderButton.setOnAction(event -> eventStudio().broadcast(new OpenItemDialogRequest(getViewingFolder(), getViewingFolder(), false)));
+        editViewingFolderButton.setOnAction(event -> eventStudio().broadcast(new OpenItemEditorDialogRequest(getViewingFolder(), getViewingFolder(), false)));
         toolbar.getLeftSection().getChildren().addAll(editViewingFolderButton);
     }
 
@@ -324,6 +378,9 @@ public class FolderExplorerPresenter implements Initializable {
         return this.createFolderActionButton(icon, tooltip, explorerAction, true);
     }
 
+    /**
+     * Creates the view settings menu which allows users to modify the settings of the explorer table.
+     */
     private void createViewSettingsMenu() {
         viewSettingsMenuButton = new MenuButton();
         viewSettingsMenuButton.setGraphic(GlyphsDude.createIcon(MaterialDesignIcon.MENU, "1.8em"));
@@ -373,17 +430,25 @@ public class FolderExplorerPresenter implements Initializable {
         return mainWindowPresenter;
     }
 
+    /**
+     * Manually sorts the explorer's items by the given sort order.
+     *
+     * @param order the order to sort the items in
+     */
     private void performManualSorting(SortOrder order) {
         if (getViewingFolder().getChildren().isEmpty()) {
             return;
         }
         Item[] itemsToSort = new Item[getViewingFolder().getChildren().size()];
         itemsToSort = getViewingFolder().getChildren().toArray(itemsToSort);
-        MergeSortingRoutine mergeSortingRoutine = new MergeSortingRoutine();
-        getViewingFolder().getChildren().setAll(mergeSortingRoutine.sort(order, itemsToSort));
+        final BookmarkMergeSortingRoutine bookmarkMergeSortingRoutine = new BookmarkMergeSortingRoutine();
+        getViewingFolder().getChildren().setAll(bookmarkMergeSortingRoutine.sort(order, itemsToSort));
 
     }
 
+    /**
+     * Table cell which shows a tooltip for the cell's text.
+     */
     private final static class TooltipTableCell extends TableCell<Item, String> {
 
         final Tooltip tooltip;

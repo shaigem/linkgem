@@ -5,11 +5,11 @@ import com.github.shaigem.linkgem.model.item.Item;
 import com.github.shaigem.linkgem.sort.SortingRoutine;
 
 /**
- * The merge sorting algorithm for sorting bookmark items by their names.
+ * The merge sorting algorithm for sorting bookmark items by their names. It will sort folders and bookmarks.
  *
  * @author Ronnie Tran
  */
-public class MergeSortingRoutine extends SortingRoutine {
+public class BookmarkMergeSortingRoutine extends SortingRoutine {
 
     @Override
     public String name() {
@@ -62,7 +62,7 @@ public class MergeSortingRoutine extends SortingRoutine {
         int i = 0; // left index
         int j = 0; // right index
         int k = 0; // result index
-        while (i < sortedLeftHalfArray.length && j < sortedRightHalfArray.length) { // contains unused numbers still
+        while (i < sortedLeftHalfArray.length && j < sortedRightHalfArray.length) { // contains unused items still
             String leftHalfName = sortedLeftHalfArray[i].getName().toLowerCase();
             String rightHalfName = sortedRightHalfArray[j].getName().toLowerCase();
             if (descending ? (leftHalfName.compareTo(rightHalfName) >= rightHalfName.compareTo(leftHalfName)) :

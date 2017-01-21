@@ -1,18 +1,18 @@
 /**
  * Copyright (c) 2013, 2016 ControlsFX
  * All rights reserved.
- *
+ * <p>
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *     * Redistributions of source code must retain the above copyright
+ * * Redistributions of source code must retain the above copyright
  * notice, this list of conditions and the following disclaimer.
- *     * Redistributions in binary form must reproduce the above copyright
+ * * Redistributions in binary form must reproduce the above copyright
  * notice, this list of conditions and the following disclaimer in the
  * documentation and/or other materials provided with the distribution.
- *     * Neither the name of ControlsFX, any associated website, nor the
+ * * Neither the name of ControlsFX, any associated website, nor the
  * names of its contributors may be used to endorse or promote products
  * derived from this software without specific prior written permission.
- *
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -33,7 +33,9 @@ import javafx.scene.control.Skin;
 import javafx.scene.control.TextField;
 
 /**
- * Created on 2016-12-30.
+ * Textfield which allows nodes to be placed on the left and right part of the textfield.
+ * Taken from ControlsFX. There was a bug in Skin of the control. When users set the left or right side of the nodes to null,
+ * the left or right side of the nodes do not disappear correctly. The bug has been fixed in NodeTextFieldSkin.
  */
 public class NodeTextField extends TextField {
 
@@ -43,8 +45,6 @@ public class NodeTextField extends TextField {
      * Private fields
      *
      **************************************************************************/
-
-
 
 
     /**************************************************************************
@@ -61,7 +61,6 @@ public class NodeTextField extends TextField {
     }
 
 
-
     /**************************************************************************
      *
      * Properties
@@ -72,7 +71,6 @@ public class NodeTextField extends TextField {
     private ObjectProperty<Node> left = new SimpleObjectProperty<>(this, "left"); //$NON-NLS-1$
 
     /**
-     *
      * @return An ObjectProperty wrapping the {@link Node} that is placed
      * on the left ofthe text field.
      */
@@ -81,7 +79,6 @@ public class NodeTextField extends TextField {
     }
 
     /**
-     *
      * @return the {@link Node} that is placed on the left of
      * the text field.
      */
@@ -92,6 +89,7 @@ public class NodeTextField extends TextField {
     /**
      * Sets the {@link Node} that is placed on the left of
      * the text field.
+     *
      * @param value
      */
     public final void setLeft(Node value) {
@@ -105,6 +103,7 @@ public class NodeTextField extends TextField {
     /**
      * Property representing the {@link Node} that is placed on the right of
      * the text field.
+     *
      * @return An ObjectProperty.
      */
     public final ObjectProperty<Node> rightProperty() {
@@ -112,7 +111,6 @@ public class NodeTextField extends TextField {
     }
 
     /**
-     *
      * @return The {@link Node} that is placed on the right of
      * the text field.
      */
@@ -123,12 +121,12 @@ public class NodeTextField extends TextField {
     /**
      * Sets the {@link Node} that is placed on the right of
      * the text field.
+     *
      * @param value
      */
     public final void setRight(Node value) {
         right.set(value);
     }
-
 
 
     /**************************************************************************
@@ -140,13 +138,16 @@ public class NodeTextField extends TextField {
     /**
      * {@inheritDoc}
      */
-    @Override protected Skin<?> createDefaultSkin() {
+    @Override
+    protected Skin<?> createDefaultSkin() {
         return new NodeTextFieldSkin(this) {
-            @Override public ObjectProperty<Node> leftProperty() {
+            @Override
+            public ObjectProperty<Node> leftProperty() {
                 return NodeTextField.this.leftProperty();
             }
 
-            @Override public ObjectProperty<Node> rightProperty() {
+            @Override
+            public ObjectProperty<Node> rightProperty() {
                 return NodeTextField.this.rightProperty();
             }
         };
@@ -155,7 +156,8 @@ public class NodeTextField extends TextField {
     /**
      * {@inheritDoc}
      */
-    @Override public String getUserAgentStylesheet() {
+    @Override
+    public String getUserAgentStylesheet() {
         return org.controlsfx.control.textfield.CustomTextField.class.getResource("customtextfield.css").toExternalForm(); //$NON-NLS-1$
     }
 

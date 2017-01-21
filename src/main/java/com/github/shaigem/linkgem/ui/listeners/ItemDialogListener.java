@@ -2,22 +2,24 @@ package com.github.shaigem.linkgem.ui.listeners;
 
 import com.github.shaigem.linkgem.model.item.BookmarkItem;
 import com.github.shaigem.linkgem.model.item.FolderItem;
-import com.github.shaigem.linkgem.ui.dialog.bookmark.BookmarkDialog;
-import com.github.shaigem.linkgem.ui.dialog.folder.FolderDialog;
-import com.github.shaigem.linkgem.ui.events.OpenItemDialogRequest;
+import com.github.shaigem.linkgem.ui.dialog.bookmark.BookmarkEditorDialog;
+import com.github.shaigem.linkgem.ui.dialog.folder.FolderEditorDialog;
+import com.github.shaigem.linkgem.ui.events.OpenItemEditorDialogRequest;
 import org.sejda.eventstudio.Listener;
 
 /**
- * Created on 2016-12-30.
+ * Listens for any requests to open the item editor dialog.
+ *
+ * @author Ronnie Tran
  */
-public class ItemDialogListener implements Listener<OpenItemDialogRequest> {
+public class ItemDialogListener implements Listener<OpenItemEditorDialogRequest> {
 
     @Override
-    public void onEvent(OpenItemDialogRequest event) {
+    public void onEvent(OpenItemEditorDialogRequest event) {
         if (event.getWorkingItem() instanceof BookmarkItem) {
-            new BookmarkDialog().showDialog(event);
+            new BookmarkEditorDialog().showDialog(event);
         } else if (event.getWorkingItem() instanceof FolderItem) {
-            new FolderDialog().showDialog(event);
+            new FolderEditorDialog().showDialog(event);
         }
     }
 }

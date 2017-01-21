@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Manages the icons used by this program.
  *
- * @author Ronnie T.
+ * @author Ronnie Tran
  */
 public final class IconManager {
 
@@ -161,6 +161,9 @@ public final class IconManager {
     }
     */
 
+    /**
+     * Allows for lazy initialization. Creates the instance when this is first needed.
+     */
     private static class LazyHolder {
         static final IconManager INSTANCE = new IconManager();
     }

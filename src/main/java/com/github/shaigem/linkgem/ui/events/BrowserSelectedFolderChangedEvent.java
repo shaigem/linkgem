@@ -3,14 +3,14 @@ package com.github.shaigem.linkgem.ui.events;
 import com.github.shaigem.linkgem.model.item.FolderItem;
 
 /**
- * Created on 2016-12-27.
+ * Event which notifies listeners that the user has selected another folder in the browser view.
  */
-public class SelectedFolderChangedEvent {
+public class BrowserSelectedFolderChangedEvent {
 
     private final FolderItem oldFolder;
     private final FolderItem newFolder;
 
-    public SelectedFolderChangedEvent(FolderItem oldFolder, FolderItem newFolder) {
+    public BrowserSelectedFolderChangedEvent(FolderItem oldFolder, FolderItem newFolder) {
         this.oldFolder = oldFolder;
         this.newFolder = newFolder;
     }

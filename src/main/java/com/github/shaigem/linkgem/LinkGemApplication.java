@@ -18,6 +18,8 @@ import java.util.Optional;
 import static org.sejda.eventstudio.StaticStudio.eventStudio;
 
 /**
+ * LinkGem is a bookmark manager for desktop.
+ * It allows users to store their favourite website links in one program which they can access at any time.
  * Created on 2016-12-21.
  *
  * @author Ronnie Tran
@@ -57,6 +59,9 @@ public class LinkGemApplication extends Application {
 
     }
 
+    /**
+     * Closes the splash screen if there is one going.
+     */
     private void closeSplash() {
         Optional.ofNullable(SplashScreen.getSplashScreen()).ifPresent(SplashScreen::close);
     }

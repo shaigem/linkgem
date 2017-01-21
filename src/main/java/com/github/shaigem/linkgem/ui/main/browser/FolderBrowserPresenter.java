@@ -24,7 +24,8 @@ import java.util.ResourceBundle;
 import static org.sejda.eventstudio.StaticStudio.eventStudio;
 
 /**
- * Created on 2016-12-21.
+ * Presenter for the folder browser. The folder browser allows users to browser folders.
+ * It is displayed in a tree like structure.
  */
 public class FolderBrowserPresenter implements Initializable {
 
@@ -50,7 +51,7 @@ public class FolderBrowserPresenter implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeToolbar();
-        setupCreateButton();
+        setupCreateNewFolderButton();
         TreeItem<FolderItem> rootFolder = new TreeItem<>();
         rootFolder.setExpanded(true);
         folderTreeView.setShowRoot(false);
@@ -60,7 +61,6 @@ public class FolderBrowserPresenter implements Initializable {
         folderTreeView.setCellFactory((v) -> new CustomTreeCellImpl());
         listenForTreeViewSelection();
         folderTreeView.getSelectionModel().selectFirst();
-        // folderTreeView.setContextMenu( new ItemContextMenu(this, folderRepository.getMasterFolder()));
         eventStudio().addAnnotatedListeners(this);
     }
 
@@ -68,24 +68,29 @@ public class FolderBrowserPresenter implements Initializable {
     @FXML
     private void onEditFolderAction() {
         final FolderItem selectedFolder = folderTreeView.getSelectionModel().getSelectedItem().getValue();
-        eventStudio().broadcast(new OpenItemDialogRequest(selectedFolder,
+        eventStudio().broadcast(new OpenItemEditorDialogRequest(selectedFolder,
                 selectedFolder, false));
     }
 
     @FXML
     private void onAddFolderAction() {
+        // creates a new folder and adds it to the selected folder
         final FolderItem selectedFolder = folderTreeView.getSelectionModel().getSelectedItem().getValue();
-        eventStudio().broadcast(new OpenItemDialogRequest(selectedFolder,
+        eventStudio().broadcast(new OpenItemEditorDialogRequest(selectedFolder,
                 new FolderItem("New Folder"), true));
     }
 
     @FXML
     private void onAddBookmarkAction() {
+        // creates a new bookmark and adds it to the selected folder
         final FolderItem selectedFolder = folderTreeView.getSelectionModel().getSelectedItem().getValue();
-        eventStudio().broadcast(new OpenItemDialogRequest(selectedFolder,
+        eventStudio().broadcast(new OpenItemEditorDialogRequest(selectedFolder,
                 new BookmarkItem("New Bookmark"), true));
     }
 
+    /**
+     * Deletes the selected folder.
+     */
     @FXML
     private void onDeleteFolderAction() {
         final FolderItem selectedFolder = folderTreeView.getSelectionModel().getSelectedItem().getValue();
@@ -105,10 +110,10 @@ public class FolderBrowserPresenter implements Initializable {
         toolbarPane.getChildren().add(new ThemeTitledToolbar("Browser"));
     }
 
-    private void setupCreateButton() {
+    private void setupCreateNewFolderButton() {
         final Text icon = GlyphsDude.createIcon(MaterialIcon.CREATE_NEW_FOLDER, "1.6em");
         createButton.setGraphic(icon);
-        createButton.setOnAction(event -> eventStudio().broadcast(new OpenItemDialogRequest(folderRepository.getMasterFolder(),
+        createButton.setOnAction(event -> eventStudio().broadcast(new OpenItemEditorDialogRequest(folderRepository.getMasterFolder(),
                 new FolderItem("New Folder"), true)));
     }
 
@@ -124,7 +129,7 @@ public class FolderBrowserPresenter implements Initializable {
                 editFolderMenuItem.setDisable(selectedFolderIsReadOnly);
                 deleteFolderMenuItem.setDisable(selectedFolderIsReadOnly || newValue.getValue() == folderRepository.getMasterFolder());
             }
-            eventStudio().broadcast(new SelectedFolderChangedEvent(oldValue == null ? null :
+            eventStudio().broadcast(new BrowserSelectedFolderChangedEvent(oldValue == null ? null :
                     oldValue.getValue(), newValue == null ? null : newValue.getValue()));
         });
     }
@@ -137,12 +142,15 @@ public class FolderBrowserPresenter implements Initializable {
         parentFolder.getAsTreeItem().getChildren().remove(folderToDelete.getAsTreeItem());
         // the parent folder will remove the folder from its children list
         parentFolder.getChildren().remove(folderToDelete);
-
-        //TODO disable deleting master folder!
     }
 
+    /**
+     * Handles when there is a request to open a folder in the explorer.
+     *
+     * @param request the open in folder explorer request
+     */
     @EventListener
-    private void onOpenFolderRequest(OpenFolderRequest request) {
+    private void onOpenFolderInExplorerRequest(OpenFolderInExplorerRequest request) {
         folderTreeView.getSelectionModel().select(request.getFolder().getAsTreeItem());
     }
 
@@ -163,6 +171,9 @@ public class FolderBrowserPresenter implements Initializable {
         });
     }
 
+    /**
+     * Custom tree cell which displays a custom icon for folders in the tree view.
+     */
     private final class CustomTreeCellImpl extends TreeCell<FolderItem> {
 
         private Text icon;

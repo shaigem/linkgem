@@ -4,21 +4,24 @@ import com.github.shaigem.linkgem.model.item.FolderItem;
 import com.github.shaigem.linkgem.model.item.Item;
 
 /**
- * Created on 2016-12-30.
+ * Request to open the item editor dialog.
+ *
+ * @author Ronnie Tran
  */
-public class OpenItemDialogRequest {
-
+public class OpenItemEditorDialogRequest {
 
     private FolderItem workingFolder;
     private Item workingItem;
+    /**
+     * Are we editing the item or are we creating a new item to add.
+     */
     private boolean add;
 
-    public OpenItemDialogRequest(FolderItem workingFolder, Item workingItem, boolean add) {
+    public OpenItemEditorDialogRequest(FolderItem workingFolder, Item workingItem, boolean add) {
         this.workingFolder = workingFolder;
         this.workingItem = workingItem;
         this.add = add;
     }
-
 
     public FolderItem getWorkingFolder() {
         return workingFolder;
@@ -27,7 +30,6 @@ public class OpenItemDialogRequest {
     public Item getWorkingItem() {
         return workingItem;
     }
-
 
     public boolean isAdd() {
         return add;

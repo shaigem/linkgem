@@ -3,13 +3,15 @@ package com.github.shaigem.linkgem.ui.events;
 import com.github.shaigem.linkgem.model.item.FolderItem;
 
 /**
- * Created on 2016-12-28.
+ * Request to open a folder in the explorer.
+ *
+ * @author Ronnie Tran
  */
-public class OpenFolderRequest {
+public class OpenFolderInExplorerRequest {
 
     private FolderItem folder;
 
-    public OpenFolderRequest(FolderItem folder) {
+    public OpenFolderInExplorerRequest(FolderItem folder) {
         this.folder = folder;
     }
 

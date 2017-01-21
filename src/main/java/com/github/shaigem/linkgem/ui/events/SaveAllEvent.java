@@ -1,7 +1,9 @@
 package com.github.shaigem.linkgem.ui.events;
 
 /**
- * Created on 2017-01-20.
+ * Event that notifies event listeners to save all items to JSON.
+ *
+ * @author Ronnie Tran
  */
 public class SaveAllEvent {
 }

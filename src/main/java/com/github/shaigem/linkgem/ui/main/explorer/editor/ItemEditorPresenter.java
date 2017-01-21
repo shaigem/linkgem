@@ -2,7 +2,6 @@ package com.github.shaigem.linkgem.ui.main.explorer.editor;
 
 import com.github.shaigem.linkgem.fx.propertysheet.ItemPropertyEditor;
 import com.github.shaigem.linkgem.fx.propertysheet.PropertyEditorItem;
-import com.github.shaigem.linkgem.ui.events.ItemSelectionChangedEvent;
 import com.github.shaigem.linkgem.model.item.BookmarkItem;
 import com.github.shaigem.linkgem.model.item.Item;
 import javafx.fxml.FXML;
@@ -17,7 +16,9 @@ import java.util.ResourceBundle;
 import static org.sejda.eventstudio.StaticStudio.eventStudio;
 
 /**
- * Created on 2016-12-28.
+ * Presenter which handles the item editor. Allows users to edit the properties of a item.
+ *
+ * @author Ronnie Tran
  */
 public class ItemEditorPresenter implements Initializable {
 
@@ -31,22 +32,31 @@ public class ItemEditorPresenter implements Initializable {
         eventStudio().addAnnotatedListeners(this);
     }
 
+    /**
+     * Listens if there are any requests to edit a new item.
+     *
+     * @param event the request to listen for
+     */
     @EventListener
-    private void onItemSelectionChanged(ItemSelectionChangedEvent event) {
-        final Optional<Item> item = event.getSelectedItem();
+    private void onChangeEditorItemRequest(ChangeEditorItemRequest event) {
+        final Optional<Item> item = event.getItem();
         if (item.isPresent()) {
             setEditingItem(item.get());
         } else {
+            // hide the property sheet
             setPropertySheetVisibility(false);
         }
     }
 
+    /**
+     * Updates the property sheet control with the editing item's properties.
+     */
     private void updatePropertySheetItems() {
         setPropertySheetVisibility(true);
 
         final PropertyEditorItem<String> nameItem = (new PropertyEditorItem<>(editingItem.nameProperty(), "Name",
-                        "The name of the item",
-                        ItemPropertyEditor.NAME));
+                "The name of the item",
+                ItemPropertyEditor.NAME));
 
         final PropertyEditorItem<String> descriptionItem = (new PropertyEditorItem<>
                 (editingItem.descriptionProperty(), "Description", "The description of the item",

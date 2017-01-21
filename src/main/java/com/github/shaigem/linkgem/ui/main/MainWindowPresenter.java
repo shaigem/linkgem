@@ -6,7 +6,7 @@ import com.github.shaigem.linkgem.repository.FolderRepository;
 import com.github.shaigem.linkgem.serialization.BookmarkSerialization;
 import com.github.shaigem.linkgem.ui.events.SaveAllEvent;
 import com.github.shaigem.linkgem.ui.events.SearchItemRequest;
-import com.github.shaigem.linkgem.ui.events.SelectedFolderChangedEvent;
+import com.github.shaigem.linkgem.ui.events.BrowserSelectedFolderChangedEvent;
 import com.github.shaigem.linkgem.ui.listeners.ItemDialogListener;
 import com.github.shaigem.linkgem.ui.main.browser.FolderBrowserView;
 import com.github.shaigem.linkgem.ui.main.explorer.FolderExplorerPresenter;
@@ -32,7 +32,9 @@ import java.util.ResourceBundle;
 import static org.sejda.eventstudio.StaticStudio.eventStudio;
 
 /**
- * Created on 2016-12-21.
+ * Presenter for the main window.
+ *
+ * @author Ronnie Tran
  */
 public class MainWindowPresenter implements Initializable {
 
@@ -53,6 +55,9 @@ public class MainWindowPresenter implements Initializable {
     @FXML
     StackPane toolbarPane;
 
+    /**
+     * The pause transition that acts like a timer before performing a search.
+     */
     private final PauseTransition searchTransition = new PauseTransition(Duration.millis(600));
 
     private MainToolbar toolbar;
@@ -62,17 +67,18 @@ public class MainWindowPresenter implements Initializable {
         initializeToolbar();
         initializeItemSidebar();
         initializeExplorer();
-        BookmarkSerialization.getInstance().deserializeAndCreateBookmarkItems(folderRepository.getMasterFolder());
         TooltipUtil.changeDefaultTooltipActivationDuration();
+        BookmarkSerialization.getInstance().deserializeAndCreateBookmarkItems(folderRepository.getMasterFolder());
         eventStudio().add(new ItemDialogListener(), 0, ReferenceStrength.STRONG);
         eventStudio().addAnnotatedListeners(this);
     }
 
     @EventListener(priority = 100)
-    private void onSelectedFolderChanged(SelectedFolderChangedEvent event) {
+    private void onBrowserSelectedFolderChanged(BrowserSelectedFolderChangedEvent event) {
         FolderItem viewingFolder = event.getNewFolder();
         if (viewingFolder != null) {
             if (viewingFolder != folderRepository.getSearchFolder()) {
+                // reset the search when the user presses on another folder that is not a search folder
                 resetSearch();
             }
         }
@@ -96,10 +102,15 @@ public class MainWindowPresenter implements Initializable {
         }
     }
 
+    /**
+     * Initialize the main toolbar UI elements.
+     */
     private void initializeToolbar() {
         toolbar = new MainToolbar();
         toolbar.getSearchPresenter().textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
+                // if the user keeps typing, reset the timer
+                // we will only perform a search when the user stops typing for a certain amount of time
                 searchTransition.playFromStart();
                 searchTransition.setOnFinished(event -> eventStudio().broadcast(new SearchItemRequest(newValue)));
             }
@@ -107,24 +118,35 @@ public class MainWindowPresenter implements Initializable {
         toolbarPane.getChildren().add(toolbar);
     }
 
+    /**
+     * Loads the sidebar that is on the left of the main window.
+     */
     private void initializeItemSidebar() {
         //  folderBrowserView = new FolderBrowserView();
+        // create the folder browser on the left of the main window
         itemSidebarPane.getChildren().add(folderBrowserView.getView());
     }
 
+    /**
+     * Loads the explorer UI elements.
+     */
     private void initializeExplorer() {
         final MasterDetailPane masterDetailPane = new MasterDetailPane();
-        //     final FolderExplorerView folderExplorerView = new FolderExplorerView();
         final FolderExplorerPresenter explorerPresenter = (FolderExplorerPresenter) folderExplorerView.getPresenter();
         explorerPresenter.setMainWindowPresenter(this);
         final ItemEditorView editorView = new ItemEditorView();
+        // master contains the table of items in a folder
         masterDetailPane.setMasterNode(folderExplorerView.getView());
+        // detail contains the item editor which displays properties for the selected item
         masterDetailPane.setDetailNode(editorView.getView());
         masterDetailPane.setDetailSide(Side.BOTTOM);
         masterDetailPane.setShowDetailNode(true);
         explorerPane.getChildren().add(masterDetailPane);
     }
 
+    /**
+     * Resets the search if the user is currently searching.
+     */
     private void resetSearch() {
         toolbar.getSearchPresenter().resetText();
         folderRepository.getSearchFolder().getChildren().clear();

@@ -6,7 +6,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
- * Created on 2016-12-25.
+ * Keeps track of all folders that are being used.
+ *
+ * @author Ronnie Tran
  */
 public class FolderRepository {
 
@@ -16,12 +18,28 @@ public class FolderRepository {
 
     private ObservableList<FolderItem> folderItems = FXCollections.observableArrayList();
 
-    public ObservableList<Item> getAllItems(FolderItem folderItem) {
+    /**
+     * Collects ALL of the items that the user has added in the program.
+     *
+     * @return the observable list of items
+     */
+    public ObservableList<Item> collectAllItems() {
+        return collectItems(masterFolder);
+    }
+
+    /**
+     * Collect items that are found in a folder.
+     *
+     * @param folderItem the folder with items that will be collected. If the folder contains more folders,
+     *                   recursion will be used to search for more items in the folders.
+     * @return the observable list with folders
+     */
+    private ObservableList<Item> collectItems(FolderItem folderItem) {
         ObservableList<Item> items = FXCollections.observableArrayList();
         for (Item item : folderItem.getChildren()) {
             if (item instanceof FolderItem) {
                 items.add(item);
-                items.addAll(getAllItems((FolderItem) item));
+                items.addAll(collectItems((FolderItem) item));
             } else {
                 items.add(item);
             }

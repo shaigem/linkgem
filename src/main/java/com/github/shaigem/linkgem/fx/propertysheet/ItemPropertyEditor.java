@@ -6,7 +6,9 @@ import com.github.shaigem.linkgem.fx.propertysheet.editor.StringPropertyEditorWi
 import org.controlsfx.property.editor.PropertyEditor;
 
 /**
- * Created on 2016-12-30.
+ * Editors that edit a certain property in a bookmark. An editor for a item's name will be a String editor.
+ *
+ * @author Ronnie Tran
  */
 public enum ItemPropertyEditor {
 

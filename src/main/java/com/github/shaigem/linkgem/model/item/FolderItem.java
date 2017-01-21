@@ -8,13 +8,22 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 
 /**
- * Created on 2016-12-21.
+ * Represents a folder item. A folder item acts like a folder. It can hold more folders and bookmarks.
+ *
+ * @author Ronnie Tran
  */
 public class FolderItem extends Item {
 
     private TreeItem<FolderItem> treeItem;
-
+    /**
+     * Property indicating that the folder is readonly.
+     * This means that users cannot add items to the folder but they can delete items in the folder.
+     * However, the folder itself cannot be deleted.
+     */
     private BooleanProperty readOnly;
+    /**
+     * Observable list that hold the folder's children.
+     */
     private ObservableList<Item> children;
 
     public FolderItem(String name, String description, boolean readOnly) {
@@ -29,7 +38,7 @@ public class FolderItem extends Item {
 
     public boolean addItem(Item item) {
         final boolean added = children.add(item);
-        if(added) {
+        if (added) {
             item.setParentFolder(this);
         }
         return added;
@@ -51,6 +60,11 @@ public class FolderItem extends Item {
         return readOnly.get();
     }
 
+    /**
+     * Create a tree item for this folder.
+     *
+     * @return the tree item
+     */
     public TreeItem<FolderItem> getAsTreeItem() {
         if (treeItem == null) {
             treeItem = new TreeItem<>(this);

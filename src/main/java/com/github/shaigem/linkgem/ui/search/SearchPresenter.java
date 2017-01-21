@@ -11,7 +11,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Created on 2017-01-03.
+ * The presenter to handle the searcher.
+ *
+ * @author Ronnie Tran
  */
 public class SearchPresenter implements Initializable {
 

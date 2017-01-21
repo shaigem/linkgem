@@ -18,7 +18,7 @@ import org.controlsfx.validation.Validator;
  * Allows the editing of string based properties. Validation support is enabled.
  * If the input is empty, the validation will warn the user and will not save any changes.
  *
- * @author Ronnie T.
+ * @author Ronnie Tran
  */
 public class StringPropertyEditorWithEmptyValidation implements PropertyEditor<String> {
 
@@ -46,6 +46,7 @@ public class StringPropertyEditorWithEmptyValidation implements PropertyEditor<S
                 commitChanges();
             }
         });
+        // if the input is invalid, show the exclamation triangle. Otherwise, hide it.
         validationSupport.invalidProperty().addListener((observable, oldValue, newValue) ->
                 textField.setLeft(newValue ? exclamationTriangle : null));
     }

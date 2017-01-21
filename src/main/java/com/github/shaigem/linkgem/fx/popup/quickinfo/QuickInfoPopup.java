@@ -10,7 +10,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.text.TextFlow;
 
 /**
- * Created on 2016-12-30.
+ * Displays a popup that is similar to a tooltip showing information to the user.
+ * The difference between this and a tooltip is that when the user hovers a node with a quick info popup,
+ * it will be displayed instantly.
+ *
+ * @author Ronnie Tran
  */
 public class QuickInfoPopup extends PopupControl {
 
@@ -20,7 +24,6 @@ public class QuickInfoPopup extends PopupControl {
 
     private final TextFlow content;
 
-    // TODO clean up CSS and code
     public QuickInfoPopup(String text) {
         super();
         getStyleClass().add(DEFAULT_STYLE_CLASS);
