@@ -12,7 +12,9 @@ mainClassName = "com.github.shaigem.linkgem.LinkGemApplication"
 
 jar {
     manifest {
-        attributes "Main-Class": "$mainClassName"
+        attributes ("Main-Class": "$mainClassName",
+                "SplashScreen-Image": "images/splash.gif")
+
     }
 
     from {
