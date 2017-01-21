@@ -13,15 +13,11 @@ import com.github.shaigem.linkgem.ui.main.explorer.FolderExplorerPresenter;
 import com.github.shaigem.linkgem.ui.main.explorer.FolderExplorerView;
 import com.github.shaigem.linkgem.ui.main.explorer.editor.ItemEditorView;
 import com.github.shaigem.linkgem.util.TooltipUtil;
-import de.jensd.fx.glyphs.GlyphsDude;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.animation.PauseTransition;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Side;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -31,7 +27,6 @@ import org.sejda.eventstudio.annotation.EventListener;
 
 import javax.inject.Inject;
 import java.net.URL;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static org.sejda.eventstudio.StaticStudio.eventStudio;
@@ -71,7 +66,6 @@ public class MainWindowPresenter implements Initializable {
         TooltipUtil.changeDefaultTooltipActivationDuration();
         eventStudio().add(new ItemDialogListener(), 0, ReferenceStrength.STRONG);
         eventStudio().addAnnotatedListeners(this);
-        setOnApplicationCloseRequest();
     }
 
     @EventListener(priority = 100)
@@ -96,27 +90,7 @@ public class MainWindowPresenter implements Initializable {
         }
     }
 
-    /**
-     * When the user tries to close the application, create a popup dialog thanking them for using the software
-     * and also asking them if they would like to save any changes.
-     */
-    private void setOnApplicationCloseRequest() {
-        Platform.runLater(() -> root.getScene().getWindow().setOnCloseRequest(event -> {
-            final Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Thanks");
-            alert.setHeaderText("Thanks");
-            alert.setContentText("Thanks for using LinkGem! Before you go, would you like to " +
-                    "save any changes that you may have made?");
-            alert.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.HAND_PAPER_ALT, "1.8em"));
-            alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
-            final Optional<ButtonType> buttonType = alert.showAndWait();
-            buttonType.ifPresent(type -> {
-                if (type == ButtonType.YES) {
-                    eventStudio().broadcast(new SaveAllEvent());
-                }
-            });
-        }));
-    }
+
 
     private void initializeToolbar() {
         toolbar = new MainToolbar();
