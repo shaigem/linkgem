@@ -1,6 +1,6 @@
 package com.github.shaigem.linkgem.ui.main;
 
-import com.github.shaigem.linkgem.fx.MainToolbar;
+import com.github.shaigem.linkgem.fx.toolbar.MainToolbar;
 import com.github.shaigem.linkgem.model.item.FolderItem;
 import com.github.shaigem.linkgem.repository.FolderRepository;
 import com.github.shaigem.linkgem.serialization.BookmarkSerialization;

@@ -1,4 +1,4 @@
-package com.github.shaigem.linkgem.fx;
+package com.github.shaigem.linkgem.fx.toolbar;
 
 import com.github.shaigem.linkgem.ui.events.SaveAllEvent;
 import com.github.shaigem.linkgem.ui.search.SearchPresenter;
@@ -6,8 +6,7 @@ import com.github.shaigem.linkgem.ui.search.SearchView;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
-import javafx.scene.control.Button;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
@@ -38,8 +37,9 @@ public class MainToolbar extends CustomToolbar {
         // create the search view
         searchView = new SearchView();
         // create the about button
-        final Button aboutButton =
-                button(GlyphsDude.createIcon(FontAwesomeIcon.COG, "1.8em"), "");
+        final MenuButton aboutButton = new MenuButton();
+              aboutButton.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.COG, "1.8em"));
+              aboutButton.getItems().addAll(new MenuItem("Written by Ronnie Tran"));
         getRightSection().getChildren().addAll(searchView.getViewWithoutRootContainer(), saveAllButton, aboutButton);
         eventStudio().addAnnotatedListeners(this);
     }

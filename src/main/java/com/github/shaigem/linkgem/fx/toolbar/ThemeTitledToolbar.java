@@ -1,4 +1,4 @@
-package com.github.shaigem.linkgem.fx;
+package com.github.shaigem.linkgem.fx.toolbar;
 
 import javafx.scene.control.Label;
 

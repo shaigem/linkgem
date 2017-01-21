@@ -1,6 +1,6 @@
 package com.github.shaigem.linkgem.ui.main.explorer;
 
-import com.github.shaigem.linkgem.fx.ThemeTitledToolbar;
+import com.github.shaigem.linkgem.fx.toolbar.ThemeTitledToolbar;
 import com.github.shaigem.linkgem.model.item.BookmarkItem;
 import com.github.shaigem.linkgem.model.item.FolderItem;
 import com.github.shaigem.linkgem.model.item.Item;
