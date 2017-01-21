@@ -443,7 +443,6 @@ public class FolderExplorerPresenter implements Initializable {
         itemsToSort = getViewingFolder().getChildren().toArray(itemsToSort);
         final BookmarkMergeSortingRoutine bookmarkMergeSortingRoutine = new BookmarkMergeSortingRoutine();
         getViewingFolder().getChildren().setAll(bookmarkMergeSortingRoutine.sort(order, itemsToSort));
-
     }
 
     /**
