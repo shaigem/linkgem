@@ -8,12 +8,12 @@ import java.util.Optional;
 /**
  * Created on 2016-12-27.
  */
-public class AddItemToFolderEvent {
+public class AddItemToFolderRequest {
 
     private FolderItem folderToAddTo;
     private Item item;
 
-    public AddItemToFolderEvent( FolderItem folderToAddTo, Item item) {
+    public AddItemToFolderRequest(FolderItem folderToAddTo, Item item) {
         this.folderToAddTo = folderToAddTo;
         this.item = item;
 

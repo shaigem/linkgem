@@ -18,6 +18,7 @@ import org.sejda.eventstudio.annotation.EventListener;
 
 import javax.inject.Inject;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static org.sejda.eventstudio.StaticStudio.eventStudio;
@@ -87,7 +88,17 @@ public class FolderBrowserPresenter implements Initializable {
 
     @FXML
     private void onDeleteFolderAction() {
-
+        final FolderItem selectedFolder = folderTreeView.getSelectionModel().getSelectedItem().getValue();
+        final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Selected Folder");
+        alert.setHeaderText("Delete Selected Folder");
+        alert.setContentText("Are you sure you want to delete the selected folder?");
+        final Optional<ButtonType> buttonType = alert.showAndWait();
+        buttonType.ifPresent(type -> {
+            if (type == ButtonType.OK) {
+                onDeleteFolderRequest(new DeleteFolderRequest(selectedFolder));
+            }
+        });
     }
 
     private void initializeToolbar() {
@@ -111,7 +122,7 @@ public class FolderBrowserPresenter implements Initializable {
                 addFolderMenuItem.setDisable(selectedFolderIsReadOnly);
                 addBookmarkMenuItem.setDisable(selectedFolderIsReadOnly);
                 editFolderMenuItem.setDisable(selectedFolderIsReadOnly);
-                deleteFolderMenuItem.setDisable(selectedFolderIsReadOnly);
+                deleteFolderMenuItem.setDisable(selectedFolderIsReadOnly || newValue.getValue() == folderRepository.getMasterFolder());
             }
             eventStudio().broadcast(new SelectedFolderChangedEvent(oldValue == null ? null :
                     oldValue.getValue(), newValue == null ? null : newValue.getValue()));
@@ -120,10 +131,14 @@ public class FolderBrowserPresenter implements Initializable {
 
     @EventListener
     private void onDeleteFolderRequest(DeleteFolderRequest event) {
-        final FolderItem itemToDelete = (FolderItem) event.getItemToDelete();
-        folderRepository.getMasterFolder().getAsTreeItem().getChildren().remove(itemToDelete.getAsTreeItem());
-        folderRepository.getMasterFolder().getChildren().remove(itemToDelete);
-        // TODO master folder
+        final FolderItem folderToDelete = (FolderItem) event.getItemToDelete();
+        final FolderItem parentFolder = folderToDelete.getParentFolder();
+        // remove the folder from the browser tree list
+        parentFolder.getAsTreeItem().getChildren().remove(folderToDelete.getAsTreeItem());
+        // the parent folder will remove the folder from its children list
+        parentFolder.getChildren().remove(folderToDelete);
+
+        //TODO disable deleting master folder!
     }
 
     @EventListener
@@ -131,10 +146,15 @@ public class FolderBrowserPresenter implements Initializable {
         folderTreeView.getSelectionModel().select(request.getFolder().getAsTreeItem());
     }
 
+    /**
+     * Listener which listens if there are any requests to add a item to a folder.
+     *
+     * @param request the request to listen for
+     */
     @EventListener
-    private void onAddItemToFolder(AddItemToFolderEvent event) {
-        final FolderItem folderToAddTo = event.getFolderToAddTo();
-        event.getItemToAdd().ifPresent(itemToAdd -> {
+    private void onAddItemToFolderRequest(AddItemToFolderRequest request) {
+        final FolderItem folderToAddTo = request.getFolderToAddTo();
+        request.getItemToAdd().ifPresent(itemToAdd -> {
             folderToAddTo.addItem(itemToAdd);
             if (itemToAdd instanceof FolderItem) {
                 folderRepository.getFolders().add((FolderItem) itemToAdd);

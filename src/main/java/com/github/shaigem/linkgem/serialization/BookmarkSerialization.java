@@ -3,7 +3,7 @@ package com.github.shaigem.linkgem.serialization;
 import com.github.shaigem.linkgem.model.item.BookmarkItem;
 import com.github.shaigem.linkgem.model.item.FolderItem;
 import com.github.shaigem.linkgem.model.item.Item;
-import com.github.shaigem.linkgem.ui.events.AddItemToFolderEvent;
+import com.github.shaigem.linkgem.ui.events.AddItemToFolderRequest;
 import com.google.gson.*;
 
 import java.io.File;
@@ -47,7 +47,7 @@ public final class BookmarkSerialization {
                 masterFolder.setDescription(description);
                 // now find any children that the master folder may have and add it to the master folder
                 JsonArray childrenArray = reader.get("children").getAsJsonArray();
-                childrenArray.forEach(element -> eventStudio().broadcast(new AddItemToFolderEvent(masterFolder, createItemFromJsonData(element.getAsJsonObject()))));
+                childrenArray.forEach(element -> eventStudio().broadcast(new AddItemToFolderRequest(masterFolder, createItemFromJsonData(element.getAsJsonObject()))));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -71,7 +71,7 @@ public final class BookmarkSerialization {
             final FolderItem newFolder = new FolderItem(name, description, false);
             final JsonArray childrenArray = object.get("children").getAsJsonArray();
             // find any children that the folder may have and set it
-            childrenArray.forEach(element -> eventStudio().broadcast(new AddItemToFolderEvent(newFolder, createItemFromJsonData(element.getAsJsonObject()))));
+            childrenArray.forEach(element -> eventStudio().broadcast(new AddItemToFolderRequest(newFolder, createItemFromJsonData(element.getAsJsonObject()))));
             itemToAdd = newFolder;
         } else {
             itemToAdd = new BookmarkItem(name, description, location);

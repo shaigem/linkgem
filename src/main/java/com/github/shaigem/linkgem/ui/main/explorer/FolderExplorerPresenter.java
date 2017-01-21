@@ -32,6 +32,7 @@ import org.sejda.eventstudio.annotation.EventListener;
 
 import javax.inject.Inject;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static org.sejda.eventstudio.StaticStudio.eventStudio;
@@ -91,9 +92,11 @@ public class FolderExplorerPresenter implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         viewingFolder = new SimpleObjectProperty<>(folderRepository.getMasterFolder());
         viewingFolderIsReadOnly = new SimpleBooleanProperty();
-        // TODO add more menu items
         addBookmarkMenuItem.disableProperty().bind(viewingFolderIsReadOnly);
         addFolderMenuItem.disableProperty().bind(viewingFolderIsReadOnly);
+        deleteSelectedItemMenuItem.disableProperty().bind
+                (itemTableView.getSelectionModel().selectedItemProperty().isNull());
+        showInFolderMenuItem.disableProperty().bind(itemTableView.getSelectionModel().selectedItemProperty().isNull().or(viewingFolder.isNotEqualTo(folderRepository.getSearchFolder())));
         initTable();
         initToolbar();
         initColumns();
@@ -191,17 +194,31 @@ public class FolderExplorerPresenter implements Initializable {
 
     @FXML
     private void onDeleteItemAction() {
-     /*   final Item selectedItem = itemTableView.getSelectionModel().getSelectedItem();
+        final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Selected Item");
+        alert.setHeaderText("Delete Selected Item");
+        alert.setContentText("Are you sure you want to delete the selected item?");
+        final Optional<ButtonType> buttonType = alert.showAndWait();
+        buttonType.ifPresent(type -> {
+            if (type == ButtonType.OK) {
+                final Item selectedItem = itemTableView.getSelectionModel().getSelectedItem();
 
-        if (selectedItem instanceof FolderItem) {
-            eventStudio().broadcast(new DeleteFolderRequest(selectedItem));
-        } else if (selectedItem instanceof BookmarkItem) {
-           folderRepository.getMasterFolder().getChildren().remove(selectedItem);
-        }
-*/
-        // TODO deleting!
-        //  eventStudio().broadcast
-        //        (new OpenItemDialogRequest(getViewingFolder(), new FolderItem("New Folder"), true));
+                if (selectedItem instanceof FolderItem) {
+                    eventStudio().broadcast(new DeleteFolderRequest(selectedItem));
+
+                } else if (selectedItem instanceof BookmarkItem) {
+                    selectedItem.getParentFolder().removeItem(selectedItem);
+                }
+                // remove the item from the search folder if the user is currently searching
+                folderRepository.getSearchFolder().removeItem(selectedItem);
+            }
+        });
+    }
+
+    @FXML
+    private void onShowInFolderAction() {
+        final Item selectedItem = itemTableView.getSelectionModel().getSelectedItem();
+        eventStudio().broadcast(new OpenFolderRequest(selectedItem.getParentFolder()));
     }
 
     private FilteredList<Item> searchData;
@@ -274,21 +291,13 @@ public class FolderExplorerPresenter implements Initializable {
 
     private void createRightSectionToolbarItems() {
         createViewSettingsMenu();
-        //     final Button deleteButton = new Button();
-
-        //    deleteButton.setGraphic(GlyphsDude.createIcon(MaterialDesignIcon.DELETE, "1.8em"));
-        //    deleteButton.setContextMenu(new ContextMenu(new MenuItem("Delete All")));
-        //   deleteButton.setOnAction(event -> performAction(ExplorerAction.DELETE));
-
+        final Button deleteSelectedItemButton = createFolderActionButton(GlyphsDude.createIcon(MaterialDesignIcon.DELETE, "1.8em"),
+                "Delete the selected item", ExplorerAction.DELETE);
+        deleteSelectedItemButton.disableProperty().bind(itemTableView.getSelectionModel().selectedItemProperty().isNull());
         final Button addBookmarkButton = createFolderActionButton(GlyphsDude.createIcon(MaterialDesignIcon.BOOKMARK_PLUS, "1.8em"),
                 "Add a new bookmark", ExplorerAction.ADD_BOOKMARK);
-
-        final Button addFolderButton = createFolderActionButton
-                (GlyphsDude.createIcon(MaterialDesignIcon.FOLDER_PLUS, "1.8em"),
-                        "Add a new folder"
-                        , ExplorerAction.ADD_FOLDER);
-
-        toolbar.getRightSection().getChildren().addAll(addFolderButton, addBookmarkButton/*, deleteButton */, viewSettingsMenuButton);
+        final Button addFolderButton = createFolderActionButton(GlyphsDude.createIcon(MaterialDesignIcon.FOLDER_PLUS, "1.8em"), "Add a new folder", ExplorerAction.ADD_FOLDER);
+        toolbar.getRightSection().getChildren().addAll(addFolderButton, addBookmarkButton, deleteSelectedItemButton, viewSettingsMenuButton);
     }
 
     /**

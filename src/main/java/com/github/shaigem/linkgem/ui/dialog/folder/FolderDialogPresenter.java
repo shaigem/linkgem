@@ -2,7 +2,7 @@ package com.github.shaigem.linkgem.ui.dialog.folder;
 
 import com.github.shaigem.linkgem.model.item.FolderItem;
 import com.github.shaigem.linkgem.ui.dialog.DialogBasedItemEditor;
-import com.github.shaigem.linkgem.ui.events.AddItemToFolderEvent;
+import com.github.shaigem.linkgem.ui.events.AddItemToFolderRequest;
 import com.github.shaigem.linkgem.ui.events.OpenItemDialogRequest;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -52,7 +52,7 @@ public class FolderDialogPresenter implements Initializable, DialogBasedItemEdit
         editingFolder.setName(nameTextField.getText());
         editingFolder.setDescription(descriptionTextField.getText());
         if (add) {
-            eventStudio().broadcast(new AddItemToFolderEvent(folder, editingFolder));
+            eventStudio().broadcast(new AddItemToFolderRequest(folder, editingFolder));
         }
     }
 

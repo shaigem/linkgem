@@ -31,7 +31,7 @@
                           <items>
                             <MenuItem fx:id="addFolderMenuItem" mnemonicParsing="false" onAction="#onAddFolderAction" text="Add Folder..." />
                               <MenuItem fx:id="addBookmarkMenuItem" mnemonicParsing="false" onAction="#onAddBookmarkAction" text="Add Bookmark..." />
-                              <MenuItem fx:id="showInFolderMenuItem" disable="true" mnemonicParsing="false" text="Show in Folder" />
+                              <MenuItem fx:id="showInFolderMenuItem" disable="true" mnemonicParsing="false" onAction="#onShowInFolderAction" text="Show in Folder" />
                               <MenuItem fx:id="deleteSelectedItemMenuItem" mnemonicParsing="false" onAction="#onDeleteItemAction" text="Delete" />
                           </items>
                         </ContextMenu>
