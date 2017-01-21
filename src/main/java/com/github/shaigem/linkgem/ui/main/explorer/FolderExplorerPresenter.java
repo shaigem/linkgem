@@ -194,14 +194,14 @@ public class FolderExplorerPresenter implements Initializable {
 
     @FXML
     private void onDeleteItemAction() {
+        final Item selectedItem = itemTableView.getSelectionModel().getSelectedItem();
         final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Delete Selected Item");
-        alert.setHeaderText("Delete Selected Item");
-        alert.setContentText("Are you sure you want to delete the selected item?");
+        alert.setHeaderText("Delete " +( selectedItem instanceof FolderItem ? "Folder" : "Bookmark") + ": " + selectedItem);
+        alert.setContentText("Are you sure you want to delete the selected folder?");
         final Optional<ButtonType> buttonType = alert.showAndWait();
         buttonType.ifPresent(type -> {
             if (type == ButtonType.OK) {
-                final Item selectedItem = itemTableView.getSelectionModel().getSelectedItem();
 
                 if (selectedItem instanceof FolderItem) {
                     eventStudio().broadcast(new DeleteFolderRequest(selectedItem));

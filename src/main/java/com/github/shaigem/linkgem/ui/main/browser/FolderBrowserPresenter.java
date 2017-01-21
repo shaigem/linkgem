@@ -91,7 +91,7 @@ public class FolderBrowserPresenter implements Initializable {
         final FolderItem selectedFolder = folderTreeView.getSelectionModel().getSelectedItem().getValue();
         final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Delete Selected Folder");
-        alert.setHeaderText("Delete Selected Folder");
+        alert.setHeaderText("Delete Folder: " + selectedFolder);
         alert.setContentText("Are you sure you want to delete the selected folder?");
         final Optional<ButtonType> buttonType = alert.showAndWait();
         buttonType.ifPresent(type -> {

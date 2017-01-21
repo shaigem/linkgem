@@ -72,7 +72,6 @@ public class MainWindowPresenter implements Initializable {
     private void onSelectedFolderChanged(SelectedFolderChangedEvent event) {
         FolderItem viewingFolder = event.getNewFolder();
         if (viewingFolder != null) {
-            // TODO also disable context menu for search folder
             if (viewingFolder != folderRepository.getSearchFolder()) {
                 resetSearch();
             }
@@ -82,7 +81,6 @@ public class MainWindowPresenter implements Initializable {
     @EventListener
     private void onSaveAll(SaveAllEvent event) {
         boolean success = BookmarkSerialization.getInstance().serialize(folderRepository.getMasterFolder());
-
         if (success) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Save Success");
