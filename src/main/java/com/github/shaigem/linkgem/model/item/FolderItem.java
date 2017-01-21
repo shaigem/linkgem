@@ -29,7 +29,14 @@ public class FolderItem extends Item {
 
     public boolean addItem(Item item) {
         final boolean added = children.add(item);
+        if(added) {
+            item.setParentFolder(this);
+        }
         return added;
+    }
+
+    public boolean removeItem(Item item) {
+        return children.remove(item);
     }
 
     public ObservableList<Item> getChildren() {

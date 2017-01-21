@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 public abstract class Item {
 
     private static final String DEFAULT_NAME = "<No Name>";
+    private ObjectProperty<FolderItem> parentFolder;
     private ObjectProperty<Image> icon;
     private StringProperty name;
     private StringProperty description;
@@ -19,6 +20,7 @@ public abstract class Item {
 
 
     public Item(final Image defaultIcon, final String name, final String description, final ItemType type) {
+        this.parentFolder = new SimpleObjectProperty<>();
         this.icon = new SimpleObjectProperty<>(defaultIcon);
         this.name = new SimpleStringProperty(name.isEmpty() ? DEFAULT_NAME : name);
         this.description = new SimpleStringProperty(description);
@@ -27,6 +29,10 @@ public abstract class Item {
 
     public Item(final String name, final String description, final ItemType type) {
         this(null, name, description, type);
+    }
+
+    public void setParentFolder(FolderItem parent) {
+        this.parentFolder.set(parent);
     }
 
     public void setName(String name) {
@@ -44,12 +50,20 @@ public abstract class Item {
         this.icon.set(icon);
     }
 
+    public FolderItem getParentFolder() {
+        return parentFolder.get();
+    }
+
     public String getName() {
         return name.get();
     }
 
     public String getDescription() {
         return description.get();
+    }
+
+    public ObjectProperty<FolderItem> parentFolderProperty() {
+        return parentFolder;
     }
 
     public ObjectProperty<Image> iconProperty() {
