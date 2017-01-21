@@ -4,7 +4,9 @@ import com.github.shaigem.linkgem.model.item.BookmarkItem;
 import com.github.shaigem.linkgem.model.item.FolderItem;
 import com.github.shaigem.linkgem.model.item.Item;
 import com.github.shaigem.linkgem.ui.events.AddItemToFolderRequest;
+import com.github.shaigem.linkgem.util.AlertDialogUtil;
 import com.google.gson.*;
+import javafx.scene.control.Alert;
 
 import java.io.File;
 import java.io.FileReader;
@@ -26,6 +28,32 @@ public final class BookmarkSerialization {
 
     private BookmarkSerialization() {
         this.itemsFile = new File("./data/items.json");
+        // create the default json file if it does not exist
+        createDefaultFileIfMissing();
+    }
+
+    /**
+     * Creates the data directory and the items.json file if they are missing.
+     *
+     * @return true if they have been successfully created.
+     */
+    private boolean createDefaultFileIfMissing() {
+        if (!this.itemsFile.getParentFile().exists()) {
+            System.out.println("Data file does not exist???");
+            final boolean createdDataDirectory = this.itemsFile.getParentFile().mkdir();
+            if (createdDataDirectory && !this.itemsFile.exists()) {
+                try {
+                    return this.itemsFile.createNewFile();
+                } catch (IOException e) {
+                    Alert exceptionAlert = AlertDialogUtil.createExceptionDialog(e);
+                    exceptionAlert.setHeaderText("Cannot Create Save File");
+                    exceptionAlert.setContentText("Cannot create items.json in folder data. Please manually create it.");
+                    exceptionAlert.showAndWait();
+                    return false;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -33,7 +61,7 @@ public final class BookmarkSerialization {
      *
      * @param masterFolder the master folder
      */
-    public void deserialize(FolderItem masterFolder) {
+    public void deserializeAndCreateBookmarkItems(FolderItem masterFolder) {
         try (FileReader in = new FileReader(itemsFile)) {
             JsonParser parser = new JsonParser();
             JsonElement rootElement = parser.parse(in);
@@ -87,7 +115,7 @@ public final class BookmarkSerialization {
     public boolean serialize(FolderItem masterFolder) {
         Gson builder = (new GsonBuilder()).setPrettyPrinting().create();
         JsonArray resultArray = new JsonArray();
-
+        createDefaultFileIfMissing();
         try (FileWriter writer = new FileWriter(itemsFile)) {
             JsonObject object = new JsonObject();
 
@@ -104,8 +132,12 @@ public final class BookmarkSerialization {
             writer.write(builder.toJson(resultArray));
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            Alert exceptionAlert = AlertDialogUtil.createExceptionDialog(e);
+            exceptionAlert.setHeaderText("Cannot Save File");
+            exceptionAlert.setContentText("An exception has occurred while trying to save your bookmarks file.");
+            exceptionAlert.showAndWait();
             return false;
+
         }
     }
 

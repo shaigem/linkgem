@@ -62,7 +62,7 @@ public class MainWindowPresenter implements Initializable {
         initializeToolbar();
         initializeItemSidebar();
         initializeExplorer();
-        BookmarkSerialization.getInstance().deserialize(folderRepository.getMasterFolder());
+        BookmarkSerialization.getInstance().deserializeAndCreateBookmarkItems(folderRepository.getMasterFolder());
         TooltipUtil.changeDefaultTooltipActivationDuration();
         eventStudio().add(new ItemDialogListener(), 0, ReferenceStrength.STRONG);
         eventStudio().addAnnotatedListeners(this);
@@ -87,10 +87,14 @@ public class MainWindowPresenter implements Initializable {
             alert.setHeaderText("Save Success!");
             alert.setContentText("All of your bookmarks have been successfully saved!");
             alert.show();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Save Failure");
+            alert.setHeaderText("Save Failure!");
+            alert.setContentText("No bookmarks were saved.");
+            alert.show();
         }
     }
-
-
 
     private void initializeToolbar() {
         toolbar = new MainToolbar();

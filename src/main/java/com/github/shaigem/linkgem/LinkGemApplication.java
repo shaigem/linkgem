@@ -12,6 +12,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.util.Optional;
 
 import static org.sejda.eventstudio.StaticStudio.eventStudio;
@@ -31,6 +32,7 @@ public class LinkGemApplication extends Application {
         primaryStage.setTitle("LinkGem");
         primaryStage.show();
         primaryStage.setOnCloseRequest(event -> showThanksDialog());
+        closeSplash();
     }
 
     /**
@@ -53,6 +55,10 @@ public class LinkGemApplication extends Application {
             }
         });
 
+    }
+
+    private void closeSplash() {
+        Optional.ofNullable(SplashScreen.getSplashScreen()).ifPresent(SplashScreen::close);
     }
 
     @Override

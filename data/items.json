@@ -2,6 +2,19 @@
   {
     "name": "Bookmarks",
     "description": "",
-    "children": []
+    "children": [
+      {
+        "name": "New Folder",
+        "description": "",
+        "location": "",
+        "children": []
+      },
+      {
+        "name": "hello",
+        "description": "",
+        "location": "",
+        "children": []
+      }
+    ]
   }
 ]
