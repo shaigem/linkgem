@@ -8,6 +8,8 @@ import javafx.stage.Stage;
 
 /**
  * Created on 2016-12-21.
+ *
+ * @author Ronnie Tran
  */
 public class LinkGemApplication extends Application {
 
@@ -24,6 +26,11 @@ public class LinkGemApplication extends Application {
         Injector.forgetAll();
     }
 
+    /**
+     * Launches a JavaFX application and calls the start method.
+     *
+     * @param args the command line arguments
+     */
     public static void main(String[] args) {
         launch(args);
     }
