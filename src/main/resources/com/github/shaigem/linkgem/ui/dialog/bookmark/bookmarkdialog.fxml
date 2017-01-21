@@ -37,10 +37,10 @@
               </rowConstraints>
                <children>
                   <Label text="Name: " />
-                  <Label text="Link: " GridPane.rowIndex="1" />
+                  <Label text="URL/Link:" GridPane.rowIndex="1" />
                   <Label text="Description" GridPane.rowIndex="2" />
                   <TextField fx:id="nameTextField" promptText="Enter name" GridPane.columnIndex="1" />
-                  <TextField fx:id="locationTextField" promptText="Enter location/URL" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="locationTextField" promptText="google.com" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <TextField fx:id="descriptionTextField" promptText="Enter a short description" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                </children>
             </GridPane>
