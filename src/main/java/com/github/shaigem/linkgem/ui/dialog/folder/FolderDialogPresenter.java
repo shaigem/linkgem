@@ -44,6 +44,7 @@ public class FolderDialogPresenter implements Initializable, DialogBasedItemEdit
         this.editingFolder = (FolderItem) request.getWorkingItem();
         this.add = request.isAdd();
         nameTextField.setText(editingFolder.getName());
+        descriptionTextField.setText(editingFolder.getDescription());
     }
 
     @Override
