@@ -1,5 +1,9 @@
 # linkgem
-Written for a school project.
+LinkGem is a very basic bookmark manager. It allows you to organise your favourite website links through folders. Bookmarks can be saved in a JSON format.
+
+Currently there are no ways to import and export bookmarks from other browser. This project is meant to be a prototype bookmark manager written to learn more about Java and JavaFX.
+
+This project was written for a final school summative.
 
 ![](http://i.imgur.com/2f1RLbS.png)
 
