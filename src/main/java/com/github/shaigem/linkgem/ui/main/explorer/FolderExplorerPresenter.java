@@ -174,9 +174,12 @@ public class FolderExplorerPresenter implements Initializable {
         row.setOnDragOver(event -> {
             Dragboard db = event.getDragboard();
             if (db.hasContent(ItemDragAndDropManager.SERIALIZED_MIME_TYPE)) {
-                if (row.getIndex() != (Integer) db.getContent(ItemDragAndDropManager.SERIALIZED_MIME_TYPE)) {
-                    event.acceptTransferModes(TransferMode.MOVE);
-                    event.consume();
+                // do not allow dropping when they are searching
+                if (viewingFolder.get() != folderRepository.getSearchFolder()) {
+                    if (row.getIndex() != (Integer) db.getContent(ItemDragAndDropManager.SERIALIZED_MIME_TYPE)) {
+                        event.acceptTransferModes(TransferMode.MOVE);
+                        event.consume();
+                    }
                 }
             }
         });

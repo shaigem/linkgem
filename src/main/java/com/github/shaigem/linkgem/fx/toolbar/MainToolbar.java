@@ -31,7 +31,7 @@ public class MainToolbar extends CustomToolbar {
         getLeftSection().getChildren().addAll(logoView);
         // create the save all button
         final Button saveAllButton = button(GlyphsDude.createIcon(MaterialDesignIcon.CONTENT_SAVE, "1.8em")
-                , "Save all bookmarks");
+                , "Save all bookmarks to file");
         // broadcast an event to all event listeners listening for a SaveAllEvent.
         saveAllButton.setOnAction(event -> eventStudio().broadcast(new SaveAllEvent(true)));
         // create the search view

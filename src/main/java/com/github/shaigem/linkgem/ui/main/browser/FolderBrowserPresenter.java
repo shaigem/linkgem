@@ -220,8 +220,10 @@ public class FolderBrowserPresenter implements Initializable {
                         if (dragAndDropManager.hasItemsOnDragList()) {
                             final Item draggedItem = dragAndDropManager.getFirstItem();
                             if (draggedItem != toItem) {
-                                event.acceptTransferModes(TransferMode.MOVE);
-                                event.consume();
+                                if (draggedItem.getParentFolder() != getItem() && (draggedItem != getItem().getParentFolder())) {
+                                    event.acceptTransferModes(TransferMode.MOVE);
+                                    event.consume();
+                                }
                             }
                         }
                     }
@@ -231,13 +233,11 @@ public class FolderBrowserPresenter implements Initializable {
             // when the user drops the item that they are dragging over this tree cell
             setOnDragDropped(event -> {
                 final Item draggedItem = dragAndDropManager.getFirstItem();
-                if (draggedItem.getParentFolder() != getItem() && (draggedItem != getItem().getParentFolder())) {
                     draggedItem.getParentFolder().removeItem(draggedItem);
                     eventStudio().broadcast(new AddItemToFolderRequest(getItem(), draggedItem));
                     dragAndDropManager.onDropComplete();
                     event.setDropCompleted(true);
                     event.consume();
-                }
             });
 
             setOnDragDone(event -> {

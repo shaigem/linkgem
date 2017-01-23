@@ -9,28 +9,31 @@
         "location": "",
         "children": [
           {
-            "name": "Art",
+            "name": "ICS4UE",
             "description": "",
             "location": "",
             "children": [
               {
-                "name": "Art Site",
-                "description": "",
-                "location": "http://art.com"
+                "name": "Google Drive",
+                "description": "School files are here",
+                "location": "http://drive.google.com"
+              },
+              {
+                "name": "Java",
+                "description": "Main language",
+                "location": "http://java.com"
+              },
+              {
+                "name": "IntelliJ",
+                "description": "The Java IDE",
+                "location": "https://www.jetbrains.com/idea/"
+              },
+              {
+                "name": "NetBeans",
+                "description": "NetBeans IDE",
+                "location": "https://netbeans.org/"
               }
             ]
-          }
-        ]
-      },
-      {
-        "name": "Games",
-        "description": "",
-        "location": "",
-        "children": [
-          {
-            "name": "RuneScape",
-            "description": "Favourite",
-            "location": "http://runescape.com"
           }
         ]
       }

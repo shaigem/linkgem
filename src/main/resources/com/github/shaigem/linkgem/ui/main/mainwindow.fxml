@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="454.0" prefWidth="666.0" spacing="10.0" styleClass="main-root" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.shaigem.linkgem.ui.main.MainWindowPresenter">
+<VBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="680.0" spacing="10.0" styleClass="main-root" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.shaigem.linkgem.ui.main.MainWindowPresenter">
    <children>
       <StackPane fx:id="toolbarPane" minHeight="45.0" prefHeight="45.0" prefWidth="636.0">
          <VBox.margin>
