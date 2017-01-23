@@ -63,6 +63,10 @@ public abstract class Item {
         return description.get();
     }
 
+    public ItemType getItemType() {
+        return itemType.get();
+    }
+
     public ObjectProperty<FolderItem> parentFolderProperty() {
         return parentFolder;
     }

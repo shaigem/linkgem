@@ -2,6 +2,38 @@
   {
     "name": "Bookmarks",
     "description": "",
-    "children": []
+    "children": [
+      {
+        "name": "School",
+        "description": "",
+        "location": "",
+        "children": [
+          {
+            "name": "Art",
+            "description": "",
+            "location": "",
+            "children": [
+              {
+                "name": "Art Site",
+                "description": "",
+                "location": "http://art.com"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Games",
+        "description": "",
+        "location": "",
+        "children": [
+          {
+            "name": "RuneScape",
+            "description": "Favourite",
+            "location": "http://runescape.com"
+          }
+        ]
+      }
+    ]
   }
 ]

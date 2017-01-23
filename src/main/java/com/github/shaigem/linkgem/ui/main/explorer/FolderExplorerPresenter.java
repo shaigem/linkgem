@@ -1,5 +1,6 @@
 package com.github.shaigem.linkgem.ui.main.explorer;
 
+import com.github.shaigem.linkgem.dnd.ItemDragAndDropManager;
 import com.github.shaigem.linkgem.fx.toolbar.ThemeTitledToolbar;
 import com.github.shaigem.linkgem.model.item.BookmarkItem;
 import com.github.shaigem.linkgem.model.item.FolderItem;
@@ -22,9 +23,13 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
@@ -63,6 +68,8 @@ public class FolderExplorerPresenter implements Initializable {
 
     @Inject
     private FolderRepository folderRepository;
+    @Inject
+    private ItemDragAndDropManager dragAndDropManager;
 
     @FXML
     StackPane toolbarPane;
@@ -129,14 +136,82 @@ public class FolderExplorerPresenter implements Initializable {
                         // when a user double clicks on a folder, open it!
                         eventStudio().broadcast(new OpenFolderInExplorerRequest((FolderItem) rowData));
                     }
-
                 }
             });
+            setupItemRowDragAndDrop(row);
             return row;
         });
         // when the item that is selected changes, update our editor to show the newly selected item's properties
         itemTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
                 eventStudio().broadcast(new ChangeEditorItemRequest(newValue)));
+    }
+
+    /**
+     * Setups the drag and drop event handlers that will handle the rearranging of items in the table.
+     * This enables users to be able to drag a item in the table view and drop it over another row to rearrange them.
+     *
+     * @param row the row to register event handlers for.
+     */
+    private void setupItemRowDragAndDrop(final TableRow<Item> row) {
+        // when a user attempts to drag this row
+        row.setOnDragDetected(event -> {
+            if (!row.isEmpty()) {
+                final int index = row.getIndex();
+                final ClipboardContent content = new ClipboardContent();
+                content.put(ItemDragAndDropManager.SERIALIZED_MIME_TYPE, index);
+                final Dragboard dashboard = row.startDragAndDrop(TransferMode.MOVE);
+                final Image dragImage = row.snapshot(new SnapshotParameters(), null);
+                dashboard.setDragView(dragImage);
+                dashboard.setContent(content);
+                dragAndDropManager.addItemToDragList(row.getItem());
+                event.consume();
+            }
+        });
+        // when a user drags an item over this row
+        row.setOnDragOver(event -> {
+            Dragboard db = event.getDragboard();
+            if (db.hasContent(ItemDragAndDropManager.SERIALIZED_MIME_TYPE)) {
+                if (row.getIndex() != (Integer) db.getContent(ItemDragAndDropManager.SERIALIZED_MIME_TYPE)) {
+                    event.acceptTransferModes(TransferMode.MOVE);
+                    event.consume();
+                }
+            }
+        });
+        // when a user drops the item over this row
+        // rearrange the items OR if a user is dragging over to a folder, add the dragged item into the folder
+        row.setOnDragDropped(event -> {
+            Dragboard db = event.getDragboard();
+            if (db.hasContent(ItemDragAndDropManager.SERIALIZED_MIME_TYPE)) {
+                int fromRowIndex = (Integer) db.getContent(ItemDragAndDropManager.SERIALIZED_MIME_TYPE); // the dragged item index
+                // remove the item that is being dragged temporarily from the table view
+                Item fromRowItem = itemTableView.getItems().remove(fromRowIndex); // get the dragged row as a item
+                int toRowIndex;
+                if (row.isEmpty()) {
+                    toRowIndex = itemTableView.getItems().size(); // put it at the end of the table
+                } else {
+                    toRowIndex = row.getIndex();
+                }
+                boolean toRowItemIsFolder = row.getItem() instanceof FolderItem;
+                // if a user drags a item over a folder
+                // place the item inside that folder
+                if (toRowItemIsFolder) {
+                    eventStudio().broadcast(new AddItemToFolderRequest((FolderItem) row.getItem(), fromRowItem));
+                } else {
+                    itemTableView.getItems().add(toRowIndex, fromRowItem);
+                    itemTableView.getSelectionModel().select(toRowIndex);
+                }
+                event.setDropCompleted(true);
+                dragAndDropManager.onDropComplete();
+                event.consume();
+            }
+        });
+
+        row.setOnDragDone((e) -> {
+            if (e.getTransferMode() == null) // if transfer failed
+                dragAndDropManager.onDragFailure();
+            e.consume();
+        });
+
     }
 
     /**
@@ -232,9 +307,10 @@ public class FolderExplorerPresenter implements Initializable {
     private void onDeleteItemAction() {
         final Item selectedItem = itemTableView.getSelectionModel().getSelectedItem();
         final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        final String itemTypeName = selectedItem.getItemType().getName().toLowerCase();
         alert.setTitle("Delete Selected Item");
-        alert.setHeaderText("Delete " + (selectedItem instanceof FolderItem ? "Folder" : "Bookmark") + ": " + selectedItem);
-        alert.setContentText("Are you sure you want to delete the selected folder?");
+        alert.setHeaderText("Delete " + itemTypeName + ": " + selectedItem);
+        alert.setContentText("Are you sure you want to delete the selected " + itemTypeName + "?");
         final Optional<ButtonType> buttonType = alert.showAndWait();
         buttonType.ifPresent(type -> {
             if (type == ButtonType.OK) {

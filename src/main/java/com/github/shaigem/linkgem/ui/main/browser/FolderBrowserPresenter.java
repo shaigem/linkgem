@@ -1,8 +1,10 @@
 package com.github.shaigem.linkgem.ui.main.browser;
 
+import com.github.shaigem.linkgem.dnd.ItemDragAndDropManager;
 import com.github.shaigem.linkgem.fx.toolbar.ThemeTitledToolbar;
 import com.github.shaigem.linkgem.model.item.BookmarkItem;
 import com.github.shaigem.linkgem.model.item.FolderItem;
+import com.github.shaigem.linkgem.model.item.Item;
 import com.github.shaigem.linkgem.repository.FolderRepository;
 import com.github.shaigem.linkgem.ui.events.*;
 import de.jensd.fx.glyphs.GlyphsDude;
@@ -11,7 +13,12 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialicons.MaterialIcon;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import org.sejda.eventstudio.annotation.EventListener;
@@ -31,6 +38,8 @@ public class FolderBrowserPresenter implements Initializable {
 
     @Inject
     private FolderRepository folderRepository;
+    @Inject
+    private ItemDragAndDropManager dragAndDropManager;
 
     @FXML
     StackPane toolbarPane;
@@ -97,7 +106,7 @@ public class FolderBrowserPresenter implements Initializable {
         final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Delete Selected Folder");
         alert.setHeaderText("Delete Folder: " + selectedFolder);
-        alert.setContentText("Are you sure you want to delete the selected folder?");
+        alert.setContentText("Are you sure you want to delete the selected folder? This will delete ALL of the folder's items.");
         final Optional<ButtonType> buttonType = alert.showAndWait();
         buttonType.ifPresent(type -> {
             if (type == ButtonType.OK) {
@@ -163,6 +172,13 @@ public class FolderBrowserPresenter implements Initializable {
     private void onAddItemToFolderRequest(AddItemToFolderRequest request) {
         final FolderItem folderToAddTo = request.getFolderToAddTo();
         request.getItemToAdd().ifPresent(itemToAdd -> {
+            if (itemToAdd.getParentFolder() != null) {
+                // if the item already exists in the browser tree view, remove it!
+                if (itemToAdd instanceof FolderItem) {
+                    itemToAdd.getParentFolder().getAsTreeItem().getChildren().remove
+                            (((FolderItem) itemToAdd).getAsTreeItem());
+                }
+            }
             folderToAddTo.addItem(itemToAdd);
             if (itemToAdd instanceof FolderItem) {
                 folderRepository.getFolders().add((FolderItem) itemToAdd);
@@ -180,6 +196,56 @@ public class FolderBrowserPresenter implements Initializable {
 
         CustomTreeCellImpl() {
             setGraphicTextGap(10);
+
+            // when the user starts to drag a folder
+            setOnDragDetected(event -> {
+                if (!isEmpty() || getItem() != null) {
+                    final ClipboardContent content = new ClipboardContent();
+                    content.put(ItemDragAndDropManager.SERIALIZED_MIME_TYPE, getIndex());
+                    final Dragboard dashboard = startDragAndDrop(TransferMode.MOVE);
+                    final Image dragImage = snapshot(new SnapshotParameters(), null);
+                    dashboard.setDragView(dragImage);
+                    dashboard.setContent(content);
+                    dragAndDropManager.addItemToDragList(getItem());
+                    event.consume();
+                }
+            });
+
+            // when the user drags a item over this tree cell
+            setOnDragOver(event -> {
+                final Item toItem = getItem();
+                // you cannot drag an item onto the search folder!
+                if (toItem != folderRepository.getSearchFolder()) {
+                    if (!isEmpty() || toItem != null) {
+                        if (dragAndDropManager.hasItemsOnDragList()) {
+                            final Item draggedItem = dragAndDropManager.getFirstItem();
+                            if (draggedItem != toItem) {
+                                event.acceptTransferModes(TransferMode.MOVE);
+                                event.consume();
+                            }
+                        }
+                    }
+                }
+            });
+
+            // when the user drops the item that they are dragging over this tree cell
+            setOnDragDropped(event -> {
+                final Item draggedItem = dragAndDropManager.getFirstItem();
+                if (draggedItem.getParentFolder() != getItem() && (draggedItem != getItem().getParentFolder())) {
+                    draggedItem.getParentFolder().removeItem(draggedItem);
+                    eventStudio().broadcast(new AddItemToFolderRequest(getItem(), draggedItem));
+                    dragAndDropManager.onDropComplete();
+                    event.setDropCompleted(true);
+                    event.consume();
+                }
+            });
+
+            setOnDragDone(event -> {
+                if (event.getTransferMode() == null) // if transfer failed
+                    dragAndDropManager.onDragFailure();
+                event.consume();
+
+            });
         }
 
         @Override

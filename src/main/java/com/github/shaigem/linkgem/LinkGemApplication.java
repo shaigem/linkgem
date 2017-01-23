@@ -51,7 +51,7 @@ public class LinkGemApplication extends Application {
         final Optional<ButtonType> buttonType = alert.showAndWait();
         buttonType.ifPresent(type -> {
             if (type == ButtonType.YES) {
-                eventStudio().broadcast(new SaveAllEvent());
+                eventStudio().broadcast(new SaveAllEvent(false));
             } else {
                 Platform.exit();
             }
