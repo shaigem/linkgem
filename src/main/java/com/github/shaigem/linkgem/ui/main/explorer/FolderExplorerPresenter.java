@@ -29,6 +29,7 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -59,7 +60,7 @@ public class FolderExplorerPresenter implements Initializable {
      * Actions that can be performed in the explorer view.
      */
     public enum ExplorerAction {
-        ADD_FOLDER, ADD_BOOKMARK, DELETE, MOVE_UP_ONE, MOVE_DOWN_ONE;
+        ADD_FOLDER, ADD_BOOKMARK, COPY_LINK, DELETE, MOVE_UP_ONE, MOVE_DOWN_ONE;
     }
 
     private MainWindowPresenter mainWindowPresenter;
@@ -97,6 +98,8 @@ public class FolderExplorerPresenter implements Initializable {
     @FXML
     MenuItem addFolderMenuItem;
     @FXML
+    MenuItem copyLinkMenuItem;
+    @FXML
     MenuItem showInFolderMenuItem;
     @FXML
     MenuItem deleteSelectedItemMenuItem;
@@ -115,9 +118,10 @@ public class FolderExplorerPresenter implements Initializable {
         viewingFolderIsReadOnly = new SimpleBooleanProperty();
         addBookmarkMenuItem.disableProperty().bind(viewingFolderIsReadOnly);
         addFolderMenuItem.disableProperty().bind(viewingFolderIsReadOnly);
+        final BooleanBinding selectedItemIsNullProperty = itemTableView.getSelectionModel().selectedItemProperty().isNull();
         deleteSelectedItemMenuItem.disableProperty().bind
-                (itemTableView.getSelectionModel().selectedItemProperty().isNull());
-        showInFolderMenuItem.disableProperty().bind(itemTableView.getSelectionModel().selectedItemProperty().isNull().or(viewingFolder.isNotEqualTo(folderRepository.getSearchFolder())));
+                (selectedItemIsNullProperty);
+        showInFolderMenuItem.disableProperty().bind(selectedItemIsNullProperty.or(viewingFolder.isNotEqualTo(folderRepository.getSearchFolder())));
         initTable();
         initToolbar();
         initColumns();
@@ -147,6 +151,9 @@ public class FolderExplorerPresenter implements Initializable {
         // when the item that is selected changes, update our editor to show the newly selected item's properties
         itemTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
                 eventStudio().broadcast(new ChangeEditorItemRequest(newValue)));
+        // copy link menu item will be disabled if the selected item is not a bookmark item!
+        itemTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
+               copyLinkMenuItem.setDisable(newValue == null || newValue.getItemType() != ItemType.BOOKMARK));
     }
 
     /**
@@ -281,6 +288,9 @@ public class FolderExplorerPresenter implements Initializable {
             case ADD_FOLDER:
                 onAddFolderAction();
                 break;
+            case COPY_LINK:
+                onCopyLinkAction();
+                break;
             case DELETE: // deletes the selected item
                 onDeleteItemAction();
                 break;
@@ -292,6 +302,15 @@ public class FolderExplorerPresenter implements Initializable {
                 break;
 
         }
+    }
+
+    @FXML
+    private void onCopyLinkAction() {
+        final BookmarkItem selectedItem = (BookmarkItem) itemTableView.getSelectionModel().getSelectedItem();
+        final Clipboard clipboard = Clipboard.getSystemClipboard();
+        final ClipboardContent content = new ClipboardContent();
+        content.putString(selectedItem.getLocation());
+        clipboard.setContent(content);
     }
 
     /**
