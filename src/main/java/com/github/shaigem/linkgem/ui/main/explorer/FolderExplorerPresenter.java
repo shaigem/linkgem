@@ -14,10 +14,12 @@ import com.github.shaigem.linkgem.ui.main.MainWindowPresenter;
 import com.github.shaigem.linkgem.ui.main.explorer.editor.ChangeEditorItemRequest;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -38,6 +40,7 @@ import org.sejda.eventstudio.annotation.EventListener;
 
 import javax.inject.Inject;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -56,7 +59,7 @@ public class FolderExplorerPresenter implements Initializable {
      * Actions that can be performed in the explorer view.
      */
     public enum ExplorerAction {
-        ADD_FOLDER, ADD_BOOKMARK, DELETE, SHOW_IN_FOLDER
+        ADD_FOLDER, ADD_BOOKMARK, DELETE, MOVE_UP_ONE, MOVE_DOWN_ONE;
     }
 
     private MainWindowPresenter mainWindowPresenter;
@@ -266,7 +269,7 @@ public class FolderExplorerPresenter implements Initializable {
      *
      * @param action the action to perform.
      */
-    public void performAction(ExplorerAction action) {
+    private void performAction(ExplorerAction action) {
 
         switch (action) {
             case ADD_BOOKMARK:
@@ -278,8 +281,42 @@ public class FolderExplorerPresenter implements Initializable {
             case DELETE: // deletes the selected item
                 onDeleteItemAction();
                 break;
+            case MOVE_UP_ONE:
+                onMoveUpOne();
+                break;
+            case MOVE_DOWN_ONE:
+                onMoveDownOne();
+                break;
 
         }
+    }
+
+    /**
+     * Moves the selected item up one.
+     */
+    private void onMoveUpOne() {
+        final int itemToMove = itemTableView.getSelectionModel().getSelectedIndex();
+        int indexAbove = itemTableView.getSelectionModel().getSelectedIndex() - 1;
+        if (indexAbove < 0) {
+            indexAbove = 0;
+        }
+        ObservableList<Item> workingCollection = FXCollections.observableArrayList(itemTableView.getItems());
+        Collections.swap(workingCollection, itemToMove, indexAbove);
+        itemTableView.getItems().setAll(workingCollection);
+    }
+
+    /**
+     * Moves the selected item down one.
+     */
+    private void onMoveDownOne() {
+        final int itemToMove = itemTableView.getSelectionModel().getSelectedIndex();
+        int indexBelow = itemTableView.getSelectionModel().getSelectedIndex() + 1;
+        if (indexBelow > itemTableView.getItems().size() - 1) {
+            indexBelow = itemTableView.getItems().size() - 1;
+        }
+        ObservableList<Item> workingCollection = FXCollections.observableArrayList(itemTableView.getItems());
+        Collections.swap(workingCollection, itemToMove, indexBelow);
+        itemTableView.getItems().setAll(workingCollection);
     }
 
     /**
@@ -403,6 +440,7 @@ public class FolderExplorerPresenter implements Initializable {
         }
     }
 
+
     private void initToolbar() {
         toolbar = new ThemeTitledToolbar("Explorer");
         createLeftSectionToolbarItems();
@@ -411,6 +449,7 @@ public class FolderExplorerPresenter implements Initializable {
     }
 
     private void createLeftSectionToolbarItems() {
+        // edit button
         final Button editViewingFolderButton = new Button();
         editViewingFolderButton.visibleProperty().bind(viewingFolderIsReadOnly.not());
         editViewingFolderButton.setTooltip(new Tooltip("Edit the viewing folder"));
@@ -421,13 +460,38 @@ public class FolderExplorerPresenter implements Initializable {
 
     private void createRightSectionToolbarItems() {
         createViewSettingsMenu();
+
+        final BooleanBinding selectedItemIsNullProperty = itemTableView.getSelectionModel().selectedItemProperty().isNull();
+
+        // delete button
         final Button deleteSelectedItemButton = createFolderActionButton(GlyphsDude.createIcon(MaterialDesignIcon.DELETE, "1.8em"),
                 "Delete the selected item", ExplorerAction.DELETE);
-        deleteSelectedItemButton.disableProperty().bind(itemTableView.getSelectionModel().selectedItemProperty().isNull());
+        deleteSelectedItemButton.disableProperty().bind(selectedItemIsNullProperty);
+        // add bookmark
         final Button addBookmarkButton = createFolderActionButton(GlyphsDude.createIcon(MaterialDesignIcon.BOOKMARK_PLUS, "1.8em"),
                 "Add a new bookmark", ExplorerAction.ADD_BOOKMARK);
+        // add folder
         final Button addFolderButton = createFolderActionButton(GlyphsDude.createIcon(MaterialDesignIcon.FOLDER_PLUS, "1.8em"), "Add a new folder", ExplorerAction.ADD_FOLDER);
-        toolbar.getRightSection().getChildren().addAll(addFolderButton, addBookmarkButton, deleteSelectedItemButton, viewSettingsMenuButton);
+
+        final Button moveUpOneButton = createFolderActionButton
+                (GlyphsDude.createIcon(MaterialDesignIcon.ARROW_UP, "1.8em"), "Move this item up",
+                        ExplorerAction.MOVE_UP_ONE);
+        moveUpOneButton.disableProperty().bind(selectedItemIsNullProperty);
+
+
+        final Button moveDownOneButton = createFolderActionButton
+                (GlyphsDude.createIcon(MaterialDesignIcon.ARROW_DOWN, "1.8em"), "Move this item down",
+                        ExplorerAction.MOVE_DOWN_ONE);
+        moveDownOneButton.disableProperty().bind(selectedItemIsNullProperty);
+
+
+        toolbar.getRightSection().getChildren().addAll(
+                addFolderButton,
+                addBookmarkButton,
+                deleteSelectedItemButton,
+                moveUpOneButton,
+                moveDownOneButton,
+                viewSettingsMenuButton);
     }
 
     /**
