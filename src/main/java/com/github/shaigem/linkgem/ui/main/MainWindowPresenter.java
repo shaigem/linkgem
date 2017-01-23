@@ -88,11 +88,13 @@ public class MainWindowPresenter implements Initializable {
     private void onSaveAll(SaveAllEvent event) {
         boolean success = BookmarkSerialization.getInstance().serialize(folderRepository.getMasterFolder());
         if (success) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Save Success");
-            alert.setHeaderText("Save Success!");
-            alert.setContentText("All of your bookmarks have been successfully saved!");
-            alert.show();
+            if (event.isShowSuccessDialog()) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Save Success");
+                alert.setHeaderText("Save Success!");
+                alert.setContentText("All of your bookmarks have been successfully saved!");
+                alert.show();
+            }
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Save Failure");
