@@ -1,7 +1,7 @@
 # linkgem
 Written for a school project.
 
-![](http://i.imgur.com/l9zfVsp.png)
+![](http://i.imgur.com/2f1RLbS.png)
 
 
 ## Thanks to the Open Source Projects
