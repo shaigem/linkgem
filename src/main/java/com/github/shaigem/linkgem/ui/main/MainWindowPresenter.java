@@ -42,9 +42,9 @@ public class MainWindowPresenter implements Initializable {
     private FolderRepository folderRepository;
 
     @Inject
-    FolderExplorerView folderExplorerView;
+    private FolderExplorerView folderExplorerView;
     @Inject
-    FolderBrowserView folderBrowserView;
+    private FolderBrowserView folderBrowserView;
 
     @FXML
     VBox root;
