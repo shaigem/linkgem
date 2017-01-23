@@ -142,6 +142,7 @@ public class MainWindowPresenter implements Initializable {
         // detail contains the item editor which displays properties for the selected item
         masterDetailPane.setDetailNode(editorView.getView());
         masterDetailPane.setDetailSide(Side.BOTTOM);
+        masterDetailPane.setDividerPosition(.70);
         masterDetailPane.setShowDetailNode(true);
         explorerPane.getChildren().add(masterDetailPane);
     }
