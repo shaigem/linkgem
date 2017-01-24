@@ -4,38 +4,37 @@
     "description": "",
     "children": [
       {
-        "name": "School",
+        "name": "ICS4UE",
         "description": "",
         "location": "",
         "children": [
           {
-            "name": "ICS4UE",
-            "description": "",
-            "location": "",
-            "children": [
-              {
-                "name": "IntelliJ",
-                "description": "The Java IDE",
-                "location": "https://www.jetbrains.com/idea/"
-              },
-              {
-                "name": "Java",
-                "description": "Main language",
-                "location": "http://java.com"
-              },
-              {
-                "name": "NetBeans",
-                "description": "NetBeans IDE",
-                "location": "https://netbeans.org/"
-              },
-              {
-                "name": "Google Drive",
-                "description": "School files are here",
-                "location": "http://drive.google.com"
-              }
-            ]
+            "name": "IntelliJ",
+            "description": "The Java IDE",
+            "location": "https://www.jetbrains.com/idea/"
+          },
+          {
+            "name": "Java",
+            "description": "Main language",
+            "location": "http://java.com"
+          },
+          {
+            "name": "Google Drive",
+            "description": "School files are here",
+            "location": "http://drive.google.com"
+          },
+          {
+            "name": "NetBeans",
+            "description": "NetBeans IDE",
+            "location": "https://netbeans.org/"
           }
         ]
+      },
+      {
+        "name": "School",
+        "description": "",
+        "location": "",
+        "children": []
       }
     ]
   }
