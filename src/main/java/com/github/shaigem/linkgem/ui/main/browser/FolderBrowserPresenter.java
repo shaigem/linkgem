@@ -200,14 +200,16 @@ public class FolderBrowserPresenter implements Initializable {
             // when the user starts to drag a folder
             setOnDragDetected(event -> {
                 if (!isEmpty() || getItem() != null) {
-                    final ClipboardContent content = new ClipboardContent();
-                    content.put(ItemDragAndDropManager.SERIALIZED_MIME_TYPE, getIndex());
-                    final Dragboard dashboard = startDragAndDrop(TransferMode.MOVE);
-                    final Image dragImage = snapshot(new SnapshotParameters(), null);
-                    dashboard.setDragView(dragImage);
-                    dashboard.setContent(content);
-                    dragAndDropManager.addItemToDragList(getItem());
-                    event.consume();
+                    if (getItem() != folderRepository.getSearchFolder()) {
+                        final ClipboardContent content = new ClipboardContent();
+                        content.put(ItemDragAndDropManager.SERIALIZED_MIME_TYPE, getIndex());
+                        final Dragboard dashboard = startDragAndDrop(TransferMode.MOVE);
+                        final Image dragImage = snapshot(new SnapshotParameters(), null);
+                        dashboard.setDragView(dragImage);
+                        dashboard.setContent(content);
+                        dragAndDropManager.addItemToDragList(getItem());
+                        event.consume();
+                    }
                 }
             });
 

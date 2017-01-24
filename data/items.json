@@ -14,9 +14,9 @@
             "location": "",
             "children": [
               {
-                "name": "Google Drive",
-                "description": "School files are here",
-                "location": "http://drive.google.com"
+                "name": "IntelliJ",
+                "description": "The Java IDE",
+                "location": "https://www.jetbrains.com/idea/"
               },
               {
                 "name": "Java",
@@ -24,14 +24,14 @@
                 "location": "http://java.com"
               },
               {
-                "name": "IntelliJ",
-                "description": "The Java IDE",
-                "location": "https://www.jetbrains.com/idea/"
-              },
-              {
                 "name": "NetBeans",
                 "description": "NetBeans IDE",
                 "location": "https://netbeans.org/"
+              },
+              {
+                "name": "Google Drive",
+                "description": "School files are here",
+                "location": "http://drive.google.com"
               }
             ]
           }
