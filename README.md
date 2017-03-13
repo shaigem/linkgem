@@ -11,6 +11,9 @@ LinkGem is a very basic bookmark manager. It allows you to organise your favouri
 
 ![](http://i.imgur.com/2f1RLbS.png)
 
+## Thanks to
+Deji Abiodun - acted as a quality and assurance analyst. He has tested and reported bugs in the earlier builds of the program.
+
 ## Thanks to the Open Source Projects
 [Sejda](http://www.sejda.org/)
 
