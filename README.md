@@ -7,8 +7,9 @@ LinkGem is a very basic bookmark manager. It allows you to organise your favouri
 - Import bookmarks from other web browsers such as Chrome and FireFox
 - Export bookmarks so that other web browsers can use them
 
-![](http://i.imgur.com/2f1RLbS.png)
+## Screenshots
 
+![](http://i.imgur.com/2f1RLbS.png)
 
 ## Thanks to the Open Source Projects
 [Sejda](http://www.sejda.org/)
