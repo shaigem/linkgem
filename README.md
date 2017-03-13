@@ -1,11 +1,11 @@
 # linkgem
-Written by Ronnie Tran
 
-LinkGem is a very basic bookmark manager. It allows you to organise your favourite website links through folders. Bookmarks can be saved in a JSON format.
+LinkGem is a very basic bookmark manager. It allows you to organise your favourite website links through the use of folders. Bookmarks are saved in a file that uses the JSON format.
 
-Currently there are no ways to import and export bookmarks from other browser. This project is meant to be a prototype bookmark manager written to learn more about Java and JavaFX.
+## Likely Features
 
-This project was written for a final school summative.
+- Import bookmarks from other web browsers such as Chrome and FireFox
+- Export bookmarks so that other web browsers can use them
 
 ![](http://i.imgur.com/2f1RLbS.png)
 
