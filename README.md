@@ -2,17 +2,16 @@
 
 LinkGem is a very basic bookmark manager. It allows you to organise your favourite website links through the use of folders. Bookmarks are saved in a file that uses the JSON format.
 
-## Likely Features
+## Features
 
-- Import bookmarks from other web browsers such as Chrome and FireFox
-- Export bookmarks so that other web browsers can use them
+* Organize your bookmarks using folders
+* Search for bookmarks by using its name or part of its URL
+* Save your bookmarks in a JSON file
+* Portable
 
 ## Screenshots
 
 ![](http://i.imgur.com/2f1RLbS.png)
-
-## Thanks to
-Deji Abiodun - acted as a quality and assurance analyst. He has tested and reported bugs in the earlier builds of the program.
 
 ## Thanks to the Open Source Projects
 [Sejda](http://www.sejda.org/)
