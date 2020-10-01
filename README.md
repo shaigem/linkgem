@@ -13,6 +13,18 @@ LinkGem is a very basic bookmark manager. It allows you to organise your favouri
 
 ![](http://i.imgur.com/2f1RLbS.png)
 
+## Building from source
+
+* git clone this repo
+* call `gradlew build` 
+
+## Starting the Application
+To start the Application you can
+* instantly start the Application via `gradlew run`
+* build an executable jar file via `gradlew uberJar`
+
+The executable jar file is located in `.\build\libs` and can be run via `java -jar linkgem-0.1-uber.jar`
+
 ## Thanks to the Open Source Projects
 [Sejda](http://www.sejda.org/)
 
