@@ -26,9 +26,8 @@
  */
 package com.github.shaigem.linkgem.fx.control;
 
-import com.sun.javafx.scene.control.behavior.TextFieldBehavior;
-import com.sun.javafx.scene.control.skin.TextFieldSkin;
-import com.sun.javafx.scene.text.HitInfo;
+import javafx.scene.control.skin.TextFieldSkin;
+import javafx.scene.text.HitInfo;
 import javafx.beans.property.ObjectProperty;
 import javafx.css.PseudoClass;
 import javafx.geometry.Pos;
@@ -52,23 +51,22 @@ public abstract class NodeTextFieldSkin extends TextFieldSkin {
     private final TextField control;
 
     public NodeTextFieldSkin(final TextField control) {
-        super(control, new TextFieldBehavior(control));
+        super(control);
 
         this.control = control;
         updateChildren();
 
-        registerChangeListener(leftProperty(), "LEFT_NODE"); //$NON-NLS-1$
-        registerChangeListener(rightProperty(), "RIGHT_NODE"); //$NON-NLS-1$
-        registerChangeListener(control.focusedProperty(), "FOCUSED"); //$NON-NLS-1$
+//        registerChangeListener(leftProperty(), "LEFT_NODE"); //$NON-NLS-1$
+//        registerChangeListener(rightProperty(), "RIGHT_NODE"); //$NON-NLS-1$
+//        registerChangeListener(control.focusedProperty(), "FOCUSED"); //$NON-NLS-1$
     }
 
     public abstract ObjectProperty<Node> leftProperty();
+
     public abstract ObjectProperty<Node> rightProperty();
 
-    @Override protected void handleControlPropertyChanged(String p) {
-        super.handleControlPropertyChanged(p);
-
-        if (p == "LEFT_NODE" || p == "RIGHT_NODE") { //$NON-NLS-1$ //$NON-NLS-2$
+    protected void handleControlPropertyChanged(String p) {
+        if ("LEFT_NODE".equalsIgnoreCase(p)  || "RIGHT_NODE".equalsIgnoreCase(p)) { //$NON-NLS-1$ //$NON-NLS-2$
             updateChildren();
         }
     }
@@ -108,14 +106,15 @@ public abstract class NodeTextFieldSkin extends TextFieldSkin {
         control.pseudoClassStateChanged(HAS_NO_SIDE_NODE, left == null && right == null);
     }
 
-    @Override protected void layoutChildren(double x, double y, double w, double h) {
+    @Override
+    protected void layoutChildren(double x, double y, double w, double h) {
         final double fullHeight = h + snappedTopInset() + snappedBottomInset();
 
-        final double leftWidth = leftPane == null ? 0.0 : snapSize(leftPane.prefWidth(fullHeight));
-        final double rightWidth = rightPane == null ? 0.0 : snapSize(rightPane.prefWidth(fullHeight));
+        final double leftWidth = leftPane == null ? 0.0 : snapSizeX(leftPane.prefWidth(fullHeight));
+        final double rightWidth = rightPane == null ? 0.0 : snapSizeX(rightPane.prefWidth(fullHeight));
 
-        final double textFieldStartX = snapPosition(x) + snapSize(leftWidth);
-        final double textFieldWidth = w - snapSize(leftWidth) - snapSize(rightWidth);
+        final double textFieldStartX = snapPositionX(x) + snapSizeX(leftWidth);
+        final double textFieldWidth = w - snapSizeX(leftWidth) - snapSizeX(rightWidth);
 
         super.layoutChildren(textFieldStartX, 0, textFieldWidth, fullHeight);
 
@@ -125,7 +124,7 @@ public abstract class NodeTextFieldSkin extends TextFieldSkin {
         }
 
         if (rightPane != null) {
-            final double rightStartX = rightPane == null ? 0.0 : w - rightWidth + snappedLeftInset();
+            final double rightStartX = w - rightWidth + snappedLeftInset();
             rightPane.resizeRelocate(rightStartX, 0, rightWidth, fullHeight);
         }
     }
@@ -137,15 +136,15 @@ public abstract class NodeTextFieldSkin extends TextFieldSkin {
          * when we have a left Node and the click point is badly returned
          * because we weren't considering the shift induced by the leftPane.
          */
-        final double leftWidth = leftPane == null ? 0.0 : snapSize(leftPane.prefWidth(getSkinnable().getHeight()));
+        final double leftWidth = leftPane == null ? 0.0 : snapSizeX(leftPane.prefWidth(getSkinnable().getHeight()));
         return super.getIndex(x - leftWidth, y);
     }
 
     @Override
     protected double computePrefWidth(double h, double topInset, double rightInset, double bottomInset, double leftInset) {
         final double pw = super.computePrefWidth(h, topInset, rightInset, bottomInset, leftInset);
-        final double leftWidth = leftPane == null ? 0.0 : snapSize(leftPane.prefWidth(h));
-        final double rightWidth = rightPane == null ? 0.0 : snapSize(rightPane.prefWidth(h));
+        final double leftWidth = leftPane == null ? 0.0 : snapSizeX(leftPane.prefWidth(h));
+        final double rightWidth = rightPane == null ? 0.0 : snapSizeX(rightPane.prefWidth(h));
 
         return pw + leftWidth + rightWidth;
     }
@@ -153,15 +152,14 @@ public abstract class NodeTextFieldSkin extends TextFieldSkin {
     @Override
     protected double computePrefHeight(double w, double topInset, double rightInset, double bottomInset, double leftInset) {
         final double ph = super.computePrefHeight(w, topInset, rightInset, bottomInset, leftInset);
-        final double leftHeight = leftPane == null ? 0.0 : snapSize(leftPane.prefHeight(-1));
-        final double rightHeight = rightPane == null ? 0.0 : snapSize(rightPane.prefHeight(-1));
+        final double leftHeight = leftPane == null ? 0.0 : snapSizeX(leftPane.prefHeight(-1));
+        final double rightHeight = rightPane == null ? 0.0 : snapSizeX(rightPane.prefHeight(-1));
 
         return Math.max(ph, Math.max(leftHeight, rightHeight));
     }
-//
-//    @Override
-//    protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-//        return computePrefWidth(height, topInset, rightInset, bottomInset, leftInset);
-//}
-}
 
+    @Override
+    protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+        return computePrefWidth(height, topInset, rightInset, bottomInset, leftInset);
+    }
+}

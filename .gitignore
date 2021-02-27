@@ -57,3 +57,11 @@ fabric.properties
 hs_err_pid*
 
 /.nb-gradle/
+/.gradle/
+/build/
+
+# Eclipse Settings
+.project
+.classpath
+/.settings/
+/bin/
